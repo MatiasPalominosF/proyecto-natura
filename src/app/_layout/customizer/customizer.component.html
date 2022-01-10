@@ -1,0 +1,391 @@
+<div class="customizer border-left ft-blue-grey border-left ft-lighten-4 d-none d-xl-block" id="customizer">
+  <a [routerLink]="" class="customizer-close" (click)="toggleCustomizer($event)"><i class="feather ft-x font-medium-3"></i></a>
+  <a [routerLink]="" class="customizer-toggle bg-danger box-shadow-3" (click)="toggleCustomizer($event)"><i
+      class="feather ft-settings font-medium-3 spinner white"></i></a>
+  <div class="customizer-content p-2" fxFlex="auto" [perfectScrollbar]="config">
+    <h4 class="text-uppercase mb-0">Theme Customizer</h4>
+    <hr>
+    <p>Customize & Preview in Real Time</p>
+    <h5 class="mt-1 mb-1 text-bold-500">Menu Color Options</h5>
+    <div class="form-group">
+      <!-- Outline Button group -->
+      <div class="btn-group customizer-sidebar-options" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-outline-info _light" (click)="setMenuColor('menu-light',$event)"
+          data-sidebar="menu-light" id="light-menu">Light Menu
+        </button>
+        <button type="button" class="btn btn-outline-info _dark active" (click)="setMenuColor('menu-dark',$event)"
+          data-sidebar="menu-dark" id="dark-menu">Dark Menu
+        </button>
+      </div>
+    </div>
+    <hr>
+    <h5 class="mt-1 text-bold-500">Layout Options</h5>
+    <ul class="nav nav-tabs nav-underline nav-justified layout-options tabsborder">
+      <div class="col-lg-12 layout_space">
+        <div class="ngtab">
+          <ngb-tabset>
+            <ngb-tab>
+              <ng-template ngbTabTitle>Layouts</ng-template>
+              <ng-template ngbTabContent>
+                <div role="tabpanel" class="tab-panel active px-1 pt-1" id="tabIcon21" aria-expanded="true"
+                  aria-labelledby="baseIcon-tab21">
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" [checked]="_themeSettingsConfig.menu == 'collapse'" (change)="toggleFixMenu($event)"
+                    [(ngModel)]="isCollapsedMenu"  name="collapsed-sidebar" id="collapsed-sidebar" >
+                    <label class="custom-control-label" for="collapsed-sidebar">Collapsed Menu</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input"
+                      name="fixed-layout" id="fixed-layout" (ngModelChange)="toggleLayout('fixed')" [(ngModel)]="isfixChecked">
+                    <label class="custom-control-label" for="fixed-layout">Fixed Layout</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input"
+                      name="boxed-layout" id="boxed-layout" (ngModelChange)="toggleLayout('boxed')" [(ngModel)]="isboxChecked">
+                    <label class="custom-control-label" for="boxed-layout">Boxed Layout</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" (change)="setLayout('static',$event)"
+                    [(ngModel)]="isStaticLayout" name="static-layout" id="static-layout">
+                    <label class="custom-control-label" for="static-layout">Static Layout</label>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+              <ng-template ngbTabTitle>Navigation</ng-template>
+              <ng-template ngbTabContent>
+                <div class="tab-panel px-1 pt-1" id="tabIcon22" aria-labelledby="baseIcon-tab22">
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="right-side-icons"
+                    [(ngModel)]="isRightSideIcons" (change)="setNavigation('menu-icon-right',$event)" id="right-side-icons">
+                    <label class="custom-control-label" for="right-side-icons">Right Side Icons</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="bordered-navigation"
+                    [(ngModel)]="isBorderedNavigation" (change)="setNavigation('menu-bordered',$event)" id="bordered-navigation">
+                    <label class="custom-control-label" for="bordered-navigation">Bordered Navigation</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="flipped-navigation"
+                    [(ngModel)]="isFlippedNavigation" (change)="setNavigation('menu-flipped',$event)" id="flipped-navigation">
+                    <label class="custom-control-label" for="flipped-navigation">Flipped Navigation</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="collapsible-navigation"
+                    [(ngModel)]="isCollapsibleNavigation" (change)="setNavigation('menu-collapsible',$event)" id="collapsible-navigation">
+                    <label class="custom-control-label" for="collapsible-navigation">Collapsible Navigation</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="static-navigation"
+                    [(ngModel)]="isStaticNavigation" (change)="setNavigation('menu-static',$event)" id="static-navigation">
+                    <label class="custom-control-label" for="static-navigation">Static Navigation</label>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+              <ng-template ngbTabTitle>Navbar</ng-template>
+              <ng-template ngbTabContent>
+                <div class="tab-panel px-1 pt-1" id="tabIcon23" aria-labelledby="baseIcon-tab23">
+                  <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" name="navbar-static-top"
+                    [(ngModel)]="isStaticTop" (change)="setNavbar($event)" id="navbar-static-top">
+                    <label class="custom-control-label" for="navbar-static-top">Static Top</label>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </ul>
+    <hr>
+    <h5 class="mt-1 text-bold-500">Navigation Color Options</h5>
+    <ul class="nav nav-tabs nav-underline nav-justified color-options tabsborder">
+      <div class="col-lg-12 layout_space">
+        <div class="ngtab">
+          <ngb-tabset (tabChange)="changeNavbarFontColor($event)">
+            <ngb-tab id="semi-dark">
+              <ng-template ngbTabTitle>Semi Dark</ng-template>
+              <ng-template ngbTabContent class="px-1">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" checked class="custom-control-input bg-default"
+                        (click)="setColor('bg-default')" id="opt-default">
+                      <label class="custom-control-label" (click)="setColor('bg-default')"
+                        for="opt-default">Default</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-primary"
+                        (click)="setColor('bg-primary')" id="opt-primary">
+                      <label class="custom-control-label" (click)="setColor('bg-primary')"
+                        for="opt-primary">Primary</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-danger"
+                        (click)="setColor('bg-danger')" id="opt-danger">
+                      <label class="custom-control-label" (click)="setColor('bg-danger')"
+                        for="opt-danger">Danger</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-success"
+                        (click)="setColor('bg-success')" id="opt-success">
+                      <label class="custom-control-label" (click)="setColor('bg-success')"
+                        for="opt-success">Success</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-blue"
+                        (click)="setColor('bg-blue')" id="opt-blue">
+                      <label class="custom-control-label" (click)="setColor('bg-blue')" for="opt-blue">Blue</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-cyan"
+                        (click)="setColor('bg-cyan')" id="opt-cyan">
+                      <label class="custom-control-label" (click)="setColor('bg-cyan')" for="opt-cyan">Cyan</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-sdark-clr" class="custom-control-input bg-pink"
+                        (click)="setColor('bg-pink')" id="opt-pink">
+                      <label class="custom-control-label" (click)="setColor('bg-pink')" for="opt-pink">Pink</label>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="semi-light">
+              <ng-template ngbTabTitle>Semi Light</ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-6">
+                    <h6>Solid</h6>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue-grey"
+                        (click)="setColor('bg-blue-grey')" id="default">
+                      <label class="custom-control-label" (click)="setColor('bg-blue-grey')"
+                        for="default">Default</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-primary"
+                        (click)="setColor('bg-primary')" id="primary">
+                      <label class="custom-control-label" (click)="setColor('bg-primary')" for="primary">Primary</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-danger"
+                        (click)="setColor('bg-danger')" id="danger">
+                      <label class="custom-control-label" (click)="setColor('bg-danger')" for="danger">Danger</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-success"
+                        (click)="setColor('bg-success')" id="success">
+                      <label class="custom-control-label" (click)="setColor('bg-success')" for="success">Success</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue"
+                        (click)="setColor('bg-blue')" id="blue">
+                      <label class="custom-control-label" (click)="setColor('bg-blue')" for="blue">Blue</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-cyan"
+                        (click)="setColor('bg-cyan')" id="cyan">
+                      <label class="custom-control-label" (click)="setColor('bg-cyan')" for="cyan">Cyan</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-pink"
+                        (click)="setColor('bg-pink')" id="pink">
+                      <label class="custom-control-label" (click)="setColor('bg-pink')" for="pink">Pink</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <h6>Gradient</h6>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue-grey"
+                        (click)="setColor('bg-gradient-x-grey-blue')" id="bg-gradient-x-grey-blue">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-grey-blue')"
+                        for="bg-gradient-x-grey-blue">Default</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-primary"
+                        (click)="setColor('bg-gradient-x-primary')" id="bg-gradient-x-primary">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-primary')"
+                        for="bg-gradient-x-primary">Primary</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-danger"
+                        (click)="setColor('bg-gradient-x-danger')" id="bg-gradient-x-danger">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-danger')"
+                        for="bg-gradient-x-danger">Danger</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-success"
+                        (click)="setColor('bg-gradient-x-success')" id="bg-gradient-x-success">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-success')"
+                        for="bg-gradient-x-success">Success</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue"
+                        (click)="setColor('bg-gradient-x-blue')" id="bg-gradient-x-blue">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-blue')"
+                        for="bg-gradient-x-blue">Blue</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-cyan"
+                        (click)="setColor('bg-gradient-x-cyan')" id="bg-gradient-x-cyan">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-cyan')"
+                        for="bg-gradient-x-cyan">Cyan</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-pink"
+                        (click)="setColor('bg-gradient-x-pink')" id="bg-gradient-x-pink">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-pink')"
+                        for="bg-gradient-x-pink">Pink</label>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="dark">
+              <ng-template ngbTabTitle>Dark</ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-6">
+                    <h3>Solid</h3>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue-grey"
+                        (click)="setColor('bg-blue-grey')" id="default">
+                      <label class="custom-control-label" (click)="setColor('bg-blue-grey')"
+                        for="default">Default</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-primary"
+                        (click)="setColor('bg-primary')" id="primary">
+                      <label class="custom-control-label" (click)="setColor('bg-primary')" for="primary">Primary</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-danger"
+                        (click)="setColor('bg-danger')" id="danger">
+                      <label class="custom-control-label" (click)="setColor('bg-danger')" for="danger">Danger</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-success"
+                        (click)="setColor('bg-success')" id="success">
+                      <label class="custom-control-label" (click)="setColor('bg-success')" for="success">Success</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue"
+                        (click)="setColor('bg-blue')" id="blue">
+                      <label class="custom-control-label" (click)="setColor('bg-blue')" for="blue">Blue</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-cyan"
+                        (click)="setColor('bg-cyan')" id="cyan">
+                      <label class="custom-control-label" (click)="setColor('bg-cyan')" for="cyan">Cyan</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-pink"
+                        (click)="setColor('bg-pink')" id="pink">
+                      <label class="custom-control-label" (click)="setColor('bg-pink')" for="pink">Pink</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <h3>Gradient</h3>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue-grey"
+                        (click)="setColor('bg-gradient-x-grey-blue')" id="bg-gradient-x-grey-blue">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-grey-blue')"
+                        for="bg-gradient-x-grey-blue">Default</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-primary"
+                        (click)="setColor('bg-gradient-x-primary')" id="bg-gradient-x-primary">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-primary')"
+                        for="bg-gradient-x-primary">Primary</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-danger"
+                        (click)="setColor('bg-gradient-x-danger')" id="bg-gradient-x-danger">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-danger')"
+                        for="bg-gradient-x-danger">Danger</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-success"
+                        (click)="setColor('bg-gradient-x-success')" id="bg-gradient-x-success">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-success')"
+                        for="bg-gradient-x-success">Success</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-blue"
+                        (click)="setColor('bg-gradient-x-blue')" id="bg-gradient-x-blue">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-blue')"
+                        for="bg-gradient-x-blue">Blue</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-cyan"
+                        (click)="setColor('bg-gradient-x-cyan')" id="bg-gradient-x-cyan">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-cyan')"
+                        for="bg-gradient-x-cyan">Cyan</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" name="nav-slight-clr" class="custom-control-input bg-pink"
+                        id="bg-gradient-x-pink" (click)="setColor('bg-gradient-x-pink')">
+                      <label class="custom-control-label" (click)="setColor('bg-gradient-x-pink')"
+                        for="bg-gradient-x-pink">Pink</label>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="light">
+              <ng-template ngbTabTitle>Light</ng-template>
+              <ng-template ngbTabContent>
+                <div class="tab-pane" id="clrOpt4" aria-labelledby="color-opt-4">
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-blue-grey"
+                      (click)="setColor('bg-blue-grey bg-lighten-4')" id="light-blue-grey">
+                    <label class="custom-control-label" (click)="setColor('bg-blue-grey bg-lighten-4')"
+                      for="light-blue-grey">Default</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-primary"
+                      (click)="setColor('bg-primary bg-lighten-4')" id="light-primary">
+                    <label class="custom-control-label" (click)="setColor('bg-primary bg-lighten-4')"
+                      for="light-primary">Primary</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-danger"
+                      (click)="setColor('bg-danger bg-lighten-4')" id="light-danger">
+                    <label class="custom-control-label" (click)="setColor('bg-danger bg-lighten-4')"
+                      for="light-danger">Danger</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-success"
+                      (click)="setColor('bg-success bg-lighten-4')" id="light-success">
+                    <label class="custom-control-label" (click)="setColor('bg-success bg-lighten-4')"
+                      for="light-success">Success</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-blue"
+                      (click)="setColor('bg-blue bg-lighten-4')" id="light-blue">
+                    <label class="custom-control-label" (click)="setColor('bg-blue bg-lighten-4')"
+                      for="light-blue">Blue</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-cyan"
+                      (click)="setColor('bg-cyan bg-lighten-4')" id="light-cyan">
+                    <label class="custom-control-label" (click)="setColor('bg-cyan bg-lighten-4')"
+                      for="light-cyan">Cyan</label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" name="nav-light-clr" class="custom-control-input bg-pink"
+                      (click)="setColor('bg-pink bg-lighten-4')" id="light-pink">
+                    <label class="custom-control-label" (click)="setColor('bg-pink bg-lighten-4')"
+                      for="light-pink">Pink</label>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </ul>

@@ -1,0 +1,118 @@
+﻿<div class="app-content content">
+  <div class="content-wrapper">
+    <div class="content-header row mb-1"></div>
+    <div class="content-body">
+      <section class="flexbox-container">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+          <div class="col-md-4 col-10 box-shadow-2 p-0">
+            <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
+              <div class="card-header border-0">
+                <div class="card-title text-center">
+                  <img
+                    src="assets/images/logo/logo-dark.png"
+                    alt="branding logo"
+                  />
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-body">
+                  <form
+                    class="form-horizontal"
+                    [formGroup]="loginForm"
+                    (ngSubmit)="tryLogin()"
+                  >
+                    <fieldset
+                      class="form-group position-relative has-icon-left"
+                    >
+                      <input
+                        type="text"
+                        formControlName="email"
+                        class="form-control"
+                        [ngClass]="{
+                          'is-invalid': submitted && f.email.errors
+                        }"
+                        id="user-name"
+                        placeholder="Ingrese email"
+                        required
+                      />
+                      <div class="form-control-position">
+                        <i class="feather ft-user"></i>
+                      </div>
+                      <div
+                        *ngIf="submitted && f.email.errors"
+                        class="invalid-feedback"
+                      >
+                        <div *ngIf="f.email.errors.required">
+                          El email es requerido
+                        </div>
+                      </div>
+                    </fieldset>
+                    <fieldset
+                      class="form-group position-relative has-icon-left"
+                    >
+                      <input
+                        type="password"
+                        placeholder="Ingrese contraseña"
+                        formControlName="password"
+                        class="form-control"
+                        [ngClass]="{
+                          'is-invalid': submitted && f.password.errors
+                        }"
+                      />
+                      <div class="form-control-position">
+                        <i class="la la-key"></i>
+                      </div>
+                      <div
+                        *ngIf="submitted && f.password.errors"
+                        class="invalid-feedback"
+                      >
+                        <div *ngIf="f.password.errors.required">
+                          La contraseña es requerida
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group row">
+                      <div class="col-md-6 col-12 text-center text-sm-left">
+                        <div class="custom-control custom-checkbox mb-1">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            name="remember-me"
+                            id="remember-me"
+                          />
+                          <label class="custom-control-label" for="remember-me"
+                            >Recuérdame</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-outline-info btn-block"
+                    >
+                      <i class="fa fa-refresh fa-spin" *ngIf="submitted"></i>
+                      <i class="feather ft-unlock" *ngIf="!submitted"></i>
+                      Iniciar sesión
+                    </button>
+                  </form>
+                </div>
+                <p
+                  class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"
+                >
+                  <span>¿Nuevo en la página?</span>
+                </p>
+                <div class="card-body">
+                  <a
+                    [routerLink]="['/register']"
+                    class="btn btn-outline-danger btn-block"
+                    ><i class="feather ft-user"></i> Registrarse</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

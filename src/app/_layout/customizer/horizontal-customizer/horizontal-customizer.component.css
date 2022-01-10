@@ -1,0 +1,19 @@
+.tabsborder{
+    border-bottom: none !important;
+  }
+
+.h6, h6 {
+  font-size: 1rem;
+}
+
+:host ::ng-deep .tab-content{
+  padding: 1rem;
+}
+
+:host ::ng-deep .layout_space{
+  padding: 0%;
+}
+
+:host ::ng-deep .nav.nav-tabs.nav-underline .nav-item a.nav-link {
+  padding: 0.5rem 0rem;
+}
