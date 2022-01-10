@@ -11,13 +11,13 @@ export const ThemeSettingsConfig = {
   menu: 'expand', // collapse, expand
   header: 'fix', // fix, static
   footer: 'static', // fix, static
-  customizer: 'on', // on ,off
+  customizer: 'off', // on ,off
   headerIcons: {
     maximize: 'on', // on, off
-    search: 'on', // on, off
-    internationalization: 'on', // on, off
-    notification: 'on', // on, off
-    email: 'on' // on, off
+    search: 'off', // on, off
+    internationalization: 'off', // on, off
+    notification: 'off', // on, off
+    email: 'off' // on, off
   },
   brand: {
     brand_name: 'Modern Admin',

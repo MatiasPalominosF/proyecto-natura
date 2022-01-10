@@ -23,6 +23,7 @@ const appRoutes: Routes = [
     component: PrivateLayoutComponent,
     children: [
       { path: 'logout', component: LoginComponent, canActivate: [AuthGuard] },
+      { path: 'product', loadChildren: () => import('../app/content/product/product.module').then(m => m.ProductModule) },
       { path: 'changelog', component: ChangelogComponent, canActivate: [AuthGuard] },
     ],
   },

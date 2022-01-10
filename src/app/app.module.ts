@@ -65,6 +65,7 @@ import { MatchHeightModule } from './content/partials/general/match-height/match
 import { FullLayoutComponent } from './_layout/full-layout/full-layout.component';
 import { NotificationService } from './_services/notification/notification.service';
 import { ToastrModule } from 'ngx-toastr';
+import { UserService } from './_services/user/user.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -124,6 +125,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     providers: [
         AuthGuard,
+        UserService,
         AlertService,
         NotificationService,
         NavbarService,

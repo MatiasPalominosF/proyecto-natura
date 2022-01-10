@@ -87,19 +87,12 @@ export const MenuSettingsConfig: MenuConfig = {
           ]
         }
       },
-      { section: 'SUPPORT', icon: 'la-ellipsis-h' },
+      { section: 'INVENTARIO', icon: 'la-ellipsis-h' },
       {
-        title: 'Raise Support',
-        icon: 'la-support',
-        page: 'https://pixinvent.ticksy.com/',
-        isExternalLink: true
+        title: 'Productos',
+        icon: 'feather ft-clipboard',
+        page: '/product/product-view',
       },
-      {
-        title: 'Documentaion',
-        icon: 'la-text-height',
-        page: 'https://modern-admin-docs.web.app/html/ltr/documentation/index.html',
-        isExternalLink: true,
-      }
     ]
   }
 
