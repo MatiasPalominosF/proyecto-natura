@@ -16,6 +16,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "rxjs-compat",
+              "angularfire2",
+              "angularfire2/auth",
+              "angularfire2/firestore",
+              "@firebase/firestore"
+
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
