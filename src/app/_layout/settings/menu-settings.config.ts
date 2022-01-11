@@ -26,10 +26,9 @@ export const MenuSettingsConfig: MenuConfig = {
   horizontal_menu: {
     items: [
       {
-        title: 'Changelog',
-        icon: 'la-file',
-        page: '/changelog',
-        badge: { type: 'badge-danger', value: '2.7' }
+        title: 'Dashboard',
+        icon: 'la-home',
+        page: '/dashboard/dashboard-view',
       },
       {
         title: 'Templates',
@@ -48,27 +47,30 @@ export const MenuSettingsConfig: MenuConfig = {
           ]
         }
       },
+      { section: 'GESTIÓN', icon: 'la-ellipsis-h', page: 'null'},
       {
-        title: 'Raise Support',
-        icon: 'la-support',
-        page: 'https://pixinvent.ticksy.com/',
-        isExternalLink: true
+        title: 'Productos',
+        icon: 'feather ft-clipboard',
+        page: '/product/product-view',
+      }, {
+        title: 'Asignaciones',
+        icon: 'feather ft-file-text',
+        page: '/assign/assign-view',
       },
+      { section: 'PERSONAL', icon: 'la-ellipsis-h', page: 'null' },
       {
-        title: 'Documentaion',
-        icon: 'la-text-height',
-        page: 'https://modern-admin-docs.web.app/html/ltr/documentation/index.html',
-        isExternalLink: true,
-      }
+        title: 'Usuarios',
+        icon: 'feather ft-users',
+        page: '/worker/worker-view',
+      },
     ]
   },
   vertical_menu: {
     items: [
       {
-        title: 'Changelog',
-        icon: 'la-file',
-        page: '/changelog',
-        badge: { type: 'badge-danger', value: '2.7' }
+        title: 'Dashboard',
+        icon: 'la-home',
+        page: '/dashboard/dashboard-view',
       },
       {
         title: 'Templates',
@@ -87,19 +89,22 @@ export const MenuSettingsConfig: MenuConfig = {
           ]
         }
       },
-      { section: 'SUPPORT', icon: 'la-ellipsis-h' },
+      { section: 'GESTIÓN', icon: 'la-ellipsis-h' },
       {
-        title: 'Raise Support',
-        icon: 'la-support',
-        page: 'https://pixinvent.ticksy.com/',
-        isExternalLink: true
+        title: 'Productos',
+        icon: 'feather ft-clipboard',
+        page: '/product/product-view',
+      }, {
+        title: 'Asignaciones',
+        icon: 'feather ft-file-text',
+        page: '/assign/assign-view',
       },
+      { section: 'PERSONAL', icon: 'la-ellipsis-h' },
       {
-        title: 'Documentaion',
-        icon: 'la-text-height',
-        page: 'https://modern-admin-docs.web.app/html/ltr/documentation/index.html',
-        isExternalLink: true,
-      }
+        title: 'Usuarios',
+        icon: 'feather ft-users',
+        page: '/worker/worker-view',
+      },
     ]
   }
 
