@@ -94,8 +94,5 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       default: return item[property];
     }
   };
-
-
-
 }
 
