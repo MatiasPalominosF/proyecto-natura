@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-assign-view',
+  templateUrl: './assign-view.component.html',
+  styleUrls: ['./assign-view.component.css']
 })
-export class ProductViewComponent implements OnInit {
+export class AssignViewComponent implements OnInit {
 
   public breadcrumb: any;
 
@@ -21,7 +21,7 @@ export class ProductViewComponent implements OnInit {
           'link': '/dashboard/dashboard-view'
         },
         {
-          'name': 'Productos',
+          'name': 'Asignaciones',
           'isLink': false,
           'link': '#'
         },

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-product-view',
-  templateUrl: './product-view.component.html',
-  styleUrls: ['./product-view.component.css']
+  selector: 'app-worker-view',
+  templateUrl: './worker-view.component.html',
+  styleUrls: ['./worker-view.component.css']
 })
-export class ProductViewComponent implements OnInit {
+export class WorkerViewComponent implements OnInit {
 
   public breadcrumb: any;
 
@@ -13,7 +13,7 @@ export class ProductViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadcrumb = {
-      'mainlabel': 'Gestión de productos',
+      'mainlabel': 'Gestión de usuarios',
       'links': [
         {
           'name': 'Home',
@@ -21,7 +21,7 @@ export class ProductViewComponent implements OnInit {
           'link': '/dashboard/dashboard-view'
         },
         {
-          'name': 'Productos',
+          'name': 'Usuarios',
           'isLink': false,
           'link': '#'
         },
