@@ -47,7 +47,7 @@ export const MenuSettingsConfig: MenuConfig = {
           ]
         }
       },
-      { section: 'GESTIÓN', icon: 'la-ellipsis-h' },
+      { section: 'GESTIÓN', icon: 'la-ellipsis-h', page: 'null'},
       {
         title: 'Productos',
         icon: 'feather ft-clipboard',
@@ -57,7 +57,7 @@ export const MenuSettingsConfig: MenuConfig = {
         icon: 'feather ft-file-text',
         page: '/assign/assign-view',
       },
-      { section: 'PERSONAL', icon: 'la-ellipsis-h' },
+      { section: 'PERSONAL', icon: 'la-ellipsis-h', page: 'null' },
       {
         title: 'Usuarios',
         icon: 'feather ft-users',

@@ -8,6 +8,12 @@ import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlockUIModule } from 'ng-block-ui';
 import { BlockTemplateComponent } from 'src/app/_layout/blockui/block-template.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRippleModule } from '@angular/material/core';
 
 
 
@@ -16,10 +22,16 @@ import { BlockTemplateComponent } from 'src/app/_layout/blockui/block-template.c
     ProductViewComponent
   ],
   imports: [
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
     CommonModule,
     BreadcrumbModule,
     CardModule,
     NgbModule,
+    MatRippleModule,
     NgbModalModule,
     FormsModule,
     ReactiveFormsModule,
