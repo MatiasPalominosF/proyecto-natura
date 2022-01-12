@@ -8,4 +8,5 @@ export interface ProductInterface {
     quantitymin?: number;
     total?: number;
     vat?: number;
+    codbarra?: string;
 }
