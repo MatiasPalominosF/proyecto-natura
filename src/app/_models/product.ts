@@ -6,6 +6,7 @@ export interface ProductInterface {
     name?: string;
     net?: number;
     quantity?: number;
+    margin?: number;
     quantitymin?: number;
     total?: number;
     vat?: number;
