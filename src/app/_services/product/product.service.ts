@@ -20,7 +20,7 @@ export class ProductService {
     this.product = this.productCollection.valueChanges();
   }
 
-  getFullInfoHarvest(): Observable<ProductInterface[]> {
+  getFullInfoProduct(): Observable<ProductInterface[]> {
     // Colocar después de 'product' para consulta con where --> , ref => ref.where('assign', '==', null)
     return this.product = this.afs.collection<ProductInterface>('product')
       .snapshotChanges()

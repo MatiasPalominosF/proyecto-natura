@@ -32,7 +32,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     private notifyService: NotificationService,
   ) { }
-
+  
   ngOnInit(): void {
     this.breadcrumb = {
       'mainlabel': 'Gestión de productos',
@@ -55,7 +55,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   getProducts() {
     this.blockUIProduct.start('Cargando...');
-    this.productService.getFullInfoHarvest().subscribe(data => {
+    this.productService.getFullInfoProduct().subscribe(data => {
       if (data.length === 0) {
         this.isEmpty = true;
       }

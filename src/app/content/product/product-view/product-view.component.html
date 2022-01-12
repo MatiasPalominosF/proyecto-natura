@@ -46,15 +46,17 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio neto ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.net }} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{ row.net | number }} </mat-cell>
         </ng-container>
 
         <!-- margin Definition -->
         <ng-container matColumnDef="margin">
           <mat-header-cell *matHeaderCellDef mat-sort-header>
-            Ganacia (%)
+            Ganacia
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.margin }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.margin | percent }}
+          </mat-cell>
         </ng-container>
 
         <!-- total Definition -->
@@ -62,7 +64,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio venta ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.total }} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{ row.total | number }} </mat-cell>
         </ng-container>
 
         <!-- quantity Definition -->
@@ -70,7 +72,9 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Stock
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.quantity }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.quantity | number }}
+          </mat-cell>
         </ng-container>
 
         <!-- quantitymin Definition -->
@@ -78,7 +82,9 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Stock mínimo
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.quantitymin }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.quantitymin | number }}
+          </mat-cell>
         </ng-container>
 
         <!-- Header and Row Declarations -->
