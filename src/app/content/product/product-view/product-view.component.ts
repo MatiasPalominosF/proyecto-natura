@@ -2,6 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ProductInterface } from 'src/app/_models/product';
+import { ProductService } from 'src/app/_services/product/product.service';
 
 
 export interface PeriodicElement {
@@ -32,15 +35,19 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ProductViewComponent implements OnInit, AfterViewInit {
 
+  @BlockUI('products') blockUIProduct: NgBlockUI;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   public breadcrumb: any;
-  public displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  public dataSource: MatTableDataSource<PeriodicElement> = new MatTableDataSource<PeriodicElement>();
+  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin'];
+  public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public isEmpty: boolean = false;
 
-  constructor() { }
+  constructor(
+    private productService: ProductService,
+  ) { }
 
   ngOnInit(): void {
     this.breadcrumb = {
@@ -59,11 +66,21 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       ],
       'options': false
     };
+    this.getProducts();
+  }
 
-    this.dataSource.data = ELEMENT_DATA;
-    if (this.dataSource.data.length === 0) {
-      this.isEmpty = true;
-    }
+  getProducts() {
+
+    this.blockUIProduct.start('Cargando...');
+    this.productService.getFullInfoHarvest().subscribe(data => {
+      console.log("data ", data);
+      if (data.length === 0) {
+        this.isEmpty = true;
+      }
+      this.dataSource.data = data;
+      this.blockUIProduct.stop();
+    });
+
   }
 
   ngAfterViewInit() {
@@ -87,10 +104,12 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   sortingCustomAccesor = (item, property) => {
     switch (property) {
-      case 'position': return item.position;
       case 'name': return item.name;
-      case 'weight': return item.weight;
-      case 'symbol': return item.symbol;
+      case 'net': return item.net;
+      case 'margin': return item.margin;
+      case 'total': return item.total;
+      case 'quantity': return item.quantity;
+      case 'quantitymin': return item.quantitymin;
       default: return item[property];
     }
   };

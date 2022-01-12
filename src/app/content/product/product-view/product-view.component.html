@@ -28,32 +28,57 @@
         #table
         [dataSource]="dataSource"
         matSort
-        matSortActive="position"
+        matSortActive="name"
         matSortDirection="asc"
         class="mat-cell"
+        *blockUI="'products'; message: 'Loading'"
       >
-        <!-- Position Definition -->
-        <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> No </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.position }} </mat-cell>
-        </ng-container>
-
-        <!-- Name Definition -->
+        <!-- name Definition -->
         <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Producto
+          </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{ row.name }} </mat-cell>
         </ng-container>
 
-        <!-- Weight Definition -->
-        <ng-container matColumnDef="weight">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.weight }} </mat-cell>
+        <!-- net Definition -->
+        <ng-container matColumnDef="net">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Neto
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.net }} </mat-cell>
         </ng-container>
 
-        <!-- Symbol Definition -->
-        <ng-container matColumnDef="symbol">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.symbol }} </mat-cell>
+        <!-- margin Definition -->
+        <ng-container matColumnDef="margin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Ganacia
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.margin }} </mat-cell>
+        </ng-container>
+
+        <!-- total Definition -->
+        <ng-container matColumnDef="total">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Total
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.total }} </mat-cell>
+        </ng-container>
+
+        <!-- quantity Definition -->
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Stock
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.quantity }} </mat-cell>
+        </ng-container>
+
+        <!-- quantitymin Definition -->
+        <ng-container matColumnDef="quantitymin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Stock mínimo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.quantitymin }} </mat-cell>
         </ng-container>
 
         <!-- Header and Row Declarations -->

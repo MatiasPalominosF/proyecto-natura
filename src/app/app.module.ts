@@ -66,6 +66,7 @@ import { FullLayoutComponent } from './_layout/full-layout/full-layout.component
 import { NotificationService } from './_services/notification/notification.service';
 import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './_services/user/user.service';
+import { ProductService } from './_services/product/product.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -128,6 +129,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         UserService,
         AlertService,
         NotificationService,
+        ProductService,
         NavbarService,
         DataApiService,
         AuthService,
