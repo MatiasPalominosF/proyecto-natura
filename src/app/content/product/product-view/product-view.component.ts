@@ -73,7 +73,6 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
     this.blockUIProduct.start('Cargando...');
     this.productService.getFullInfoHarvest().subscribe(data => {
-      console.log("data ", data);
       if (data.length === 0) {
         this.isEmpty = true;
       }

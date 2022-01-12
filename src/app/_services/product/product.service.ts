@@ -21,7 +21,8 @@ export class ProductService {
   }
 
   getFullInfoHarvest(): Observable<ProductInterface[]> {
-    return this.product = this.afs.collection<ProductInterface>('product', ref => ref.where('assign', '==', null))
+    // Colocar después de 'product' para consulta con where --> , ref => ref.where('assign', '==', null)
+    return this.product = this.afs.collection<ProductInterface>('product')
       .snapshotChanges()
       .pipe(map(changes => {
         return changes.map(action => {
