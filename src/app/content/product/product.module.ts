@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { NewProductComponent } from './new-product/new-product.component';
-
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -36,6 +36,7 @@ import { NewProductComponent } from './new-product/new-product.component';
     MatRippleModule,
     NgbModalModule,
     FormsModule,
+    MatRadioModule,
     ReactiveFormsModule,
     BlockUIModule.forRoot({
       template: BlockTemplateComponent

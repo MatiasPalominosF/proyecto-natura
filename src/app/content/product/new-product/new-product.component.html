@@ -18,7 +18,233 @@
   </button>
 </div>
 <div class="modal-body">
-  <p>new-product works!</p>
+  <form [formGroup]="productInfo">
+    <div class="form-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="name">Nombre *</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              formControlName="name"
+              placeholder="Nombre producto"
+              [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.name.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.name.errors.required">
+                El nombre del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="gross">Precio bruto *</label>
+            <input
+              type="text"
+              id="gross"
+              class="form-control"
+              formControlName="gross"
+              placeholder="Precio bruto"
+              [ngClass]="{ 'is-invalid': submitted && f.gross.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.gross.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.gross.errors.required">
+                El precio bruto del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="vat">IVA *</label>
+            <input
+              type="text"
+              id="vat"
+              class="form-control"
+              formControlName="vat"
+              placeholder="IVA"
+              [ngClass]="{ 'is-invalid': submitted && f.vat.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.vat.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.vat.errors.required">
+                El IVA del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="net">Precio neto *</label>
+            <input
+              type="text"
+              id="net"
+              class="form-control"
+              formControlName="net"
+              placeholder="Precio neto"
+              [ngClass]="{ 'is-invalid': submitted && f.net.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.net.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.net.errors.required">
+                El precio neto del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="margin">Margen de ganancia *</label>
+            <input
+              type="text"
+              id="margin"
+              class="form-control"
+              formControlName="margin"
+              placeholder="IVA"
+              [ngClass]="{ 'is-invalid': submitted && f.margin.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.margin.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.margin.errors.required">
+                El margen de ganacia es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="total">Precio venta *</label>
+            <input
+              type="text"
+              id="total"
+              class="form-control"
+              formControlName="total"
+              placeholder="Precio venta"
+              [ngClass]="{ 'is-invalid': submitted && f.total.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.total.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.total.errors.required">
+                El precio venta del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="quantity">Stock *</label>
+            <input
+              type="text"
+              id="quantity"
+              class="form-control"
+              formControlName="quantity"
+              placeholder="Stock"
+              [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.quantity.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.quantity.errors.required">
+                El stock del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="quantitymin">Stock mínimo *</label>
+            <input
+              type="text"
+              id="quantitymin"
+              class="form-control"
+              formControlName="quantitymin"
+              placeholder="Precio venta"
+              [ngClass]="{ 'is-invalid': submitted && f.quantitymin.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.quantitymin.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.quantitymin.errors.required">
+                El stock mínimo del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>¿Para venta? *</label>
+            <div class="input-group">
+              <div class="d-inline-block custom-control custom-radio mr-1">
+                <input
+                  type="radio"
+                  class="custom-control-input"
+                  [value]="true"
+                  id="yes"
+                  formControlName="isSale"
+                  checked="true"
+                />
+                <label class="custom-control-label" for="yes">Sí</label>
+              </div>
+              <div class="d-inline-block custom-control custom-radio">
+                <input
+                  type="radio"
+                  class="custom-control-input"
+                  [value]="false"
+                  id="no"
+                  formControlName="isSale"
+                />
+                <label class="custom-control-label" for="no">No</label>
+              </div>
+              <small
+                class="form-text text-muted danger"
+                *ngIf="submitted && f.isSale.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.isSale.errors.required">
+                  Este campo es requerido
+                </div>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 <div class="modal-footer">
   <button
