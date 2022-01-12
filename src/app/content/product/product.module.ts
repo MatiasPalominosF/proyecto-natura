@@ -14,12 +14,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
+import { NewProductComponent } from './new-product/new-product.component';
 
 
 
 @NgModule({
   declarations: [
-    ProductViewComponent
+    ProductViewComponent,
+    NewProductComponent
   ],
   imports: [
     MatTableModule,

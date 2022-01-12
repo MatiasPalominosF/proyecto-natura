@@ -67,6 +67,8 @@ import { NotificationService } from './_services/notification/notification.servi
 import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './_services/user/user.service';
 import { ProductService } from './_services/product/product.service';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { getSpanishPaginatorIntl } from './spanish-paginator';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -139,6 +141,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         },
         NgbCarouselConfig,
         NgbModalConfig,
+        {
+            provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl()
+        }
     ],
     bootstrap: [AppComponent],
     exports: [RouterModule]

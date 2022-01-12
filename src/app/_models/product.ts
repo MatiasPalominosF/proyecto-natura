@@ -1,6 +1,7 @@
 export interface ProductInterface {
     uid?: string;
     assign?: string;
+    nameassign?: string;
     gross?: number;
     name?: string;
     net?: number;
