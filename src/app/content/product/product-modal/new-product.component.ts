@@ -7,13 +7,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './new-product.component.html',
   styleUrls: ['./new-product.component.css']
 })
-export class NewProductComponent implements OnInit {
+export class ProductModalComponent implements OnInit {
 
   @Input() public opc: boolean;
 
   public productInfo: FormGroup;
   public submitted: boolean = false;
-  public selection = {}
+  public selection = {};
+  private currentUser: any;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -35,6 +36,10 @@ export class NewProductComponent implements OnInit {
       vat: ['', Validators.required],
       isSale: [true, Validators.required],
     });
+
+    this.getUserLogged();
+
+    console.log("this.currentUser: ", this.currentUser);
   }
 
   get f() { return this.productInfo.controls; }
@@ -43,8 +48,17 @@ export class NewProductComponent implements OnInit {
 
   onProductInfoSubmit() {
     this.submitted = true;
-    console.log("fValue", this.fValue);
 
+
+    this.fValue.assign = this.currentUser.uid;
+    this.fValue.nameassign = this.currentUser.displayName;
+    console.log("fValue", this.fValue);
+  }
+
+  getUserLogged(): void {
+    if (localStorage.getItem('currentUser')) {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    }
   }
 
 }

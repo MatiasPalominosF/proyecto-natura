@@ -21,7 +21,7 @@
   <form [formGroup]="productInfo">
     <div class="form-body">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
           <div class="form-group">
             <label for="name">Nombre *</label>
             <input
@@ -39,6 +39,28 @@
             >
               <div *ngIf="f.name.errors.required">
                 El nombre del producto es requerido
+              </div>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="codbarra">Código de barras *</label>
+            <input
+              type="text"
+              id="codbarra"
+              class="form-control"
+              formControlName="codbarra"
+              placeholder="Código de barras"
+              [ngClass]="{ 'is-invalid': submitted && f.codbarra.errors }"
+            />
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.codbarra.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.codbarra.errors.required">
+                El código de barras del producto es requerido
               </div>
             </small>
           </div>

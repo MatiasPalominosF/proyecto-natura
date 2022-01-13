@@ -7,7 +7,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ProductInterface } from 'src/app/_models/product';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { ProductService } from 'src/app/_services/product/product.service';
-import { NewProductComponent } from '../new-product/new-product.component';
+import { ProductModalComponent } from '../product-modal/new-product.component';
 
 @Component({
   selector: 'app-product-view',
@@ -22,7 +22,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   public breadcrumb: any;
-  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin'];
+  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin', 'nameassign', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public isEmpty: boolean = false;
   private closeResult = '';
@@ -32,7 +32,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     private notifyService: NotificationService,
   ) { }
-  
+
   ngOnInit(): void {
     this.breadcrumb = {
       'mainlabel': 'Gestión de productos',
@@ -72,7 +72,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   }
 
   addNewProduct() {
-    const modalRef = this.modalService.open(NewProductComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
     modalRef.componentInstance.opc = true;
     modalRef.result.then((result) => {
       if (result) {
@@ -114,5 +114,17 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       default: return item[property];
     }
   };
+
+  changeOwnerProduct(product: ProductInterface): void {
+    console.log("product in changeOwnerProduct", product);
+  }
+
+  editProduct(product: ProductInterface): void {
+    console.log("product in editProduct", product);
+  }
+
+  deleteProduct(product: ProductInterface): void {
+    console.log("product in deleteProduct", product);
+  }
 }
 

@@ -34,9 +34,6 @@ export class LoginComponent implements OnInit {
             rememberme: [false]
         });
 
-        // if (localStorage.getItem('currentUser')) {
-        //     this.authService.doLogout();
-        // }
         if (localStorage.getItem('remember')) {
             localStorage.removeItem('currentLayoutStyle');
             let returnUrl = this.onLoginRedirect();
