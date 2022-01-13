@@ -33,6 +33,13 @@ export class ProductService {
       }));
   }
 
+  addProduct(product: ProductInterface) {
+    var tempId = this.afs.createId();
+    product.uid = tempId;
+
+    this.afs.collection('product').doc(tempId).set(product);
+  }
+
 
 
 }
