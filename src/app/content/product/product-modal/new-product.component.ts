@@ -98,7 +98,7 @@ export class ProductModalComponent implements OnInit {
     var totalWithMargin = 0;
     if (margin !== "") {
       marginInPercent = (+margin / 100) + 1;
-      totalWithMargin = this.f['net'].value * marginInPercent
+      totalWithMargin = Math.round(this.f['net'].value * marginInPercent);
       this.f['total'].setValue(totalWithMargin);
     } else {
       this.f['margin'].setValue(0)
