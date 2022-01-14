@@ -109,10 +109,15 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   }
 
   changeOwnerProduct(product: ProductInterface): void {
-    console.log("product in changeOwnerProduct", product);
     this.productService.selectedProduct = Object.assign({}, product);
     const modalRef = this.modalService.open(ChangeProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
-
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Mover stock", "¡El stock se ha movido correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   editProduct(product: ProductInterface): void {

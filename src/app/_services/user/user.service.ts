@@ -35,6 +35,17 @@ export class UserService {
     }));
   }
 
+  getAllUsers() {
+    return this.users = this.usersCollection.snapshotChanges()
+      .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as UserInterface;
+          data.uid = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
   getUsers() {
     return this.firestore.collection('users').snapshotChanges(); // use only for login.
   }
