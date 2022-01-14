@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ProductInterface } from 'src/app/_models/product';
+import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { ProductService } from 'src/app/_services/product/product.service';
 import { ProductModalComponent } from '../product-modal/new-product.component';
@@ -31,6 +32,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     private productService: ProductService,
     private modalService: NgbModal,
     private notifyService: NotificationService,
+    private confirmationDialogService: ConfirmationDialogService,
   ) { }
 
   ngOnInit(): void {
@@ -71,29 +73,6 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     this.dataSource.sortingDataAccessor = this.sortingCustomAccesor;
   }
 
-  addNewProduct() {
-    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
-    modalRef.componentInstance.opc = true;
-    modalRef.result.then((result) => {
-      if (result) {
-        this.notifyService.showSuccess("Agregar", "¡El producto se agregó correctamente!");
-      }
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log(this.closeResult);
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -115,16 +94,57 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     }
   };
 
+  addNewProduct() {
+    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = true;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Agregar", "¡El producto se agregó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   changeOwnerProduct(product: ProductInterface): void {
     console.log("product in changeOwnerProduct", product);
+    this.productService.selectedProduct = Object.assign({}, product);
   }
 
   editProduct(product: ProductInterface): void {
-    console.log("product in editProduct", product);
+    this.productService.selectedProduct = Object.assign({}, product);
+    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = false;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Editar", "¡El producto se editó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   deleteProduct(product: ProductInterface): void {
-    console.log("product in deleteProduct", product);
+    this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
+      .then(confirmed => {
+        if (!confirmed) {
+        } else {
+          this.productService.deleteProduct(product);
+          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+        }
+      }).catch(() => {
+        console.log("Not ok");
+      });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }
 

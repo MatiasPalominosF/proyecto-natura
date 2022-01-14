@@ -16,12 +16,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { ProductModalComponent } from './product-modal/new-product.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { ChangeProductModalComponent } from './change-product-modal/change-product-modal.component';
 
 
 @NgModule({
   declarations: [
     ProductViewComponent,
-    ProductModalComponent
+    ProductModalComponent,
+    ChangeProductModalComponent
   ],
   imports: [
     MatTableModule,

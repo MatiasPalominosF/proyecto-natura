@@ -12,6 +12,7 @@ export class ProductService {
   private productCollection: AngularFirestoreCollection<ProductInterface>;
   private productDoc: AngularFirestoreDocument<ProductInterface>;
   private product: Observable<ProductInterface[]>;
+  public selectedProduct: ProductInterface = {};
 
   constructor(
     public afs: AngularFirestore
@@ -37,9 +38,17 @@ export class ProductService {
     var tempId = this.afs.createId();
     product.uid = tempId;
 
-    this.afs.collection('product').doc(tempId).set(product);
+    this.afs.collection<ProductInterface>('product').doc(tempId).set(product);
   }
 
+  updateProduct(product: ProductInterface) {
+    this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
+    this.productDoc.update(product);
+  }
 
+  deleteProduct(product: ProductInterface) {
+    this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
+    this.productDoc.delete();
+  }
 
 }

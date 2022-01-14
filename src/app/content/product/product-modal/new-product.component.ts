@@ -30,26 +30,47 @@ export class ProductModalComponent implements OnInit {
   ngOnInit(): void {
 
     this.getUserLogged();
+    this.productInfo = this.formBuilder.group({
+      name: ['', Validators.required],
+      assign: [null],
+      codbarra: ['', Validators.required],
+      gross: ['', Validators.required],
+      margin: ['', Validators.required],
+      nameassign: [null],
+      net: ['', Validators.required],
+      quantity: [, Validators.required],
+      quantitymin: ['', Validators.required],
+      total: ['', Validators.required],
+      vat: ['', Validators.required],
+      isSale: [true, Validators.required],
+    });
 
-    if (this.opc) {
-      this.productInfo = this.formBuilder.group({
-        name: ['', Validators.required],
-        assign: [null],
-        codbarra: ['', Validators.required],
-        gross: ['', Validators.required],
-        margin: ['', Validators.required],
-        nameassign: [null],
-        net: ['', Validators.required],
-        quantity: [, Validators.required],
-        quantitymin: ['', Validators.required],
-        total: ['', Validators.required],
-        vat: ['', Validators.required],
-        isSale: [true, Validators.required],
-      });
-    } else {
+    if (!this.opc) {
       //Setear valores al formulario
+      this.setValuesInForm(this.productService.selectedProduct.name, this.productService.selectedProduct.assign,
+        this.productService.selectedProduct.codbarra, this.productService.selectedProduct.gross, this.productService.selectedProduct.margin,
+        this.productService.selectedProduct.nameassign, this.productService.selectedProduct.net, this.productService.selectedProduct.quantity,
+        this.productService.selectedProduct.quantitymin, this.productService.selectedProduct.total, this.productService.selectedProduct.vat,
+        this.productService.selectedProduct.isSale);
     }
   }
+
+  setValuesInForm(name: string, assign: string, codbarra: string, gross: number, margin: number, nameassign: string, net: number, quantity: number, quantitymin: number, total: number, vat: number, isSale: boolean) {
+    this.f['name'].setValue(name);
+    this.f['assign'].setValue(assign);
+    this.f['codbarra'].setValue(codbarra);
+    this.f['gross'].setValue(gross);
+    this.f['margin'].setValue(margin * 100);
+    this.f['nameassign'].setValue(nameassign);
+    this.f['net'].setValue(net);
+    this.f['quantity'].setValue(quantity);
+    this.f['quantitymin'].setValue(quantitymin);
+    this.f['total'].setValue(total);
+    this.f['vat'].setValue(vat);
+    this.f['isSale'].setValue(isSale);
+  }
+
+
 
   get f() { return this.productInfo.controls; }
 
@@ -68,6 +89,13 @@ export class ProductModalComponent implements OnInit {
       this.product = this.fValue;
       this.productService.addProduct(this.product);
 
+      this.passEntry.emit(true);
+      this.activeModal.close(true);
+    } else {
+      this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
+      this.product = this.fValue;
+      this.product.uid = this.productService.selectedProduct.uid;
+      this.productService.updateProduct(this.product);
       this.passEntry.emit(true);
       this.activeModal.close(true);
     }

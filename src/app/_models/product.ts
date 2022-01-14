@@ -11,4 +11,5 @@ export interface ProductInterface {
     total?: number;
     vat?: number;
     codbarra?: string;
+    isSale?:boolean;
 }
