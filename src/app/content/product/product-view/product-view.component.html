@@ -39,8 +39,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Producto
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Producto:</span>
+          <mat-cell *matCellDef="let row" data-label="Producto">
             {{ row.name }}
           </mat-cell>
         </ng-container>
@@ -50,8 +49,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio neto ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Precio neto ($):</span>
+          <mat-cell *matCellDef="let row" data-label="Precio neto">
             {{ row.net | number }}
           </mat-cell>
         </ng-container>
@@ -61,8 +59,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Ganancia
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Ganancia:</span>
+          <mat-cell *matCellDef="let row" data-label="Ganancia">
             {{ row.margin | percent }}
           </mat-cell>
         </ng-container>
@@ -72,8 +69,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio venta ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Precio venta ($):</span>
+          <mat-cell *matCellDef="let row" data-label="Precio venta ($)">
             {{ row.total | number }}
           </mat-cell>
         </ng-container>
@@ -83,8 +79,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Stock
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Stock:</span>
+          <mat-cell *matCellDef="let row" data-label="Stock">
             {{ row.quantity | number }}
           </mat-cell>
         </ng-container>
@@ -94,8 +89,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Stock mínimo
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Stock mínimo:</span>
+          <mat-cell *matCellDef="let row" data-label="Stock mínimo">
             {{ row.quantitymin | number }}
           </mat-cell>
         </ng-container>
@@ -105,8 +99,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Bodega
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Bodega:</span>
+          <mat-cell *matCellDef="let row" data-label="Bodega">
             {{ row.nameassign }}
           </mat-cell>
         </ng-container>
@@ -116,9 +109,8 @@
           <mat-header-cell *matHeaderCellDef style="justify-content: center">
             Acciones
           </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span class="mobile-label">Acciones:</span>
-            <div class="d-flex justify-content-between">
+          <mat-cell *matCellDef="let row" data-label="Acciones">
+            <div class="d-flex justify-content-end">
               <button
                 (click)="changeOwnerProduct(row)"
                 triggers="hover:click:hover"
@@ -155,10 +147,7 @@
 
         <!-- Header and Row Declarations -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row
-          matRipple
-          *matRowDef="let row; columns: displayedColumns"
-        ></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 
         <!-- Row shown when there is no matching data. -->
 
