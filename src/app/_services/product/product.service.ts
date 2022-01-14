@@ -35,7 +35,8 @@ export class ProductService {
   }
 
   getProductByUid(product: ProductInterface) {
-    return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign).where('codbarra', '==', product.codbarra).get();
+    return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign)
+      .where('codbarra', '==', product.codbarra).where('total', '==', product.total).get();
 
   }
 
