@@ -95,8 +95,8 @@ export const MenuSettingsConfig: MenuConfig = {
         icon: 'feather ft-clipboard',
         page: '/product/product-view',
       }, {
-        title: 'Asignaciones',
-        icon: 'feather ft-file-text',
+        title: 'Mover stock',
+        icon: 'feather ft-repeat',
         page: '/assign/assign-view',
       },
       { section: 'PERSONAL', icon: 'la-ellipsis-h' },

@@ -1,0 +1,317 @@
+<div class="modal-header">
+  <h4 class="form-section">
+    <div class="d-flex flex-row">
+      <div *ngIf="!opc"><i class="mr-2 feather ft-edit"></i></div>
+      <div *ngIf="opc"><i class="mr-2 icon-plus"></i></div>
+      <div>
+        {{ opc ? "Agregar producto" : "Editar producto" }}
+      </div>
+    </div>
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body px-0">
+  <div style="overflow-y: hidden; height: calc(100vh - 15rem)">
+    <div class="px-2" style="overflow-y: auto; height: 100%">
+      <form [formGroup]="productInfo">
+        <div class="form-body">
+          <h4 class="form-section">
+            <i class="la la-eye"></i> Acerca del producto
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">Nombre *</label>
+                <input
+                  type="text"
+                  id="name"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="Nombre producto"
+                  [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.name.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.name.errors.required">
+                    El nombre del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="codbarra">Código de barras *</label>
+                <input
+                  type="text"
+                  id="codbarra"
+                  class="form-control"
+                  formControlName="codbarra"
+                  placeholder="Código de barras"
+                  [ngClass]="{ 'is-invalid': submitted && f.codbarra.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.codbarra.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.codbarra.errors.required">
+                    El código de barras del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <h4 class="form-section">
+            <i class="feather ft-info"></i> Información del producto
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="gross">Precio bruto *</label>
+                <input
+                  type="number"
+                  (ngModelChange)="setVatGross($event)"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="gross"
+                  class="form-control"
+                  formControlName="gross"
+                  placeholder="Precio bruto"
+                  [ngClass]="{ 'is-invalid': submitted && f.gross.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.gross.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.gross.errors.required">
+                    El precio bruto del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="vat">IVA *</label>
+                <input
+                  type="number"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  step=".01"
+                  id="vat"
+                  class="form-control"
+                  formControlName="vat"
+                  placeholder="IVA"
+                  [ngClass]="{ 'is-invalid': submitted && f.vat.errors }"
+                  readonly
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.vat.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.vat.errors.required">
+                    El IVA del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="net">Precio neto *</label>
+                <input
+                  type="number"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="net"
+                  class="form-control"
+                  formControlName="net"
+                  placeholder="Precio neto"
+                  [ngClass]="{ 'is-invalid': submitted && f.net.errors }"
+                  readonly
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.net.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.net.errors.required">
+                    El precio neto del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="margin">Margen de ganancia *</label>
+                <input
+                  type="number"
+                  (change)="setMarginToTotal($event.target.value)"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="margin"
+                  class="form-control"
+                  formControlName="margin"
+                  placeholder="Margen de ganancia"
+                  [ngClass]="{ 'is-invalid': submitted && f.margin.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.margin.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.margin.errors.required">
+                    El margen de ganacia es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="total">Precio venta *</label>
+                <input
+                  type="number"
+                  (change)="setMarginFromTotal($event.target.value)"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="total"
+                  class="form-control"
+                  formControlName="total"
+                  placeholder="Precio venta"
+                  [ngClass]="{ 'is-invalid': submitted && f.total.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.total.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.total.errors.required">
+                    El precio venta del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="quantity">Stock *</label>
+                <input
+                  type="number"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="quantity"
+                  class="form-control"
+                  formControlName="quantity"
+                  placeholder="Stock"
+                  [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.quantity.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.quantity.errors.required">
+                    El stock del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="quantitymin">Stock mínimo *</label>
+                <input
+                  type="number"
+                  onkeydown="javascript: return event.keyCode === 8 ||
+                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  id="quantitymin"
+                  class="form-control"
+                  formControlName="quantitymin"
+                  placeholder="Precio venta"
+                  [ngClass]="{
+                    'is-invalid': submitted && f.quantitymin.errors
+                  }"
+                />
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.quantitymin.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.quantitymin.errors.required">
+                    El stock mínimo del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>¿Para venta? *</label>
+                <div class="input-group">
+                  <div class="d-inline-block custom-control custom-radio mr-1">
+                    <input
+                      type="radio"
+                      class="custom-control-input"
+                      [value]="true"
+                      id="yes"
+                      formControlName="isSale"
+                      checked="true"
+                    />
+                    <label class="custom-control-label" for="yes">Sí</label>
+                  </div>
+                  <div class="d-inline-block custom-control custom-radio">
+                    <input
+                      type="radio"
+                      class="custom-control-input"
+                      [value]="false"
+                      id="no"
+                      formControlName="isSale"
+                    />
+                    <label class="custom-control-label" for="no">No</label>
+                  </div>
+                  <small
+                    class="form-text text-muted danger"
+                    *ngIf="submitted && f.isSale.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.isSale.errors.required">
+                      Este campo es requerido
+                    </div>
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+    class="btn btn-sm grey btn-outline-secondary"
+  >
+    <i class="feather ft-x"></i> Cerrar
+  </button>
+  <button
+    (click)="onProductInfoSubmit()"
+    class="btn btn-sm btn-outline-primary"
+  >
+    <i class="feather ft-check"></i> Guardar
+  </button>
+</div>

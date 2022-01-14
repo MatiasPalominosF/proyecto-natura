@@ -2,28 +2,14 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
-
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ProductInterface } from 'src/app/_models/product';
+import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
+import { NotificationService } from 'src/app/_services/notification/notification.service';
+import { ProductService } from 'src/app/_services/product/product.service';
+import { ChangeProductModalComponent } from '../change-product-modal/change-product-modal.component';
+import { ProductModalComponent } from '../product-modal/new-product.component';
 
 @Component({
   selector: 'app-product-view',
@@ -32,15 +18,23 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ProductViewComponent implements OnInit, AfterViewInit {
 
+  @BlockUI('products') blockUIProduct: NgBlockUI;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   public breadcrumb: any;
-  public displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  public dataSource: MatTableDataSource<PeriodicElement> = new MatTableDataSource<PeriodicElement>();
+  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin', 'nameassign', 'actions'];
+  public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public isEmpty: boolean = false;
+  private closeResult = '';
 
-  constructor() { }
+  constructor(
+    private productService: ProductService,
+    private modalService: NgbModal,
+    private notifyService: NotificationService,
+    private confirmationDialogService: ConfirmationDialogService,
+  ) { }
 
   ngOnInit(): void {
     this.breadcrumb = {
@@ -59,21 +53,25 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       ],
       'options': false
     };
+    this.getProducts();
+  }
 
-    this.dataSource.data = ELEMENT_DATA;
-    if (this.dataSource.data.length === 0) {
-      this.isEmpty = true;
-    }
+  getProducts() {
+    this.blockUIProduct.start('Cargando...');
+    this.productService.getFullInfoProduct().subscribe(data => {
+      if (data.length === 0) {
+        this.isEmpty = true;
+      }
+      this.dataSource.data = data;
+      this.blockUIProduct.stop();
+    });
+
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = this.sortingCustomAccesor;
-  }
-
-  addNewProduct() {
-    console.log("Se presiona");
   }
 
   applyFilter(event: Event) {
@@ -87,12 +85,75 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   sortingCustomAccesor = (item, property) => {
     switch (property) {
-      case 'position': return item.position;
       case 'name': return item.name;
-      case 'weight': return item.weight;
-      case 'symbol': return item.symbol;
+      case 'net': return item.net;
+      case 'margin': return item.margin;
+      case 'total': return item.total;
+      case 'quantity': return item.quantity;
+      case 'quantitymin': return item.quantitymin;
       default: return item[property];
     }
   };
+
+  addNewProduct() {
+    this.productService.selectedProduct = Object.assign({}, {});
+    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = true;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Agregar", "¡El producto se agregó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  changeOwnerProduct(product: ProductInterface): void {
+    this.productService.selectedProduct = Object.assign({}, product);
+    const modalRef = this.modalService.open(ChangeProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Mover stock", "¡El stock se ha movido correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  editProduct(product: ProductInterface): void {
+    this.productService.selectedProduct = Object.assign({}, product);
+    const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = false;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Editar", "¡El producto se editó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  deleteProduct(product: ProductInterface): void {
+    this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
+      .then(confirmed => {
+        if (!confirmed) {
+        } else {
+          this.productService.deleteProduct(product);
+          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+        }
+      }).catch(() => {
+        console.log("Not ok");
+      });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }
 

@@ -17,51 +17,137 @@
         <div class="justify-content-center">
           <button
             type="button"
-            class="btn btn-primary btn-sm mt-2"
+            class="btn btn-primary btn-sm"
             (click)="addNewProduct()"
           >
-            <i class="la la-plus"></i> Crear categoría
+            <i class="la la-plus"></i> Nuevo producto
           </button>
         </div>
       </div>
       <mat-table
         #table
+        class="mat-elevation-z8"
         [dataSource]="dataSource"
         matSort
-        matSortActive="position"
+        matSortActive="name"
         matSortDirection="asc"
         class="mat-cell"
+        *blockUI="'products'; message: 'Loading'"
       >
-        <!-- Position Definition -->
-        <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> No </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.position }} </mat-cell>
-        </ng-container>
-
-        <!-- Name Definition -->
+        <!-- name Definition -->
         <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.name }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Producto
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Producto">
+            {{ row.name }}
+          </mat-cell>
         </ng-container>
 
-        <!-- Weight Definition -->
-        <ng-container matColumnDef="weight">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.weight }} </mat-cell>
+        <!-- net Definition -->
+        <ng-container matColumnDef="net">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Precio neto ($)
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Precio neto">
+            {{ row.net | number }}
+          </mat-cell>
         </ng-container>
 
-        <!-- Symbol Definition -->
-        <ng-container matColumnDef="symbol">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.symbol }} </mat-cell>
+        <!-- margin Definition -->
+        <ng-container matColumnDef="margin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Ganancia
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Ganancia">
+            {{ row.margin | percent }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- total Definition -->
+        <ng-container matColumnDef="total">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Precio venta ($)
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Precio venta ($)">
+            {{ row.total | number }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- quantity Definition -->
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Stock
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Stock">
+            {{ row.quantity | number }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- quantitymin Definition -->
+        <ng-container matColumnDef="quantitymin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Stock mínimo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Stock mínimo">
+            {{ row.quantitymin | number }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- nameassign Definition -->
+        <ng-container matColumnDef="nameassign">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Bodega
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Bodega">
+            {{ row.nameassign }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- actions Definition -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef style="justify-content: center">
+            Acciones
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Acciones">
+            <div class="d-flex justify-content-end">
+              <button
+                (click)="changeOwnerProduct(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Mover stock"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-soundcloud"
+              >
+                <span class="feather ft-repeat"></span>
+              </button>
+              <button
+                (click)="editProduct(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Editar producto"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-vimeo"
+              >
+                <span class="feather ft-edit-2"></span>
+              </button>
+              <button
+                (click)="deleteProduct(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Eliminar producto"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-flickr"
+              >
+                <span class="feather ft-trash-2"></span>
+              </button>
+            </div>
+          </mat-cell>
         </ng-container>
 
         <!-- Header and Row Declarations -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row
-          matRipple
-          *matRowDef="let row; columns: displayedColumns"
-        ></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 
         <!-- Row shown when there is no matching data. -->
 

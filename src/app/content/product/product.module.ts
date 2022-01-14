@@ -14,12 +14,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
-
+import { ProductModalComponent } from './product-modal/new-product.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { ChangeProductModalComponent } from './change-product-modal/change-product-modal.component';
 
 
 @NgModule({
   declarations: [
-    ProductViewComponent
+    ProductViewComponent,
+    ProductModalComponent,
+    ChangeProductModalComponent
   ],
   imports: [
     MatTableModule,
@@ -34,6 +38,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatRippleModule,
     NgbModalModule,
     FormsModule,
+    MatRadioModule,
     ReactiveFormsModule,
     BlockUIModule.forRoot({
       template: BlockTemplateComponent
