@@ -34,6 +34,11 @@ export class ProductService {
       }));
   }
 
+  getProductByUid(product: ProductInterface) {
+    return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign).where('codbarra', '==', product.codbarra).get();
+
+  }
+
   addProduct(product: ProductInterface) {
     var tempId = this.afs.createId();
     product.uid = tempId;

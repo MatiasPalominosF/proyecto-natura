@@ -15,6 +15,7 @@ import { UserService } from 'src/app/_services/user/user.service';
 export class ChangeProductModalComponent implements OnInit {
 
   @BlockUI('usersBlock') blockUIUsers: NgBlockUI;
+  @BlockUI('submitBlock') blockUISubmit: NgBlockUI;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
 
   public title: string;
@@ -22,8 +23,10 @@ export class ChangeProductModalComponent implements OnInit {
   public submitted: boolean = false;
   public users: UserInterface[] = [];
   private oldSelectedProduct: ProductInterface;
-  private newSelectedProduct: ProductInterface = {};
+  private newSelectedProduct: ProductInterface;
   public isBiggest: boolean = false;
+  private data: ProductInterface = Object.assign({}, {});
+
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -70,9 +73,8 @@ export class ChangeProductModalComponent implements OnInit {
 
   get fValue() { return this.productInfo.value; }
 
-  onProductInfoSubmit() {
+  async onProductInfoSubmit() {
     this.submitted = true;
-
 
     if (this.productInfo.invalid) {
       return;
@@ -80,23 +82,40 @@ export class ChangeProductModalComponent implements OnInit {
       this.isBiggest = true;
       return;
     }
-
     this.setNameAssign(this.users, this.newSelectedProduct);
     this.newSelectedProduct.assign = this.fValue.assign;
     this.newSelectedProduct.quantity = this.fValue.move;
 
-    this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct);
-
-    this.productService.updateProduct(this.oldSelectedProduct);
-    this.productService.addProduct(this.newSelectedProduct);
-
-    this.passEntry.emit(true);
-    this.activeModal.close(true);
+    this.blockUISubmit.start("Guardando...");
+    this.productService.getProductByUid(this.newSelectedProduct).then((querySnapshot) => {
+      querySnapshot.forEach(document => {
+        this.data = Object.assign({}, document.data());
+      })
+    }).finally(() => {
+      if (Object.keys(this.data).length !== 0) {
+        this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
+        this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
+        this.productService.updateProduct(this.data);
+        this.productService.updateProduct(this.oldSelectedProduct);
+      } else {
+        this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
+        this.productService.updateProduct(this.oldSelectedProduct);
+        this.productService.addProduct(this.newSelectedProduct);
+      }
+      this.blockUISubmit.stop();
+      this.passEntry.emit(true);
+      this.activeModal.close(true);
+    })
   }
 
-  updateQuantityOldSelectedProduct(oldSelectedProduct: ProductInterface, newSelectedProduct: ProductInterface) {
-    let quantity = this.oldSelectedProduct.quantity;
-    this.oldSelectedProduct.quantity = quantity - newSelectedProduct.quantity;
+  updateQuantityOldSelectedProduct(oldSelectedProduct: ProductInterface, newSelectedProduct: ProductInterface, opc: boolean) {
+    var quantity = oldSelectedProduct.quantity;
+    if (opc) {// Se resta stock
+      oldSelectedProduct.quantity = quantity - newSelectedProduct.quantity;
+    } else {// Se suma stock
+      oldSelectedProduct.quantity = quantity + newSelectedProduct.quantity;
+    }
+
   }
 
   private setNameAssign(users: UserInterface[], selectedProduct: ProductInterface): void {
