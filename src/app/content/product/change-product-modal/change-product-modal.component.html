@@ -141,6 +141,7 @@
             placement="top"
             formControlName="assign"
           >
+            <option [ngValue]="null" disabled>Selecciona una bodega</option>
             <option *ngFor="let user of users" [value]="user.uid">
               {{ user.firstname }}
             </option>

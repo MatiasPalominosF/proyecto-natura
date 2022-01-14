@@ -48,20 +48,19 @@ export class ChangeProductModalComponent implements OnInit {
 
     this.getUsers();
     this.setValuesInForm(this.productService.selectedProduct.name, this.productService.selectedProduct.codbarra,
-      this.productService.selectedProduct.assign, this.productService.selectedProduct.quantity);
+      this.productService.selectedProduct.quantity);
 
   }
 
-  setValuesInForm(name: string, codbarra: string, assign: string, quantity: number) {
+  setValuesInForm(name: string, codbarra: string, quantity: number) {
     this.f['name'].setValue(name);
     this.f['codbarra'].setValue(codbarra);
-    this.f['assign'].setValue(assign);
     this.f['quantity'].setValue(quantity);
   }
 
   private getUsers(): void {
     this.blockUIUsers.start("Cargando...");
-    this.userService.getAllUsers().subscribe(users => {
+    this.userService.getUserDistinct(this.productService.selectedProduct.assign).subscribe(users => {
       this.users = users;
       this.blockUIUsers.stop();
     });
