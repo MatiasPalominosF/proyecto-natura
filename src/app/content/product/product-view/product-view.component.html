@@ -39,7 +39,10 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Producto
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.name }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Producto:</span>
+            {{ row.name }}
+          </mat-cell>
         </ng-container>
 
         <!-- net Definition -->
@@ -47,15 +50,19 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio neto ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.net | number }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Precio neto ($):</span>
+            {{ row.net | number }}
+          </mat-cell>
         </ng-container>
 
         <!-- margin Definition -->
         <ng-container matColumnDef="margin">
           <mat-header-cell *matHeaderCellDef mat-sort-header>
-            Ganacia
+            Ganancia
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Ganancia:</span>
             {{ row.margin | percent }}
           </mat-cell>
         </ng-container>
@@ -65,7 +72,10 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio venta ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.total | number }} </mat-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Precio venta ($):</span>
+            {{ row.total | number }}
+          </mat-cell>
         </ng-container>
 
         <!-- quantity Definition -->
@@ -74,6 +84,7 @@
             Stock
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Stock:</span>
             {{ row.quantity | number }}
           </mat-cell>
         </ng-container>
@@ -84,6 +95,7 @@
             Stock mínimo
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Stock mínimo:</span>
             {{ row.quantitymin | number }}
           </mat-cell>
         </ng-container>
@@ -94,6 +106,7 @@
             Bodega
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Bodega:</span>
             {{ row.nameassign }}
           </mat-cell>
         </ng-container>
@@ -104,6 +117,7 @@
             Acciones
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Acciones:</span>
             <div class="d-flex justify-content-between">
               <button
                 (click)="changeOwnerProduct(row)"

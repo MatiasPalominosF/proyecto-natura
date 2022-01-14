@@ -8,6 +8,7 @@ import { ProductInterface } from 'src/app/_models/product';
 import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { ProductService } from 'src/app/_services/product/product.service';
+import { ChangeProductModalComponent } from '../change-product-modal/change-product-modal.component';
 import { ProductModalComponent } from '../product-modal/new-product.component';
 
 @Component({
@@ -95,6 +96,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   };
 
   addNewProduct() {
+    this.productService.selectedProduct = Object.assign({}, {});
     const modalRef = this.modalService.open(ProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
     modalRef.componentInstance.opc = true;
     modalRef.result.then((result) => {
@@ -109,6 +111,8 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   changeOwnerProduct(product: ProductInterface): void {
     console.log("product in changeOwnerProduct", product);
     this.productService.selectedProduct = Object.assign({}, product);
+    const modalRef = this.modalService.open(ChangeProductModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+
   }
 
   editProduct(product: ProductInterface): void {

@@ -1,1 +1,36 @@
-<p>change-product-modal works!</p>
+<div class="modal-header">
+  <h4 class="form-section">
+    <div class="d-flex flex-row">
+      <div><i class="mr-2 feather ft-repeat"></i></div>
+      <div>
+        {{ title }}
+      </div>
+    </div>
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>change-product-modal works!</p>
+</div>
+<div class="modal-footer">
+  <button
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+    class="btn btn-sm grey btn-outline-secondary"
+  >
+    <i class="feather ft-x"></i> Cerrar
+  </button>
+  <button
+    (click)="onProductInfoSubmit()"
+    class="btn btn-sm btn-outline-primary"
+  >
+    <i class="feather ft-check"></i> Guardar
+  </button>
+</div>

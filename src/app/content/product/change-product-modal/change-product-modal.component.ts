@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-change-product-modal',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChangeProductModalComponent implements OnInit {
 
-  constructor() { }
+  public title: string;
+  constructor(
+    public activeModal: NgbActiveModal,
+  ) { }
 
   ngOnInit(): void {
+    this.title = 'Mover stock';
   }
 
 }
