@@ -11,6 +11,11 @@ import { ProductService } from 'src/app/_services/product/product.service';
 import { ChangeProductModalComponent } from '../change-product-modal/change-product-modal.component';
 import { ProductModalComponent } from '../product-modal/new-product.component';
 
+export interface FilterInterface {
+  id: string,
+  value: string
+}
+
 @Component({
   selector: 'app-product-view',
   templateUrl: './product-view.component.html',
@@ -58,6 +63,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   getProducts() {
     this.blockUIProduct.start('Cargando...');
+
     this.productService.getFullInfoProduct().subscribe(data => {
       if (data.length === 0) {
         this.isEmpty = true;
@@ -72,16 +78,44 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = this.sortingCustomAccesor;
+
+    /* configure filter */
+    this.dataSource.filterPredicate = this.filterCustomAccessor();
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    let filteredValues = {
+      name: '', nameassign: '', codbarra: ''
+    };
+
+    filteredValues['name'] = filterValue;
+    filteredValues['nameassign'] = filterValue;
+    filteredValues['codbarra'] = filterValue;
+    this.dataSource.filter = JSON.stringify(filteredValues);
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  /**
+   * 
+   * @returns Custom accessor function
+   */
+  filterCustomAccessor() {
+    const myFilterPredicate = (data: ProductInterface, filter: string): boolean => {
+      let searchString = JSON.parse(filter);
+
+      // Para compara numbers usar: data.position.toString().trim().indexOf(searchString.position) !== -1
+      return data.name.toString().trim().toLowerCase().indexOf(searchString.nameassign.toLowerCase()) !== -1 ||
+        data.nameassign.toString().trim().toLowerCase().indexOf(searchString.nameassign.toLowerCase()) !== -1 ||
+        data.codbarra.toString().trim().toLowerCase().indexOf(searchString.codbarra.toLowerCase()) !== -1;
+    }
+    return myFilterPredicate;
+  }
+
+
 
   sortingCustomAccesor = (item, property) => {
     switch (property) {
@@ -91,6 +125,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       case 'total': return item.total;
       case 'quantity': return item.quantity;
       case 'quantitymin': return item.quantitymin;
+      case 'nameassign': return item.nameassign;
       default: return item[property];
     }
   };

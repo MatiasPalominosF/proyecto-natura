@@ -2,6 +2,8 @@ export interface ProductInterface {
     uid?: string;
     assign?: string;
     nameassign?: string;
+    refcicle?: string;
+    namecicle?: string;
     gross?: number;
     name?: string;
     net?: number;
@@ -11,5 +13,5 @@ export interface ProductInterface {
     total?: number;
     vat?: number;
     codbarra?: string;
-    isSale?:boolean;
+    isSale?: boolean;
 }
