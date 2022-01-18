@@ -70,7 +70,6 @@ import { ProductService } from './_services/product/product.service';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getSpanishPaginatorIntl } from './spanish-paginator';
 import { ConfirmationDialogService } from './_services/confirmation-dialog/confirmation-dialog.service';
-
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };

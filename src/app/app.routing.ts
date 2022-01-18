@@ -31,7 +31,7 @@ const appRoutes: Routes = [
     ],
   },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'changelog' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes, { scrollOffset: [0, 0], scrollPositionRestoration: 'top', relativeLinkResolution: 'legacy' });
