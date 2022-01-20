@@ -2,9 +2,12 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { CicleService } from 'src/app/_services/cicle/cicle.service';
+import { NotificationService } from 'src/app/_services/notification/notification.service';
+import { CicleModalComponent } from '../cicle-modal/cicle-modal.component';
 
 @Component({
   selector: 'app-cicle-view',
@@ -26,6 +29,8 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cicleService: CicleService,
+    private modalService: NgbModal,
+    private notifyService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -87,15 +92,25 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
   }
 
   addNewCicle(): void {
-
+    this.cicleService.selectedCicle = Object.assign({}, {});
+    const modalRef = this.modalService.open(CicleModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = true;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Agregar", "¡El ciclo se agregó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   editCicle(cicle: CicleInterface): void {
+    console.log(cicle);
 
   }
 
   deleteCicle(cicle: CicleInterface): void {
-
+    console.log(cicle);
   }
 
   applyFilter(event: Event) {
@@ -125,6 +140,16 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
       this.dataSource.data = cicles;
       this.blockUICicle.stop();
     });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }

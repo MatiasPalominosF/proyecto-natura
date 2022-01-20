@@ -2,7 +2,7 @@
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule, NgbCarouselConfig, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbCarouselConfig, NgbModalConfig, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -72,6 +72,7 @@ import { getSpanishPaginatorIntl } from './spanish-paginator';
 import { ConfirmationDialogService } from './_services/confirmation-dialog/confirmation-dialog.service';
 import localeEsCl from "@angular/common/locales/es-CL";
 import { registerLocaleData } from '@angular/common';
+import { NgbDateCustomParserFormatter } from './_helpers/dateCustomFormatter';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
@@ -141,6 +142,10 @@ registerLocaleData(localeEsCl);
         DataApiService,
         AuthService,
         ConfirmationDialogService,
+        {
+            provide: NgbDateParserFormatter,
+            useClass: NgbDateCustomParserFormatter
+        },
         {
             provide: LOCALE_ID,
             useValue: "es-CL"

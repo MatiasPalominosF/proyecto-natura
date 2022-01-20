@@ -31,6 +31,12 @@ export class CicleService {
           return data;
         });
       }));
+  }
 
+  addCicle(cicle: CicleInterface) {
+    var tempId = this.afs.createId();
+    cicle.uid = tempId;
+
+    this.afs.collection<CicleInterface>('cicles').doc(tempId).set(cicle);
   }
 }

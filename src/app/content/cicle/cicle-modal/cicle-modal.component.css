@@ -1,0 +1,138 @@
+.form-control.is-invalid {
+  border-color: #cacfe7;
+  background-image: none !important;
+}
+
+.div.basicInfoCard {
+  height: 700px;
+}
+
+:host ::ng-deep .block-ui-wrapper {
+  background: rgba(255, 249, 249, 0.5) !important;
+}
+:host ::ng-deep .block-ui-wrapper {
+  background: rgba(255, 249, 249, 0.5) !important;
+}
+:host ::ng-deep .btn-light:not(:disabled):not(.disabled):active {
+  color: unset !important;
+  background-color: unset !important;
+  border-color: #d3d9df !important;
+}
+
+:host ::ng-deep .btn-light:hover:not(.disabled):active {
+  background-color: #e2e6ea !important;
+  border-color: #dae0e5 !important;
+}
+
+:host ::ng-deep .btn-light {
+  color: unset !important;
+  background-color: unset !important;
+  border-color: unset !important;
+}
+
+:host ::ng-deep .bg-primary {
+  background-color: #007bff !important;
+}
+
+:host ::ng-deep .text-white {
+  color: #fff !important;
+}
+
+:host ::ng-deep .custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+:host ::ng-deep .custom-day:active {
+  color: #6d7183 !important;
+  background-color: #fff !important;
+  border-block-color: rgb(2, 117, 216) !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+:host ::ng-deep .hidden {
+  display: block !important;
+}
+
+.ngb-dp-weekday {
+  color: #17a2b8;
+}
+
+.ngb-dp-week-number,
+.ngb-dp-weekday {
+  line-height: 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+.ngb-datepicker-month-view {
+  pointer-events: auto;
+}
+
+.small {
+  font-size: 80%;
+  font-weight: 400;
+}
+
+.ngb-dp-day {
+  cursor: pointer !important;
+}
+
+.ngb-dp-month {
+  pointer-events: none;
+}
+
+.btn-light:hover {
+  color: #212529 !important;
+  background-color: #e2e6ea !important;
+  border-color: #dae0e5 !important;
+}
+
+.ngb-datepicker-month-view {
+  pointer-events: auto;
+}
+
+.ngb-dp-header {
+  border-bottom: 0;
+  border-radius: 0.25rem 0.25rem 0 0;
+  padding-top: 0.25rem;
+}
+
+.ngb-dp-day,
+.ngb-dp-week-number,
+.ngb-dp-weekday {
+  width: 2rem;
+  height: 2rem;
+}
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}
+
+:host ::ng-deep .block-ui-wrapper {
+  background: rgba(255, 249, 249, 0.5) !important;
+}
