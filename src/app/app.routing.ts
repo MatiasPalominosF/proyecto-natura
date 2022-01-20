@@ -24,7 +24,7 @@ const appRoutes: Routes = [
     children: [
       { path: 'logout', component: LoginComponent, canActivate: [AuthGuard] },
       { path: 'product', loadChildren: () => import('../app/content/product/product.module').then(m => m.ProductModule), canActivate: [AuthGuard] },
-      { path: 'assign', loadChildren: () => import('../app/content/assign/assign.module').then(m => m.AssignModule), canActivate: [AuthGuard] },
+      { path: 'cicle', loadChildren: () => import('./content/cicle/cicle.module').then(m => m.CicleModule), canActivate: [AuthGuard] },
       { path: 'worker', loadChildren: () => import('../app/content/worker/worker.module').then(m => m.WorkerModule), canActivate: [AuthGuard] },
       { path: 'dashboard', loadChildren: () => import('../app/content/dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [AuthGuard] },
       { path: 'changelog', component: ChangelogComponent, canActivate: [AuthGuard] },

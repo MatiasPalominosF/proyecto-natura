@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AssignViewComponent } from './assign-view.component';
+import { CicleViewComponent } from './cicle-view.component';
 
 describe('AssignViewComponent', () => {
-  let component: AssignViewComponent;
-  let fixture: ComponentFixture<AssignViewComponent>;
+  let component: CicleViewComponent;
+  let fixture: ComponentFixture<CicleViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssignViewComponent ]
+      declarations: [ CicleViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssignViewComponent);
+    fixture = TestBed.createComponent(CicleViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
