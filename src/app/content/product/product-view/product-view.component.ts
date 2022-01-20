@@ -63,10 +63,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   getProducts() {
     this.blockUIProduct.start('Cargando...');
-
+    this.isEmpty = true;
     this.productService.getFullInfoProduct().subscribe(data => {
       if (data.length === 0) {
         this.isEmpty = true;
+        this.isEmpty = false;
+        this.blockUIProduct.stop();
+        return;
       }
       this.dataSource.data = data;
       this.blockUIProduct.stop();

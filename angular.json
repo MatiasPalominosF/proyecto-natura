@@ -8,7 +8,7 @@
   "projects": {
     "modern-admin": {
       "i18n": {
-        "sourceLocale": "es"
+        "sourceLocale": "es-CL"
       },
       "root": "",
       "sourceRoot": "src",
@@ -42,7 +42,7 @@
               "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js",
               "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"
             ],
-            "aot": false,
+            "aot": true,
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,

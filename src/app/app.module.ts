@@ -1,4 +1,4 @@
-﻿import { NgModule } from '@angular/core';
+﻿import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -70,9 +70,14 @@ import { ProductService } from './_services/product/product.service';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getSpanishPaginatorIntl } from './spanish-paginator';
 import { ConfirmationDialogService } from './_services/confirmation-dialog/confirmation-dialog.service';
+import localeEsCl from "@angular/common/locales/es-CL";
+import { registerLocaleData } from '@angular/common';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
+
+
+registerLocaleData(localeEsCl);
 
 @NgModule({
     imports: [
@@ -136,6 +141,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DataApiService,
         AuthService,
         ConfirmationDialogService,
+        {
+            provide: LOCALE_ID,
+            useValue: "es-CL"
+        },
         {
             provide: HAMMER_GESTURE_CONFIG,
             useClass: HammerGestureConfig

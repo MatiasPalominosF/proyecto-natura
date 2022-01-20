@@ -50,7 +50,7 @@
             Precio neto ($)
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Precio neto">
-            {{ row.net | number }}
+            {{ row.net | number:'':'es-CL' }}
           </mat-cell>
         </ng-container>
 
@@ -70,7 +70,7 @@
             Precio venta ($)
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Precio venta ($)">
-            {{ row.total | number }}
+            {{ row.total | number:'':'es-CL' }}
           </mat-cell>
         </ng-container>
 
@@ -80,7 +80,7 @@
             Stock
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Stock">
-            {{ row.quantity | number }}
+            {{ row.quantity | number:'':'es-CL' }}
           </mat-cell>
         </ng-container>
 
@@ -90,7 +90,7 @@
             Stock mínimo
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Stock mínimo">
-            {{ row.quantitymin | number }}
+            {{ row.quantitymin | number:'':'es-CL' }}
           </mat-cell>
         </ng-container>
 

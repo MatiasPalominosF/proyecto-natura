@@ -114,9 +114,13 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
 
   getCicles() {
     this.blockUICicle.start('Cargando...');
+    this.isEmpty = true;
     this.cicleService.getFullInfoCicle().subscribe((cicles) => {
       if (cicles.length === 0) {
         this.isEmpty = true;
+        this.blockUICicle.stop();
+        this.isEmpty = false;
+        return;
       }
       this.dataSource.data = cicles;
       this.blockUICicle.stop();
