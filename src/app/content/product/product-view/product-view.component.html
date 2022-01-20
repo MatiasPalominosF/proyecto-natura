@@ -47,10 +47,10 @@
         <!-- net Definition -->
         <ng-container matColumnDef="net">
           <mat-header-cell *matHeaderCellDef mat-sort-header>
-            Precio neto ($)
+            Precio neto
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Precio neto">
-            {{ row.net | number:'':'es-CL' }}
+            {{ row.net | currency:'CLP'}}
           </mat-cell>
         </ng-container>
 
@@ -69,8 +69,8 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             Precio venta ($)
           </mat-header-cell>
-          <mat-cell *matCellDef="let row" data-label="Precio venta ($)">
-            {{ row.total | number:'':'es-CL' }}
+          <mat-cell *matCellDef="let row" data-label="Precio venta">
+            {{ row.total | currency:'CLP' }}
           </mat-cell>
         </ng-container>
 
