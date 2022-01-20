@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -9,7 +10,7 @@ export class BreadcrumbComponent implements OnInit {
 
   constructor() { }
 
-  @Input() breadcrumb: object;
+  @Input() breadcrumb: BreadcrumbInterface;
 
   ngOnInit() {
     this.processBreadCrumbLinks();

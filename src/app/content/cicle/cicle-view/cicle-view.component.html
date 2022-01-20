@@ -1,0 +1,132 @@
+<div class="app-content content">
+  <div class="content-wrapper">
+    <div class="content-header row mb-1">
+      <app-breadcrumb class="col-12" [breadcrumb]="breadcrumb"></app-breadcrumb>
+    </div>
+    <div class="content-body">
+      <div class="d-flex justify-content-between">
+        <mat-form-field appearance="standard">
+          <mat-label>Buscar</mat-label>
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Ej. Ciclo 03"
+            #input
+          />
+        </mat-form-field>
+        <div class="justify-content-center">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm mt-2"
+            (click)="addNewCicle()"
+          >
+            <i class="la la-plus"></i> Nuevo producto
+          </button>
+        </div>
+      </div>
+      <mat-table
+        #table
+        class="mat-elevation-z8"
+        [dataSource]="dataSource"
+        matSort
+        matSortActive="name"
+        matSortDirection="asc"
+        class="mat-cell"
+        *blockUI="'cicles'; message: 'Loading'"
+      >
+        <!-- position Definition -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i = index" data-label="No">
+            {{ paginator.pageIndex * paginator.pageSize + i + 1 }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- name Definition -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Nombre ciclo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Nombre ciclo">
+            {{ row.name }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- dateinit Definition -->
+        <ng-container matColumnDef="dateinit">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Fecha inicio
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Fecha inicio">
+            {{ row.dateinit.toDate() | date: "dd/MM/yyyy" }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- dateend Definition -->
+        <ng-container matColumnDef="dateend">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Fecha término
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Fecha término">
+            {{ row.dateend.toDate() | date: "dd/MM/yyyy" }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- actions Definition -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Acciones">
+            <div class="d-flex justify-content-end">
+              <button
+                (click)="editCicle(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Editar ciclo"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-vimeo"
+              >
+                <span class="feather ft-edit-2"></span>
+              </button>
+              <button
+                (click)="deleteCicle(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Eliminar ciclo"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-flickr"
+              >
+                <span class="feather ft-trash-2"></span>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns; let i = index"
+        ></mat-row>
+
+        <!-- Row shown when there is no matching data. -->
+
+        <tr class="mat-row" *matNoDataRow>
+          <td *ngIf="!isEmpty" class="mat-cell" colspan="4">
+            <br />
+            No hay coincidencias para "{{ input.value }}"
+          </td>
+          <td *ngIf="isEmpty" class="mat-cell" colspan="4">
+            <br />
+            No hay datos para mostrar
+          </td>
+        </tr>
+      </mat-table>
+      <!-- Pagination-->
+      <mat-paginator
+        #paginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 15, 50, 100]"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
