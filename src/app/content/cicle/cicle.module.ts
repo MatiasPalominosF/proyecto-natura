@@ -15,12 +15,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
+import { CicleModalComponent } from './cicle-modal/cicle-modal.component';
 
 
 
 @NgModule({
   declarations: [
-    CicleViewComponent
+    CicleViewComponent,
+    CicleModalComponent
   ],
   imports: [
     MatTableModule,

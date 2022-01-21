@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AnyCnameRecord } from 'dns';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
+import { CicleService } from 'src/app/_services/cicle/cicle.service';
 import { ProductService } from 'src/app/_services/product/product.service';
 
 @Component({
@@ -14,17 +17,21 @@ export class ProductModalComponent implements OnInit {
 
   @Input() public opc: boolean;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
+  @BlockUI('cicles') blockUICicle: NgBlockUI;
 
+  private selectedCicle: CicleInterface = {};
   public productInfo: FormGroup;
   public submitted: boolean = false;
   public selection = {};
   private currentUser: any;
   private product: ProductInterface = {};
+  public ciclesArray: CicleInterface[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private productService: ProductService,
+    private cicleService: CicleService,
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +41,7 @@ export class ProductModalComponent implements OnInit {
       name: ['', Validators.required],
       assign: [null],
       codbarra: ['', Validators.required],
+      refcicle: [null, Validators.required],
       gross: ['', Validators.required],
       margin: ['', Validators.required],
       nameassign: [null],
@@ -45,20 +53,23 @@ export class ProductModalComponent implements OnInit {
       isSale: [true, Validators.required],
     });
 
+    this.getCicles();
+
     if (!this.opc) {
       //Setear valores al formulario
       this.setValuesInForm(this.productService.selectedProduct.name, this.productService.selectedProduct.assign,
-        this.productService.selectedProduct.codbarra, this.productService.selectedProduct.gross, this.productService.selectedProduct.margin,
+        this.productService.selectedProduct.codbarra, this.productService.selectedProduct.refcicle, this.productService.selectedProduct.gross, this.productService.selectedProduct.margin,
         this.productService.selectedProduct.nameassign, this.productService.selectedProduct.net, this.productService.selectedProduct.quantity,
         this.productService.selectedProduct.quantitymin, this.productService.selectedProduct.total, this.productService.selectedProduct.vat,
         this.productService.selectedProduct.isSale);
     }
   }
 
-  setValuesInForm(name: string, assign: string, codbarra: string, gross: number, margin: number, nameassign: string, net: number, quantity: number, quantitymin: number, total: number, vat: number, isSale: boolean) {
+  setValuesInForm(name: string, assign: string, codbarra: string, selectCicle: any, gross: number, margin: number, nameassign: string, net: number, quantity: number, quantitymin: number, total: number, vat: number, isSale: boolean) {
     this.f['name'].setValue(name);
     this.f['assign'].setValue(assign);
     this.f['codbarra'].setValue(codbarra);
+    this.getCicleToForm(this.f['refcicle'], selectCicle);
     this.f['gross'].setValue(gross);
     this.f['margin'].setValue(margin * 100);
     this.f['nameassign'].setValue(nameassign);
@@ -69,8 +80,25 @@ export class ProductModalComponent implements OnInit {
     this.f['vat'].setValue(vat);
     this.f['isSale'].setValue(isSale);
   }
+  getCicleToForm(selecCicleForm: AbstractControl, selectCicle: any) {
+    if (selectCicle) {
+      this.blockUICicle.start("Cargando...");
+      selectCicle.get().then((result) => {
+        console.log(result.data());
+        let cicle: CicleInterface = result.data();
+        selecCicleForm.setValue(cicle.uid);
+        this.blockUICicle.stop();
+      })
+    }
+  }
 
-
+  getCicles() {
+    this.blockUICicle.start("Cargando...");
+    this.cicleService.getFullInfoCicle().subscribe((cicles) => {
+      this.ciclesArray = cicles;
+      this.blockUICicle.stop();
+    })
+  }
 
   get f() { return this.productInfo.controls; }
 
@@ -86,8 +114,7 @@ export class ProductModalComponent implements OnInit {
       this.fValue.assign = this.currentUser.uid;
       this.fValue.nameassign = this.currentUser.displayName;
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
-      this.product = this.fValue;
-      this.productService.addProduct(this.product);
+      this.productService.addProduct(this.fValue);
 
       this.passEntry.emit(true);
       this.activeModal.close(true);

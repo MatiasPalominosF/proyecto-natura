@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
 import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
@@ -29,10 +30,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   public breadcrumb: any;
-  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin', 'nameassign', 'actions'];
+  public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin', 'namecicle', 'nameassign', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
-  public isEmpty: boolean = false;
+  public isEmpty: boolean;
+  public isFounded: boolean;
   private closeResult = '';
+  private productArray: ProductInterface[] = [];
+
 
   constructor(
     private productService: ProductService,
@@ -64,17 +68,38 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   getProducts() {
     this.blockUIProduct.start('Cargando...');
     this.isEmpty = true;
-    this.productService.getFullInfoProduct().subscribe(data => {
-      if (data.length === 0) {
+    this.isFounded = true;
+    this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
+      this.productArray = [];
+      if (querySnapshot.empty) {
         this.isEmpty = true;
-        this.isEmpty = false;
         this.blockUIProduct.stop();
         return;
       }
-      this.dataSource.data = data;
-      this.blockUIProduct.stop();
-    });
+      
+      querySnapshot.forEach(doc => {
+        let data: any = doc.data();
+        if (Object.keys(data.refcicle).length !== 0) {
+          let product: ProductInterface = {};
+          data.refcicle.get().then((cicleFs) => {
+            let cicle: CicleInterface = cicleFs.data();
+            product = data;
+            product.namecicle = cicle.name;
+            this.productArray.push(product);
+          }).finally(() => {
+            this.dataSource.data = this.productArray;
+            this.isEmpty = false;
+            this.isFounded = false;
+            this.blockUIProduct.stop();
+          })
+        }
 
+      });
+    })
+  }
+
+  refreshView() {
+    this.getProducts();
   }
 
   ngAfterViewInit() {
@@ -140,6 +165,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Agregar", "¡El producto se agregó correctamente!");
+        this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -152,6 +178,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Mover stock", "¡El stock se ha movido correctamente!");
+        this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -165,6 +192,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Editar", "¡El producto se editó correctamente!");
+        this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -178,6 +206,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
         } else {
           this.productService.deleteProduct(product);
           this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+          this.refreshView();
         }
       }).catch(() => {
         console.log("Not ok");

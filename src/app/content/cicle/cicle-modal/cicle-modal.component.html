@@ -1,0 +1,121 @@
+<div class="modal-header">
+  <h4 class="form-section">
+    <div class="d-flex flex-row">
+      <div *ngIf="!opc"><i class="mr-2 feather ft-edit"></i></div>
+      <div *ngIf="opc"><i class="mr-2 icon-plus"></i></div>
+      <div>
+        {{ opc ? "Agregar ciclo" : "Editar ciclo" }}
+      </div>
+    </div>
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="cicleInfo">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="name">Nombre *</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            formControlName="name"
+            placeholder="Producto"
+            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+          />
+          <small
+            class="form-text text-muted danger"
+            *ngIf="submitted && f.name.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.name.errors.required">
+              El nombre del ciclo es requerido
+            </div>
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="datenit">Fecha inicio</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="dd-mm-yyyy"
+              formControlName="dateinit"
+              name="dp"
+              ngbDatepicker
+              [ngClass]="{ 'is-invalid': submitted && f.dateinit.errors }"
+              #d1="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <div class="input-group-text" (click)="d1.toggle()">
+                <i class="fa fa-calendar" style="cursor: pointer"></i>
+              </div>
+            </div>
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.dateinit.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.dateinit.errors.required">
+                La fecha de inicio es requerida
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="dateend">Fecha término</label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              formControlName="dateend"
+              ngbDatepicker
+              [ngClass]="{ 'is-invalid': submitted && f.dateend.errors }"
+              #d2="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <div class="input-group-text" (click)="d2.toggle()">
+                <i class="fa fa-calendar" style="cursor: pointer"></i>
+              </div>
+            </div>
+            <small
+              class="form-text text-muted danger"
+              *ngIf="submitted && f.dateend.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.dateend.errors.required">
+                La fecha de término es requerida
+              </div>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+    class="btn btn-sm grey btn-outline-secondary"
+  >
+    <i class="feather ft-x"></i> Cerrar
+  </button>
+  <button (click)="onCicleInfoSubmit()" class="btn btn-sm btn-outline-primary">
+    <i class="feather ft-check"></i> Guardar
+  </button>
+</div>
