@@ -105,12 +105,16 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
   }
 
   editCicle(cicle: CicleInterface): void {
-    console.log(cicle);
-
-  }
-
-  deleteCicle(cicle: CicleInterface): void {
-    console.log(cicle);
+    this.cicleService.selectedCicle = Object.assign({}, cicle);
+    const modalRef = this.modalService.open(CicleModalComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.opc = false;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Editar", "¡El ciclo se editó correctamente!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   applyFilter(event: Event) {

@@ -39,4 +39,10 @@ export class CicleService {
 
     this.afs.collection<CicleInterface>('cicles').doc(tempId).set(cicle);
   }
+
+  updateCicle(cicle: CicleInterface) {
+    console.log(cicle);
+    this.cicleDoc = this.afs.collection<CicleInterface>('cicles').doc(`${cicle.uid}`);
+    this.cicleDoc.update(cicle);
+  }
 }
