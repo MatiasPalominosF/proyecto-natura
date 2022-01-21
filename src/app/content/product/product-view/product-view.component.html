@@ -50,7 +50,7 @@
             Precio neto
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Precio neto">
-            {{ row.net | currency:'CLP'}}
+            {{ row.net | currency: "CLP" }}
           </mat-cell>
         </ng-container>
 
@@ -67,10 +67,10 @@
         <!-- total Definition -->
         <ng-container matColumnDef="total">
           <mat-header-cell *matHeaderCellDef mat-sort-header>
-            Precio venta ($)
+            Precio venta
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Precio venta">
-            {{ row.total | currency:'CLP' }}
+            {{ row.total | currency: "CLP" }}
           </mat-cell>
         </ng-container>
 
@@ -80,7 +80,7 @@
             Stock
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Stock">
-            {{ row.quantity | number:'':'es-CL' }}
+            {{ row.quantity | number: "":"es-CL" }} un
           </mat-cell>
         </ng-container>
 
@@ -90,7 +90,17 @@
             Stock mínimo
           </mat-header-cell>
           <mat-cell *matCellDef="let row" data-label="Stock mínimo">
-            {{ row.quantitymin | number:'':'es-CL' }}
+            {{ row.quantitymin | number: "":"es-CL" }} un
+          </mat-cell>
+        </ng-container>
+
+        <!-- refcicle Definition -->
+        <ng-container matColumnDef="namecicle">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Ciclo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Ciclo">
+            {{ row.namecicle }}
           </mat-cell>
         </ng-container>
 
@@ -152,12 +162,14 @@
         <!-- Row shown when there is no matching data. -->
 
         <tr class="mat-row" *matNoDataRow>
-          <td *ngIf="!isEmpty" class="mat-cell" colspan="4">
+          <td *ngIf="!isFounded" class="mat-cell" colspan="4">
             <br />
+
             No hay coincidencias para "{{ input.value }}"
           </td>
           <td *ngIf="isEmpty" class="mat-cell" colspan="4">
             <br />
+
             No hay datos para mostrar
           </td>
         </tr>

@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
 import { UserInterface } from 'src/app/_models/user';
 import { ProductService } from 'src/app/_services/product/product.service';
@@ -92,19 +93,38 @@ export class ChangeProductModalComponent implements OnInit {
         this.data = Object.assign({}, document.data());
       })
     }).finally(() => {
-      if (Object.keys(this.data).length !== 0) {
-        this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
-        this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
-        this.productService.updateProduct(this.data);
-        this.productService.updateProduct(this.oldSelectedProduct);
-      } else {
-        this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
-        this.productService.updateProduct(this.oldSelectedProduct);
-        this.productService.addProduct(this.newSelectedProduct);
+      if (Object.keys(this.data).length !== 0) {// Si a la persona que se envía stock ya existe, se actualiza stock.
+        console.log(this.data);
+        this.newSelectedProduct.refcicle.get().then((cicleFs) => {
+          let cicle: CicleInterface = cicleFs.data();
+          this.newSelectedProduct.refcicle = cicle.uid;
+          this.oldSelectedProduct.refcicle = cicle.uid;
+        }).finally(() => {
+          this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
+          this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
+          this.productService.updateProduct(this.data);
+          this.productService.updateProduct(this.oldSelectedProduct);
+          this.blockUISubmit.stop();
+          this.passEntry.emit(true);
+          this.activeModal.close(true);
+        });
+
+      } else { // Si la persona a la que se le pasa stock no existe, se crea el producto y se reduce stock al que mandó.
+        this.newSelectedProduct.refcicle.get().then((cicleFs) => {
+          let cicle: CicleInterface = cicleFs.data();
+          this.newSelectedProduct.refcicle = cicle.uid;
+          this.oldSelectedProduct.refcicle = cicle.uid;
+        }).finally(() => {
+          this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
+          this.productService.updateProduct(this.oldSelectedProduct);
+          this.productService.addProduct(this.newSelectedProduct);
+          this.blockUISubmit.stop();
+          this.passEntry.emit(true);
+          this.activeModal.close(true);
+        });
+
       }
-      this.blockUISubmit.stop();
-      this.passEntry.emit(true);
-      this.activeModal.close(true);
+
     })
   }
 

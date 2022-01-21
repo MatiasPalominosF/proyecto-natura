@@ -9,8 +9,8 @@
 .mat-row,
 .mat-header-row,
 .mat-footer-row {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 mat-cell:first-child,

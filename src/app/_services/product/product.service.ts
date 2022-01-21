@@ -34,6 +34,10 @@ export class ProductService {
       }));
   }
 
+  getFullInfoProductNotObservable() {
+    return this.afs.firestore.collection('product').get();
+  }
+
   getProductByUid(product: ProductInterface) {
     return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign)
       .where('codbarra', '==', product.codbarra).where('total', '==', product.total).get();
@@ -42,12 +46,16 @@ export class ProductService {
 
   addProduct(product: ProductInterface) {
     var tempId = this.afs.createId();
+    var refcicle = product.refcicle;
     product.uid = tempId;
+    product.refcicle = this.afs.firestore.doc('/cicles/' + refcicle);
 
     this.afs.collection<ProductInterface>('product').doc(tempId).set(product);
   }
 
   updateProduct(product: ProductInterface) {
+    var refcicle = product.refcicle;
+    product.refcicle = this.afs.firestore.doc('/cicles/' + refcicle);
     this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
     this.productDoc.update(product);
   }

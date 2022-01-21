@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { ProductModalComponent } from './product-modal/new-product.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ChangeProductModalComponent } from './change-product-modal/change-product-modal.component';
 
@@ -37,6 +38,7 @@ import { ChangeProductModalComponent } from './change-product-modal/change-produ
     NgbModule,
     MatRippleModule,
     NgbModalModule,
+    NgSelectModule,
     FormsModule,
     MatRadioModule,
     ReactiveFormsModule,
