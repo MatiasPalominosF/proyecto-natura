@@ -47,17 +47,23 @@ export const MenuSettingsConfig: MenuConfig = {
           ]
         }
       },
-      { section: 'GESTIÓN', icon: 'la-ellipsis-h', page: 'null'},
+      { section: 'PRINCIPAL', icon: 'la-ellipsis-h' },
+      {
+        title: 'Ventas',
+        icon: 'la-shopping-cart',
+        page: '/sale/sale-view',
+      },
+      { section: 'GESTIÓN', icon: 'la-ellipsis-h' },
       {
         title: 'Productos',
         icon: 'feather ft-clipboard',
         page: '/product/product-view',
       }, {
-        title: 'Asignaciones',
-        icon: 'feather ft-file-text',
-        page: '/assign/assign-view',
+        title: 'Ciclos',
+        icon: 'la-book',
+        page: '/cicle/cicle-view',
       },
-      { section: 'PERSONAL', icon: 'la-ellipsis-h', page: 'null' },
+      { section: 'PERSONAL', icon: 'la-ellipsis-h' },
       {
         title: 'Usuarios',
         icon: 'feather ft-users',
@@ -88,6 +94,12 @@ export const MenuSettingsConfig: MenuConfig = {
             },
           ]
         }
+      },
+      { section: 'PRINCIPAL', icon: 'la-ellipsis-h' },
+      {
+        title: 'Ventas',
+        icon: 'la-shopping-cart',
+        page: '/sale/sale-view',
       },
       { section: 'GESTIÓN', icon: 'la-ellipsis-h' },
       {
