@@ -19,6 +19,8 @@ export class CicleModalComponent implements OnInit {
   public cicleInfo: FormGroup;
   public submitted: boolean = false;
   private cicles: CicleInterface[] = [];
+  private datei: NgbDate;
+  private datee: NgbDate;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -52,19 +54,19 @@ export class CicleModalComponent implements OnInit {
 
 
   setValuesInForm(name: string, dateinit: any, dateend: any) {
-    this.f['name'].setValue(this.cicleService.selectedCicle.name);
+    this.f['name'].setValue(name);
     //Date init in ngDate
     let monthinit = dateinit.toDate().getUTCMonth() + 1;
     let dayinit = dateinit.toDate().getUTCDate();
     let yearinit = dateinit.toDate().getUTCFullYear();
-    const datei: NgbDate = new NgbDate(yearinit, monthinit, dayinit);
-    this.f['dateinit'].setValue(datei);
+    this.datei = new NgbDate(yearinit, monthinit, dayinit);
+    this.f['dateinit'].setValue(this.datei);
     //Date end in ngDate
     let monthend = dateend.toDate().getUTCMonth() + 1;
     let dayend = dateend.toDate().getUTCDate();
     let yearend = dateend.toDate().getUTCFullYear();
-    const datee: NgbDate = new NgbDate(yearinit, monthinit, dayinit);
-    this.f['dateend'].setValue(datee);
+    this.datee = new NgbDate(yearinit, monthinit, dayinit);
+    this.f['dateend'].setValue(this.datee);
   }
 
   get f() { return this.cicleInfo.controls; }
@@ -81,25 +83,39 @@ export class CicleModalComponent implements OnInit {
 
     let dateinit = new Date(this.f['dateinit'].value.year, this.f['dateinit'].value.month - 1, this.f['dateinit'].value.day);
     let dateend = new Date(this.f['dateend'].value.year, this.f['dateend'].value.month - 1, this.f['dateend'].value.day);
+
+    if (Object.keys(this.cicleService.selectedCicle).length !== 0) {
+      if (this.cicles.some(a => a.name.replace(/\s/g, "").trim().toLowerCase() === this.fValue.name
+        .replace(/\s/g, "").trim().toLowerCase())) {
+        this.f['dateinit'].setValue(this.datei);
+        this.f['dateend'].setValue(this.datee);
+        this.notifyService.showError("Duplicado", "El ciclo ya existe en la base de datos");
+        return;
+      }
+    } else {
+      if (this.cicles.some(a => a.name.replace(/\s/g, "").trim().toLowerCase() === this.fValue.name
+        .replace(/\s/g, "").trim().toLowerCase())) {
+        this.notifyService.showError("Duplicado", "El ciclo ya existe en la base de datos");
+        return;
+      }
+    }
+
     this.f['dateinit'].setValue(dateinit);
     this.f['dateend'].setValue(dateend);
+
     if (this.opc) {
       this.cicleService.addCicle(this.fValue);
+
     } else {
+      this.f['dateinit'].setValue(dateinit);
+      this.f['dateend'].setValue(dateend);
       this.cicleService.selectedCicle.name = this.fValue.name;
       this.cicleService.selectedCicle.dateinit = this.fValue.dateinit;
       this.cicleService.selectedCicle.dateend = this.fValue.dateend;
-
-      if (this.cicles.some(a => a.name === this.cicleService.selectedCicle.name)) {
-        this.notifyService.showError("Duplicado", "El ciclo ya existe en la base de datos");
-        return;
-      } else {
-        this.cicleService.updateCicle(this.cicleService.selectedCicle);
-      }
+      this.cicleService.updateCicle(this.cicleService.selectedCicle);
 
     }
     this.passEntry.emit(true);
     this.activeModal.close(true);
   }
-
 }
