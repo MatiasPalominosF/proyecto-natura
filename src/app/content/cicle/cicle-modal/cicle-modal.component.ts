@@ -107,8 +107,6 @@ export class CicleModalComponent implements OnInit {
       this.cicleService.addCicle(this.fValue);
 
     } else {
-      this.f['dateinit'].setValue(dateinit);
-      this.f['dateend'].setValue(dateend);
       this.cicleService.selectedCicle.name = this.fValue.name;
       this.cicleService.selectedCicle.dateinit = this.fValue.dateinit;
       this.cicleService.selectedCicle.dateend = this.fValue.dateend;
