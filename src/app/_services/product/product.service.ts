@@ -62,7 +62,10 @@ export class ProductService {
 
   deleteProduct(product: ProductInterface) {
     this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
-    this.productDoc.delete();
+    return this.productDoc.delete();
   }
 
+  async delete2(product: ProductInterface): Promise<void> {
+    return await this.afs.firestore.collection('product').doc(`${product.uid}`).delete();
+  }
 }

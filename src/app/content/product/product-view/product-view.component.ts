@@ -35,7 +35,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   public isEmpty: boolean;
   public isFounded: boolean;
   private closeResult = '';
-  private productArray: ProductInterface[] = [];
+  private productArray: ProductInterface[];
 
 
   constructor(
@@ -74,6 +74,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       if (querySnapshot.empty) {
         this.isEmpty = true;
         this.blockUIProduct.stop();
+        this.dataSource.data = this.productArray;
         return;
       }
 
@@ -92,6 +93,12 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
             this.isFounded = false;
             this.blockUIProduct.stop();
           })
+        } else {
+          this.productArray = [];
+          this.dataSource.data = this.productArray;
+          this.isEmpty = false;
+          this.isFounded = false;
+          this.blockUIProduct.stop();
         }
 
       });
@@ -203,12 +210,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   deleteProduct(product: ProductInterface): void {
     this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
-      .then(confirmed => {
+      .then(async confirmed => {
         if (!confirmed) {
         } else {
           this.productService.deleteProduct(product);
-          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
           this.refreshView();
+          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+
         }
       }).catch(() => {
         console.log("Not ok");

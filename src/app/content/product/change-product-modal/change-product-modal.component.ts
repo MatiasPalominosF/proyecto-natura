@@ -94,10 +94,9 @@ export class ChangeProductModalComponent implements OnInit {
       })
     }).finally(() => {
       if (Object.keys(this.data).length !== 0) {// Si a la persona que se envía stock ya existe, se actualiza stock.
-        console.log(this.data);
         this.newSelectedProduct.refcicle.get().then((cicleFs) => {
           let cicle: CicleInterface = cicleFs.data();
-          this.newSelectedProduct.refcicle = cicle.uid;
+          this.data.refcicle = cicle.uid;
           this.oldSelectedProduct.refcicle = cicle.uid;
         }).finally(() => {
           this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
