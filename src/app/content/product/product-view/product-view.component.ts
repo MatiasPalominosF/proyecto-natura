@@ -35,7 +35,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   public isEmpty: boolean;
   public isFounded: boolean;
   private closeResult = '';
-  private productArray: ProductInterface[] = [];
+  private productArray: ProductInterface[];
 
 
   constructor(
@@ -74,9 +74,10 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       if (querySnapshot.empty) {
         this.isEmpty = true;
         this.blockUIProduct.stop();
+        this.dataSource.data = this.productArray;
         return;
       }
-      
+
       querySnapshot.forEach(doc => {
         let data: any = doc.data();
         if (Object.keys(data.refcicle).length !== 0) {
@@ -92,6 +93,12 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
             this.isFounded = false;
             this.blockUIProduct.stop();
           })
+        } else {
+          this.productArray = [];
+          this.dataSource.data = this.productArray;
+          this.isEmpty = false;
+          this.isFounded = false;
+          this.blockUIProduct.stop();
         }
 
       });
@@ -114,12 +121,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     let filteredValues = {
-      name: '', nameassign: '', codbarra: ''
+      name: '', nameassign: '', codbarra: '', namecicle: ''
     };
 
     filteredValues['name'] = filterValue;
     filteredValues['nameassign'] = filterValue;
     filteredValues['codbarra'] = filterValue;
+    filteredValues['namecicle'] = filterValue;
     this.dataSource.filter = JSON.stringify(filteredValues);
 
     if (this.dataSource.paginator) {
@@ -138,7 +146,8 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       // Para compara numbers usar: data.position.toString().trim().indexOf(searchString.position) !== -1
       return data.name.toString().trim().toLowerCase().indexOf(searchString.nameassign.toLowerCase()) !== -1 ||
         data.nameassign.toString().trim().toLowerCase().indexOf(searchString.nameassign.toLowerCase()) !== -1 ||
-        data.codbarra.toString().trim().toLowerCase().indexOf(searchString.codbarra.toLowerCase()) !== -1;
+        data.codbarra.toString().trim().toLowerCase().indexOf(searchString.codbarra.toLowerCase()) !== -1 ||
+        data.namecicle.toString().trim().toLowerCase().indexOf(searchString.namecicle.toLowerCase()) !== -1;
     }
     return myFilterPredicate;
   }
@@ -201,12 +210,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   deleteProduct(product: ProductInterface): void {
     this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
-      .then(confirmed => {
+      .then(async confirmed => {
         if (!confirmed) {
         } else {
           this.productService.deleteProduct(product);
-          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
           this.refreshView();
+          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+
         }
       }).catch(() => {
         console.log("Not ok");
