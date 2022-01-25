@@ -29,7 +29,7 @@ mat-header-cell:last-child {
   font-weight: bold;
 }
 .margin-to-card {
-  margin-top: 5em;
+  margin-top: 1.2em;
 }
 
 @media screen and (max-width: 960px) {

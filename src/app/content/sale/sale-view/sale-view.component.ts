@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, KeyValueDiffers, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,9 +6,12 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ProductInterface } from 'src/app/_models/product';
 import { ProductCartInterface } from 'src/app/_models/productCart';
+import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { ProductService } from 'src/app/_services/product/product.service';
+import { SaleService } from 'src/app/_services/sale/sale.service';
 import { AddCartModalComponent } from '../add-cart-modal/add-cart-modal.component';
+
 
 @Component({
   selector: 'app-sale-view',
@@ -21,8 +24,9 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
   @BlockUI('products') blockUIProduct: NgBlockUI;
 
+  public isDisabled: boolean = true;
   public breadcrumb: any;
-  public displayedColumns: string[] = ['position', 'name', 'quantity', 'total', 'actions'];
+  public displayedColumns: string[] = ['position', 'name', 'cicle', 'quantity', 'total', 'actions'];
   public displayedColumnsCart: string[] = ['position', 'name', 'quantitycart', 'unitprice', 'totalcart', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public dataSourceCart: MatTableDataSource<ProductCartInterface> = new MatTableDataSource<ProductCartInterface>();
@@ -35,9 +39,13 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private productService: ProductService,
+    private saleService: SaleService,
     private modalService: NgbModal,
     private notifyService: NotificationService,
-  ) { }
+    private confirmationDialogService: ConfirmationDialogService,
+    private differs: KeyValueDiffers
+  ) {
+  }
 
   ngOnInit(): void {
     this.breadcrumb = {
@@ -78,17 +86,60 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   }
 
   deleteProductCart(product: ProductCartInterface) {
-    console.table(product);
+    this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
+      .then(async confirmed => {
+        if (!confirmed) {
+        } else {
+          let productDelete = this.dataCart.find(data => data.puid === product.puid);
+          if (productDelete) {
+            let index = this.dataCart.indexOf(productDelete);
+            this.dataCart.splice(index, 1);
+            this.dataSourceCart.data = this.dataCart;
+            this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+          }
+          if (this.dataCart.length === 0) {
+            this.isDisabled = true;
+          }
+
+        }
+      }).catch(() => {
+        console.log("Not ok");
+      });
+  }
+
+  onSubmitSale(): void {
+    this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de realizar la venta?')
+      .then(confirmed => {
+        if (!confirmed) {
+        } else {
+          this.dataCart.forEach((item) => {
+            this.saleService.addProduct(item).finally(() => {
+            })
+          });
+          this.dataCart = [];
+          this.dataSourceCart.data = this.dataCart;
+          this.isDisabled = true;
+          this.notifyService.showSuccess("Venta efectuada con éxito", "Venta");
+        }
+      }).catch(() => {
+        console.log("Not ok");
+      });
   }
 
   getProducts(): void {
     this.blockUIProduct.start("Cargando...");
     this.isEmpty = true;
+
     this.productService.getFullInfoProduct().subscribe((products) => {
       this.dataSource.data = products;
       this.isEmpty = false;
       this.blockUIProduct.stop();
-    });
+    }, error => {
+      console.log("Error", error);
+    },
+      () => {
+        console.log("Se termina el subscribe del getProducts");
+      });
   }
 
   addCart(producto: ProductInterface): void {
@@ -112,6 +163,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
       }
 
       this.dataSourceCart.data = this.dataCart;
+      this.isDisabled = false;
       this.notifyService.showInfo("El producto se añadió al carrito", "Aviso");
     });
   }
