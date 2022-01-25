@@ -16,12 +16,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { BlockUIModule } from 'ng-block-ui';
 import { BlockTemplateComponent } from 'src/app/_layout/blockui/block-template.component';
 import { RouterModule } from '@angular/router';
+import { AddCartModalComponent } from './add-cart-modal/add-cart-modal.component';
 
 
 
 @NgModule({
   declarations: [
-    SaleViewComponent
+    SaleViewComponent,
+    AddCartModalComponent
   ],
   imports: [
     MatTableModule,
