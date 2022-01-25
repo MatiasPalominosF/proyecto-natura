@@ -25,6 +25,9 @@ mat-header-cell:last-child {
   padding-right: 0;
 }
 
+.example-first-footer-row {
+  font-weight: bold;
+}
 .margin-to-card {
   margin-top: 5em;
 }

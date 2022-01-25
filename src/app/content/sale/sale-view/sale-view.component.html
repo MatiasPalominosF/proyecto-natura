@@ -140,6 +140,7 @@
                         paginatorCart.pageIndex * paginatorCart.pageSize + i + 1
                       }}
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
                   </ng-container>
 
                   <!-- name Definition -->
@@ -150,6 +151,7 @@
                     <mat-cell *matCellDef="let row" data-label="Producto">
                       {{ row.name }}
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
                   </ng-container>
 
                   <!-- dateinit Definition -->
@@ -160,6 +162,7 @@
                     <mat-cell *matCellDef="let row" data-label="Cantidad">
                       {{ row.quantitycart | number: "":"es-CL" }}
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
                   </ng-container>
 
                   <!-- unitprice Definition -->
@@ -173,6 +176,9 @@
                     >
                       {{ row.unitprice | currency: "CLP" }}
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      Total:
+                    </mat-footer-cell>
                   </ng-container>
 
                   <!-- dateend Definition -->
@@ -183,6 +189,9 @@
                     <mat-cell *matCellDef="let row" data-label="Precio total">
                       {{ row.totalcart | currency: "CLP" }}
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef>
+                      {{ calculateTotal() | currency: "CLP" }}
+                    </mat-footer-cell>
                   </ng-container>
 
                   <!-- actions Definition -->
@@ -204,6 +213,7 @@
                         </button>
                       </div>
                     </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                   </ng-container>
 
                   <!-- Header and Row Declarations -->
@@ -217,6 +227,10 @@
                       let i = index
                     "
                   ></mat-row>
+                  <mat-footer-row
+                    class="example-first-footer-row"
+                    *matFooterRowDef="displayedColumnsCart"
+                  ></mat-footer-row>
 
                   <!-- Row shown when there is no matching data. -->
 

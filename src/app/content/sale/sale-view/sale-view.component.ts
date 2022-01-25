@@ -145,6 +145,10 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     }
   };
 
+  public calculateTotal(): number {
+    return this.dataCart.reduce((accum, curr) => accum + curr.totalcart, 0);
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     let filteredValues = {
