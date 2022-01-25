@@ -1,0 +1,106 @@
+<div class="modal-header">
+  <h4 class="form-section">
+    <div class="d-flex flex-row">
+      <div><i class="mr-2 font-size la la-cart-plus"></i></div>
+      <div>
+        {{ title }}
+      </div>
+    </div>
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="productInfo">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Nombre *</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            formControlName="name"
+            placeholder="Producto"
+            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+            readonly
+          />
+          <small
+            class="form-text text-muted danger"
+            *ngIf="submitted && f.name.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.name.errors.required">
+              El nombre del producto es requerido
+            </div>
+          </small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="total">Precio *</label>
+          <input
+            type="number"
+            id="total"
+            class="form-control"
+            formControlName="total"
+            placeholder="Precio"
+            [ngClass]="{ 'is-invalid': submitted && f.total.errors }"
+            readonly
+          />
+          <small
+            class="form-text text-muted danger"
+            *ngIf="submitted && f.total.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.total.errors.required">
+              El precio total del producto es requerido
+            </div>
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="quantity">Cantidad *</label>
+          <input
+            type="number"
+            id="quantity"
+            class="form-control"
+            formControlName="quantity"
+            placeholder="Precio"
+            [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }"
+          />
+          <small
+            class="form-text text-muted danger"
+            *ngIf="submitted && f.quantity.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.quantity.errors.required">
+              El cantidad a vender es requerida
+            </div>
+          </small>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+    class="btn btn-sm grey btn-outline-secondary"
+  >
+    <i class="feather ft-x"></i> Cerrar
+  </button>
+  <button (click)="onCicleInfoSubmit()" class="btn btn-sm btn-outline-primary">
+    <i class="feather ft-check"></i> Guardar
+  </button>
+</div>
