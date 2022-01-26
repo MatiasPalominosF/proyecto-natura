@@ -34,14 +34,13 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   public dataSourceCart: MatTableDataSource<ProductCartInterface> = new MatTableDataSource<ProductCartInterface>();
   public isEmpty: boolean = false;
   private products: ProductInterface[] = [];
-  private products3: ProductInterface[] = [];
   public isEmptyCart: boolean = false;
   public pageSizeOptions: Array<number> = new Array<number>();
   public pageSize: number;
   private closeResult = '';
   private dataCart: ProductCartInterface[] = [];
   private products2: ProductInterface[] = [];
-
+  private a = [1, 3, 4];
   constructor(
     private productService: ProductService,
     private saleService: SaleService,
@@ -147,22 +146,39 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.isEmpty = true;
 
     this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
-      this.products3 = [];
-      querySnapshot.forEach(doc => {
-        let product: ProductInterface = doc.data();
-        product.refcicle.get().then((cicleFs) => {
-          let cicle: CicleInterface = cicleFs.data();
-          product.namecicle = cicle.name;
-          this.products3.push(product);
-        }).finally(() => {
-          this.dataSource.data = this.products3;
-          this.products = this.products3;
-          this.isEmpty = false;
-          this.blockUIProduct.stop();
+      this.products = [];
+
+      var bar = new Promise<void>((resolve, reject) => {
+        querySnapshot.docs.forEach(async (doc, index, array) => {
+          let product: ProductInterface = doc.data();
+          await product.refcicle.get().then((cicleFs) => {
+            let cicle: CicleInterface = cicleFs.data();
+            product.namecicle = cicle.name;
+            this.products.push(product);
+          }).finally(() => {
+            this.dataSource.data = this.products;
+            this.isEmpty = false;
+            this.blockUIProduct.stop();
+          });
+          this.products2 = this.products;
+          if (index === array.length - 1) resolve();
         });
       });
-    })
-    this.fireAlert();
+      bar.then(() => {
+        this.products.forEach(element => {
+          let text: string;
+          if (element.quantity === element.quantitymin) {
+            text = "El producto " + element.name + " alcanzó el stock mínimo"
+
+          } if (element.quantity < element.quantitymin) {
+            text = "El producto " + element.name + " está por debajo del stock mínimo"
+          }
+          if (text) {
+            this.notifyService.showWarning(text, "Aviso")
+          }
+        });
+      });
+    });
   }
 
 
