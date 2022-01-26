@@ -39,7 +39,6 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   public pageSize: number;
   private closeResult = '';
   private dataCart: ProductCartInterface[] = [];
-  private products2: ProductInterface[] = [];
   private a = [1, 3, 4];
   constructor(
     private productService: ProductService,
@@ -160,7 +159,6 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
             this.isEmpty = false;
             this.blockUIProduct.stop();
           });
-          this.products2 = this.products;
           if (index === array.length - 1) resolve();
         });
       });
@@ -179,37 +177,6 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         });
       });
     });
-  }
-
-
-  delay(n) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, n * 1000);
-    });
-  }
-
-  async fireAlert(): Promise<void> {
-    await this.delay(3);
-    this.productService.getFullInfoProduct2().subscribe(
-      data => {
-        this.products2 = data
-      },
-      error => console.log(error),
-      () => {
-        this.products2.forEach(element => {
-          let text: string;
-          if (element.quantity === element.quantitymin) {
-            text = "El producto " + element.name + " alcanzó el stock mínimo"
-
-          } if (element.quantity < element.quantitymin) {
-            text = "El producto " + element.name + " está por debajo del stock mínimo"
-          }
-          if (text) {
-            this.notifyService.showWarning(text, "Aviso")
-          }
-        });
-
-      });
   }
 
   addCart(producto: ProductInterface): void {
