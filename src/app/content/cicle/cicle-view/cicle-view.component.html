@@ -87,6 +87,16 @@
               >
                 <span class="feather ft-edit-2"></span>
               </button>
+              <button
+                (click)="showProductsCicle(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Ver productos del ciclo"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-soundcloud"
+              >
+                <span class="la la-eye"></span>
+              </button>
             </div>
           </mat-cell>
         </ng-container>

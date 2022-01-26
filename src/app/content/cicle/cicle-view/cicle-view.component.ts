@@ -8,6 +8,7 @@ import { CicleInterface } from 'src/app/_models/cicle';
 import { CicleService } from 'src/app/_services/cicle/cicle.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { CicleModalComponent } from '../cicle-modal/cicle-modal.component';
+import { ShowProductsComponent } from '../show-products/show-products.component';
 
 @Component({
   selector: 'app-cicle-view',
@@ -143,6 +144,18 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
       }
       this.dataSource.data = cicles;
       this.blockUICicle.stop();
+    });
+  }
+
+  showProductsCicle(cicle: CicleInterface) {
+    const modalRef = this.modalService.open(ShowProductsComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' , size: 'lg' });
+    modalRef.componentInstance.cuid = cicle.uid;
+    modalRef.componentInstance.namecicle = cicle.name;
+    modalRef.result.then((result) => {
+      if (result) {
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 

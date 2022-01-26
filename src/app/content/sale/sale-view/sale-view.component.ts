@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize, map, tap } from 'rxjs/operators';
+import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
 import { ProductCartInterface } from 'src/app/_models/productCart';
 import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
@@ -33,6 +34,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   public dataSourceCart: MatTableDataSource<ProductCartInterface> = new MatTableDataSource<ProductCartInterface>();
   public isEmpty: boolean = false;
   private products: ProductInterface[] = [];
+  private products3: ProductInterface[] = [];
   public isEmptyCart: boolean = false;
   public pageSizeOptions: Array<number> = new Array<number>();
   public pageSize: number;
@@ -115,18 +117,25 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
       .then(confirmed => {
         if (!confirmed) {
         } else {
-          this.dataCart.forEach((item) => {
-            this.saleService.addProduct(item).finally(() => {
+
+          var bar = new Promise<void>((resolve, reject) => {
+            this.dataCart.forEach((item, index, array) => {
+              console.log(item);
               let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
               let reducestock: number = product.quantity - item.quantitycart;
               this.productService.updateFieldProduct(product.uid, reducestock);
+              if (index === array.length - 1) resolve();
             });
           });
-          this.getProducts();
-          this.dataCart = [];
-          this.dataSourceCart.data = this.dataCart;
-          this.isDisabled = true;
-          this.notifyService.showSuccess("Venta efectuada con éxito", "Venta");
+
+          bar.then(() => {
+            this.getProducts();
+            this.dataCart = [];
+            this.dataSourceCart.data = this.dataCart;
+            this.isDisabled = true;
+            this.notifyService.showSuccess("Venta efectuada con éxito", "Venta");
+          });
+
         }
       }).catch(() => {
         console.log("Not ok");
@@ -137,14 +146,22 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.blockUIProduct.start("Cargando...");
     this.isEmpty = true;
 
-    this.productService.getFullInfoProduct().subscribe(
-      (products) => {
-        this.dataSource.data = products;
-        this.products = products;
-        this.isEmpty = false;
-        this.blockUIProduct.stop();
+    this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
+      this.products3 = [];
+      querySnapshot.forEach(doc => {
+        let product: ProductInterface = doc.data();
+        product.refcicle.get().then((cicleFs) => {
+          let cicle: CicleInterface = cicleFs.data();
+          product.namecicle = cicle.name;
+          this.products3.push(product);
+        }).finally(() => {
+          this.dataSource.data = this.products3;
+          this.products = this.products3;
+          this.isEmpty = false;
+          this.blockUIProduct.stop();
+        });
       });
-
+    })
     this.fireAlert();
   }
 

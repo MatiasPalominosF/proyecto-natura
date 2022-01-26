@@ -2,6 +2,7 @@ export interface ProductInterface {
     uid?: string;
     assign?: string;
     nameassign?: string;
+    cuid?: string;
     refcicle?: any;
     namecicle?: string;
     gross?: number;

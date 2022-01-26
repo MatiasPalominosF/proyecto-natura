@@ -51,15 +51,19 @@ export class ProductService {
     return this.afs.firestore.collection('product').get();
   }
 
+  getProductByCicle(cuid: string) {
+    return this.afs.firestore.collection('product').where('cuid', '==', `${cuid}`).get();
+  }
+
   getProductByUid(product: ProductInterface) {
     return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign)
       .where('codbarra', '==', product.codbarra).where('total', '==', product.total).get();
-
   }
 
   addProduct(product: ProductInterface) {
     var tempId = this.afs.createId();
     var refcicle = product.refcicle;
+    product.cuid = refcicle;
     product.uid = tempId;
     product.refcicle = this.afs.firestore.doc('/cicles/' + refcicle);
 
