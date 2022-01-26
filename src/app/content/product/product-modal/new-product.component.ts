@@ -80,11 +80,11 @@ export class ProductModalComponent implements OnInit {
     this.f['vat'].setValue(vat);
     this.f['isSale'].setValue(isSale);
   }
+
   getCicleToForm(selecCicleForm: AbstractControl, selectCicle: any) {
     if (selectCicle) {
       this.blockUICicle.start("Cargando...");
       selectCicle.get().then((result) => {
-        console.log(result.data());
         let cicle: CicleInterface = result.data();
         selecCicleForm.setValue(cicle.uid);
         this.blockUICicle.stop();

@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { finalize, map, tap } from 'rxjs/operators';
 import { ProductInterface } from 'src/app/_models/product';
 import { ProductCartInterface } from 'src/app/_models/productCart';
 import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
@@ -31,11 +32,13 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public dataSourceCart: MatTableDataSource<ProductCartInterface> = new MatTableDataSource<ProductCartInterface>();
   public isEmpty: boolean = false;
+  private products: ProductInterface[] = [];
   public isEmptyCart: boolean = false;
   public pageSizeOptions: Array<number> = new Array<number>();
   public pageSize: number;
   private closeResult = '';
   private dataCart: ProductCartInterface[] = [];
+  private products2: ProductInterface[] = [];
 
   constructor(
     private productService: ProductService,
@@ -114,8 +117,12 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         } else {
           this.dataCart.forEach((item) => {
             this.saleService.addProduct(item).finally(() => {
-            })
+              let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
+              let reducestock: number = product.quantity - item.quantitycart;
+              this.productService.updateFieldProduct(product.uid, reducestock);
+            });
           });
+          this.getProducts();
           this.dataCart = [];
           this.dataSourceCart.data = this.dataCart;
           this.isDisabled = true;
@@ -130,15 +137,45 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.blockUIProduct.start("Cargando...");
     this.isEmpty = true;
 
-    this.productService.getFullInfoProduct().subscribe((products) => {
-      this.dataSource.data = products;
-      this.isEmpty = false;
-      this.blockUIProduct.stop();
-    }, error => {
-      console.log("Error", error);
-    },
+    this.productService.getFullInfoProduct().subscribe(
+      (products) => {
+        this.dataSource.data = products;
+        this.products = products;
+        this.isEmpty = false;
+        this.blockUIProduct.stop();
+      });
+
+    this.fireAlert();
+  }
+
+
+  delay(n) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, n * 1000);
+    });
+  }
+
+  async fireAlert(): Promise<void> {
+    await this.delay(3);
+    this.productService.getFullInfoProduct2().subscribe(
+      data => {
+        this.products2 = data
+      },
+      error => console.log(error),
       () => {
-        console.log("Se termina el subscribe del getProducts");
+        this.products2.forEach(element => {
+          let text: string;
+          if (element.quantity === element.quantitymin) {
+            text = "El producto " + element.name + " alcanzó el stock mínimo"
+
+          } if (element.quantity < element.quantitymin) {
+            text = "El producto " + element.name + " está por debajo del stock mínimo"
+          }
+          if (text) {
+            this.notifyService.showWarning(text, "Aviso")
+          }
+        });
+
       });
   }
 
@@ -161,21 +198,10 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
           this.dataCart.push(receivedEntry);
         }
       }
-
       this.dataSourceCart.data = this.dataCart;
       this.isDisabled = false;
       this.notifyService.showInfo("El producto se añadió al carrito", "Aviso");
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   sortingCustomAccesor = (item, property) => {
