@@ -147,7 +147,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
       this.products = [];
 
-      var bar = new Promise<void>((resolve, reject) => {
+      var promise = new Promise<void>((resolve, reject) => {
         querySnapshot.docs.forEach(async (doc, index, array) => {
           let product: ProductInterface = doc.data();
           await product.refcicle.get().then((cicleFs) => {
@@ -162,17 +162,19 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
           if (index === array.length - 1) resolve();
         });
       });
-      bar.then(() => {
+      promise.then(() => {
         this.products.forEach(element => {
           let text: string;
+          let typeWarning: boolean = true;
           if (element.quantity === element.quantitymin) {
             text = "El producto " + element.name + " alcanzó el stock mínimo"
-
           } if (element.quantity < element.quantitymin) {
             text = "El producto " + element.name + " está por debajo del stock mínimo"
+            typeWarning = false;
           }
           if (text) {
-            this.notifyService.showWarning(text, "Aviso")
+            if (typeWarning) { this.notifyService.showWarning(text, "Stock alcanzado") }
+            else { this.notifyService.showError(text, "Stock crítico") }
           }
         });
       });
