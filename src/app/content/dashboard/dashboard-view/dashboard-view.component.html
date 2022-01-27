@@ -92,6 +92,34 @@
         </div>
       </div>
       <!-- Hospital Info cards Ends -->
+      <!-- Pie Chart -->
+      <section
+        id="chartjs-pie-charts"
+        *blockUI="'card'; message: 'Loading'"
+      >
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-content collapse show">
+                <div class="card-body">
+                  <h3>Registro de ventas</h3>
+                  <div class="piechart height-400">
+                    <canvas
+                      baseChart
+                      [data]="pieChartData"
+                      [options]="pieChartOptions"
+                      [labels]="pieChartLabel"
+                      [chartType]="pieChartType"
+                      [colors]="pieChartColors"
+                    ></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Pie Chart -->
     </div>
   </div>
 </div>

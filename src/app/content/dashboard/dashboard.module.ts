@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlockUIModule } from 'ng-block-ui';
 import { BlockTemplateComponent } from 'src/app/_layout/blockui/block-template.component';
 import { RouterModule } from '@angular/router';
+import { ChartsModule } from 'ng2-charts';
+import { MatchHeightModule } from '../partials/general/match-height/match-height.module';
 
 
 
@@ -22,6 +24,8 @@ import { RouterModule } from '@angular/router';
     NgbModule,
     NgbModalModule,
     FormsModule,
+    MatchHeightModule,
+    ChartsModule,
     ReactiveFormsModule,
     BlockUIModule.forRoot({
       template: BlockTemplateComponent
