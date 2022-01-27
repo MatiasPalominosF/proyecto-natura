@@ -52,7 +52,6 @@ export class DashboardViewComponent implements OnInit {
     if (cicle.uid != 'customuid') {
       this.setValuesInCardWithCicle(cicle);
     } else {
-      console.log("Nulo");
       this.setValuesInCardGeneral();
     }
   }
