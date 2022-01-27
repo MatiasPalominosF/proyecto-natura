@@ -126,6 +126,7 @@ export class ProductModalComponent implements OnInit {
     } else {
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
       this.product = this.fValue;
+      this.product.cuid = this.fValue.refcicle;
       this.product.uid = this.productService.selectedProduct.uid;
       this.productService.updateProduct(this.product).finally(() => {
         this.blockUISubmit.stop();

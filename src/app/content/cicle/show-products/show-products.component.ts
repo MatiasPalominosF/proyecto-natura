@@ -34,7 +34,7 @@ export class ShowProductsComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.title = "Productos " + this.namecicle;
+    this.title = "Productos " + this.namecicle.toLowerCase();
     this.getProducts();
   }
 
@@ -107,31 +107,23 @@ export class ShowProductsComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      querySnapshot.forEach(doc => {
-        let data: any = doc.data();
-        if (Object.keys(data.refcicle).length !== 0) {
-          let product: ProductInterface = {};
-          data.refcicle.get().then((cicleFs) => {
+      var promise = new Promise<void>((resolve, reject) => {
+        querySnapshot.docs.forEach(async (doc, index, array) => {
+          let product: ProductInterface = doc.data();
+          await product.refcicle.get().then((cicleFs) => {
             let cicle: CicleInterface = cicleFs.data();
-            product = data;
             product.namecicle = cicle.name;
             this.productArray.push(product);
-          }).finally(() => {
-            this.dataSource.data = this.productArray;
-            this.isEmpty = false;
-            this.isFounded = false;
-            this.blockUIProduct.stop();
           })
-        } else {
-          this.productArray = [];
-          this.dataSource.data = this.productArray;
-          this.isEmpty = false;
-          this.isFounded = false;
-          this.blockUIProduct.stop();
-        }
-
+          if (index === array.length - 1) resolve();
+        });
       });
+
+      promise.then(() => {
+        this.dataSource.data = this.productArray;
+        this.isEmpty = false;
+        this.blockUIProduct.stop();
+      })
     })
   }
-
 }
