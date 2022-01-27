@@ -116,10 +116,11 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         if (!confirmed) {
         } else {
           var bar = new Promise<void>((resolve, reject) => {
-            this.dataCart.forEach((item, index, array) => {
+            this.dataCart.forEach(async (item, index, array) => {
               let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
               let reducestock: number = product.quantity - item.quantitycart;
-              this.productService.updateFieldProduct(product.uid, reducestock);
+              await this.productService.updateFieldProduct(product.uid, reducestock);
+              await this.saleService.addSale(item);
               if (index === array.length - 1) resolve();
             });
           });

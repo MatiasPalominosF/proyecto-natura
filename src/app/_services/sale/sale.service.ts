@@ -20,7 +20,7 @@ export class SaleService {
     this.sales = this.saleCollection.valueChanges();
   }
 
-  async addProduct(sale: ProductCartInterface) {
+  async addSale(sale: ProductCartInterface): Promise<void> {
     var tempId = this.afs.createId();
     sale.suid = tempId;
 
