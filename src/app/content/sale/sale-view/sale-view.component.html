@@ -3,7 +3,7 @@
     <div class="content-header row mb-1">
       <app-breadcrumb class="col-12" [breadcrumb]="breadcrumb"></app-breadcrumb>
     </div>
-    <div class="content-body">
+    <div class="content-body" *blockUI="'submit'; message: 'Loading'">
       <div class="row">
         <div class="col-md-6">
           <div class="d-flex justify-content-between">

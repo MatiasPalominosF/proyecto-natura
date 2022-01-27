@@ -4,6 +4,7 @@ import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductCartInterface } from 'src/app/_models/productCart';
 import { SaleService } from 'src/app/_services/sale/sale.service';
+import * as chartsData from './data';
 
 @Component({
   selector: 'app-dashboard-view',
@@ -13,6 +14,14 @@ import { SaleService } from 'src/app/_services/sale/sale.service';
 export class DashboardViewComponent implements OnInit {
 
   @BlockUI('card') blockUICards: NgBlockUI;
+
+  /** Data for PieChart */
+  public pieChartLabel: string[] = []; // Nombre producto
+  public pieChartData: number[] = []; // Cantidad de producto
+  public pieChartType = chartsData.pieChartType;
+  public pieChartColors = chartsData.pieChartColors;
+  public pieChartOptions = chartsData.pieChartOptions;
+  /** End data for PieChart */
 
   public totalProduct: number = 0;
   public saleTotal: number = 0;
@@ -49,18 +58,25 @@ export class DashboardViewComponent implements OnInit {
     this.gain = 0;
     this.margin = 0;
     this.sales = [];
+    this.pieChartData = [];
+    this.pieChartLabel = [];
     if (cicle.uid != 'customuid') {
       this.setValuesInCardWithCicle(cicle);
     } else {
-      console.log("Nulo");
       this.setValuesInCardGeneral();
     }
   }
 
   setValuesInCardGeneral() {
     this.blockUICards.start("Cargando...");
+
     this.saleService.getAllSales().then(
       (querySnapshot) => {
+        if (querySnapshot.empty) {
+          this.pieChartLabel.push("Sin datos");
+          this.pieChartData.push(0)
+          this.blockUICards.stop();
+        };
         var promise = new Promise<void>((resolve, reject) => {
           querySnapshot.docs.forEach(async (item, index, array) => {
             let sale: ProductCartInterface = item.data();
@@ -77,6 +93,16 @@ export class DashboardViewComponent implements OnInit {
           });
           this.gain = this.saleTotal - salegross;
           this.margin = this.gain / salegross;
+
+          let grouped = this.groupBy(this.sales, "puid");
+
+          let array = [];
+          Object.keys(grouped).forEach(key => { array.push(grouped[key]); });
+
+          for (let i = 0; i < array.length; i++) {
+            this.pieChartLabel.push(array[i][0].name);
+            this.pieChartData.push(array[i].length);
+          }
           this.blockUICards.stop();
         })
       }
@@ -87,6 +113,8 @@ export class DashboardViewComponent implements OnInit {
     this.blockUICards.start("Cargando...");
     this.saleService.getSalesByCicle(cicle.uid).then((querySnapshot) => {
       if (querySnapshot.empty) {
+        this.pieChartLabel.push("Sin datos");
+        this.pieChartData.push(0)
         this.blockUICards.stop();
       };
       var promise = new Promise<void>((resolve, reject) => {
@@ -103,10 +131,30 @@ export class DashboardViewComponent implements OnInit {
           this.saleTotal += sale.totalcart;
           salegross += sale.grosstotalcart;
         });
+
         this.gain = this.saleTotal - salegross;
         this.margin = this.gain / salegross;
+
+        let grouped = this.groupBy(this.sales, "puid");
+
+        let array = [];
+        Object.keys(grouped).forEach(key => { array.push(grouped[key]); });
+
+        for (let i = 0; i < array.length; i++) {
+          this.pieChartLabel.push(array[i][0].name);
+          this.pieChartData.push(array[i].length);
+        }
         this.blockUICards.stop();
       });
     });
   }
+
+
+  groupBy(xs: any[], key: string): any {
+    return xs.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  }
+
 }
