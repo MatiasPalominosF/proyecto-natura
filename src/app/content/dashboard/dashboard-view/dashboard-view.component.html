@@ -1,11 +1,97 @@
 <div class="app-content content">
-    <div class="content-wrapper">
-      <div class="content-header row mb-1">
-        <app-breadcrumb class="col-12" [breadcrumb]="breadcrumb"></app-breadcrumb>
+  <div class="content-wrapper">
+    <div class="content-header row mb-1">
+      <app-breadcrumb
+        class="col-12"
+        (idCategory)="setValuesInDashboard($event)"
+        [breadcrumb]="breadcrumb"
+      ></app-breadcrumb>
+    </div>
+    <div class="content-body">
+      <!-- Hospital Info cards -->
+      <div class="row">
+        <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+          <div class="card pull-up" *blockUI="'card'; message: 'Loading'">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="feather ft-box font-large-2 success"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h5 class="text-muted size-font text-bold-500">
+                      Productos vendidos
+                    </h5>
+                    <h3 class="text-bold-600">{{ totalProduct | number }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+          <div class="card pull-up" *blockUI="'card'; message: 'Loading'">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="la la-money font-large-2 warning"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h5 class="text-muted size-font text-bold-500">
+                      Ventas totales
+                    </h5>
+                    <h3 class="text-bold-600">
+                      {{ saleTotal | currency: "CLP" }}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+          <div class="card pull-up" *blockUI="'card'; message: 'Loading'">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="icon-wallet font-large-2 info"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h5 class="text-muted size-font text-bold-500">
+                      Ganancias
+                    </h5>
+                    <h3 class="text-bold-600">
+                      {{ gain | currency: "CLP" }}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+          <div class="card pull-up" *blockUI="'card'; message: 'Loading'">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="feather ft-trending-up font-large-2 info"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <h5 class="text-muted size-font text-bold-500">
+                      Porcentaje ganancia
+                    </h5>
+                    <h3 class="text-bold-600">{{ margin | percent }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="content-body">
-        <p>dashboard-view works!</p>
-      </div>
+      <!-- Hospital Info cards Ends -->
     </div>
   </div>
-  
+</div>

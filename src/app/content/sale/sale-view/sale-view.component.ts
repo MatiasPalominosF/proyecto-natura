@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize, map, tap } from 'rxjs/operators';
+import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
 import { ProductCartInterface } from 'src/app/_models/productCart';
@@ -27,7 +28,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   @BlockUI('products') blockUIProduct: NgBlockUI;
 
   public isDisabled: boolean = true;
-  public breadcrumb: any;
+  public breadcrumb: BreadcrumbInterface;
   public displayedColumns: string[] = ['position', 'name', 'cicle', 'quantity', 'total', 'actions'];
   public displayedColumnsCart: string[] = ['position', 'name', 'quantitycart', 'unitprice', 'totalcart', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
@@ -52,20 +53,19 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.breadcrumb = {
-      'mainlabel': 'Gestión de ventas',
-      'links': [
-        {
-          'name': 'Home',
-          'isLink': true,
-          'link': '/dashboard/dashboard-view'
-        },
-        {
-          'name': 'Ventas',
-          'isLink': false,
-          'link': '#'
-        },
-      ],
-      'options': false
+      mainlabel: 'Gestión de ventas',
+      links: [{
+        'name': 'Home',
+        'isLink': true,
+        'link': '/dashboard/dashboard-view'
+      },
+      {
+        'name': 'Ventas',
+        'isLink': false,
+        'link': '#'
+      },],
+      options: false,
+      putselect: false,
     };
 
     if (this.dataSourceCart.data.length === 0) {

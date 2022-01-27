@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
 import { ConfirmationDialogService } from 'src/app/_services/confirmation-dialog/confirmation-dialog.service';
@@ -29,7 +30,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  public breadcrumb: any;
+  public breadcrumb: BreadcrumbInterface;
   public displayedColumns: string[] = ['name', 'net', 'margin', 'total', 'quantity', 'quantitymin', 'namecicle', 'nameassign', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public isEmpty: boolean;
@@ -47,20 +48,19 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.breadcrumb = {
-      'mainlabel': 'Gestión de productos',
-      'links': [
-        {
-          'name': 'Home',
-          'isLink': true,
-          'link': '/dashboard/dashboard-view'
-        },
-        {
-          'name': 'Productos',
-          'isLink': false,
-          'link': '#'
-        },
-      ],
-      'options': false
+      mainlabel: 'Gestión de productos',
+      links: [{
+        'name': 'Home',
+        'isLink': true,
+        'link': '/dashboard/dashboard-view'
+      },
+      {
+        'name': 'Productso',
+        'isLink': false,
+        'link': '#'
+      },],
+      options: false,
+      putselect: false,
     };
     this.getProducts();
   }

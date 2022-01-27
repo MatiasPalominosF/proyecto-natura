@@ -22,7 +22,7 @@ export class CicleService {
   }
 
   getFullInfoCicle(): Observable<CicleInterface[]> {
-    return this.cicle = this.afs.collection<CicleInterface>('cicles')
+    return this.cicle = this.afs.collection<CicleInterface>('cicles', ref => ref.orderBy('name'))
       .snapshotChanges()
       .pipe(map(changes => {
         return changes.map(action => {

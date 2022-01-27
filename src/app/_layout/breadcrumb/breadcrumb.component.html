@@ -37,4 +37,23 @@
       </div>
     </div>
   </div>
+  <div
+    *ngIf="breadcrumb.putselect"
+    class="content-header-right col-md-6 col-12"
+  >
+    <div class="d-flex justify-content-end">
+      <div class="col-md-6" *blockUI="'selectBlockUi'; message: 'Loading'">
+        <ng-select
+          [items]="dataForSelect"
+          [searchable]="true"
+          bindLabel="name"
+          placeholder="Selecciona una categoría"
+          [(ngModel)]="singlebasicSelected.name"
+          (ngModelChange)="change($event)"
+        >
+          <ng-option [value]="'showall'"> Mostrar todos</ng-option>
+        </ng-select>
+      </div>
+    </div>
+  </div>
 </div>

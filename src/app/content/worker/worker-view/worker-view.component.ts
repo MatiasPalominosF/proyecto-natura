@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 
 @Component({
   selector: 'app-worker-view',
@@ -7,26 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkerViewComponent implements OnInit {
 
-  public breadcrumb: any;
+  public breadcrumb: BreadcrumbInterface;
 
   constructor() { }
 
   ngOnInit(): void {
     this.breadcrumb = {
-      'mainlabel': 'Gestión de usuarios',
-      'links': [
-        {
-          'name': 'Home',
-          'isLink': true,
-          'link': '/dashboard/dashboard-view'
-        },
-        {
-          'name': 'Usuarios',
-          'isLink': false,
-          'link': '#'
-        },
-      ],
-      'options': false
+      mainlabel: 'Gestión de usuarios',
+      links: [{
+        'name': 'Home',
+        'isLink': true,
+        'link': '/dashboard/dashboard-view'
+      },
+      {
+        'name': 'Usuarios',
+        'isLink': false,
+        'link': '#'
+      },],
+      options: false,
+      putselect: false,
     };
   }
 
