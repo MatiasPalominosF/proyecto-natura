@@ -49,7 +49,6 @@ export class DashboardViewComponent implements OnInit {
     this.gain = 0;
     this.margin = 0;
     this.sales = [];
-    console.log(cicle);
     if (cicle.uid != 'customuid') {
       this.setValuesInCardWithCicle(cicle);
     } else {
@@ -65,11 +64,9 @@ export class DashboardViewComponent implements OnInit {
         if (querySnapshot.empty) {
           this.blockUICards.stop();
         };
-        console.log(querySnapshot.empty);
         var promise = new Promise<void>((resolve, reject) => {
           querySnapshot.docs.forEach(async (item, index, array) => {
             let sale: ProductCartInterface = item.data();
-            console.log("sale: ", sale);
             await this.sales.push(sale);
             if (index === array.length - 1) resolve();
           });

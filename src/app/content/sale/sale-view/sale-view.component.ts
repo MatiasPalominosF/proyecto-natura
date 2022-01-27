@@ -26,6 +26,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
   @BlockUI('products') blockUIProduct: NgBlockUI;
+  @BlockUI('submit') blockUIsubmit: NgBlockUI;
 
   public isDisabled: boolean = true;
   public breadcrumb: BreadcrumbInterface;
@@ -40,7 +41,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
   public pageSize: number;
   private closeResult = '';
   private dataCart: ProductCartInterface[] = [];
-  private a = [1, 3, 4];
+
   constructor(
     private productService: ProductService,
     private saleService: SaleService,
@@ -115,12 +116,13 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
       .then(confirmed => {
         if (!confirmed) {
         } else {
+          this.blockUIsubmit.start("Cargando...")
           var bar = new Promise<void>((resolve, reject) => {
             this.dataCart.forEach(async (item, index, array) => {
               let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
               let reducestock: number = product.quantity - item.quantitycart;
               await this.productService.updateFieldProduct(product.uid, reducestock);
-              await this.saleService.addSale(item);
+              this.saleService.addSale(item);
               if (index === array.length - 1) resolve();
             });
           });
@@ -129,6 +131,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
             this.dataCart = [];
             this.dataSourceCart.data = this.dataCart;
             this.isDisabled = true;
+            this.blockUIsubmit.stop();
             this.notifyService.showSuccess("Venta efectuada con éxito", "Venta");
             this.getProducts();
           });
