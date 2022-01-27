@@ -4,10 +4,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { CicleService } from 'src/app/_services/cicle/cicle.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { CicleModalComponent } from '../cicle-modal/cicle-modal.component';
+import { ShowProductsComponent } from '../show-products/show-products.component';
 
 @Component({
   selector: 'app-cicle-view',
@@ -25,7 +27,7 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
   public isEmpty: boolean = false;
   private closeResult = '';
 
-  public breadcrumb: any;
+  public breadcrumb: BreadcrumbInterface;
 
   constructor(
     private cicleService: CicleService,
@@ -35,22 +37,20 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.breadcrumb = {
-      'mainlabel': 'Gestión de productos',
-      'links': [
-        {
-          'name': 'Home',
-          'isLink': true,
-          'link': '/dashboard/dashboard-view'
-        },
-        {
-          'name': 'Ciclos',
-          'isLink': false,
-          'link': '#'
-        },
-      ],
-      'options': false
-    };
-
+      mainlabel: 'Gestión de productos',
+      links: [{
+        'name': 'Home',
+        'isLink': true,
+        'link': '/dashboard/dashboard-view'
+      },
+      {
+        'name': 'Ciclos',
+        'isLink': false,
+        'link': '#'
+      },],
+      options: false,
+      putselect: false,
+    }
     this.getCicles();
   }
 
@@ -143,6 +143,18 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
       }
       this.dataSource.data = cicles;
       this.blockUICicle.stop();
+    });
+  }
+
+  showProductsCicle(cicle: CicleInterface) {
+    const modalRef = this.modalService.open(ShowProductsComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static', size: 'lg' });
+    modalRef.componentInstance.cuid = cicle.uid;
+    modalRef.componentInstance.namecicle = cicle.name;
+    modalRef.result.then((result) => {
+      if (result) {
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 

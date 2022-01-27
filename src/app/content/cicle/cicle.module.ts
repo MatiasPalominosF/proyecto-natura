@@ -16,13 +16,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { CicleModalComponent } from './cicle-modal/cicle-modal.component';
+import { ShowProductsComponent } from './show-products/show-products.component';
 
 
 
 @NgModule({
   declarations: [
     CicleViewComponent,
-    CicleModalComponent
+    CicleModalComponent,
+    ShowProductsComponent
   ],
   imports: [
     MatTableModule,

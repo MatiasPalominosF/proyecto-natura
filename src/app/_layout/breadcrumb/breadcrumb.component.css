@@ -4,16 +4,19 @@
 }
 
 .dropdown-menu.arrow:before {
-    left: 70px !important;
-    border-bottom-color: #ffffff;
+  left: 70px !important;
+  border-bottom-color: #ffffff;
 }
 
 .dropdown-menu.arrow:after {
-    top: 0px;
+  top: 0px;
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
   ._dropdown_mob {
-      margin-left: 150px !important;
+    margin-left: 150px !important;
   }
+}
+:host ::ng-deep .block-ui-wrapper {
+  background: rgba(255, 249, 249, 0.5) !important;
 }

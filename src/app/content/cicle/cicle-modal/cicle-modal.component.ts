@@ -103,17 +103,25 @@ export class CicleModalComponent implements OnInit {
     this.f['dateinit'].setValue(dateinit);
     this.f['dateend'].setValue(dateend);
 
+    this.blockUICicle.start("Guardando...")
     if (this.opc) {
-      this.cicleService.addCicle(this.fValue);
+      this.cicleService.addCicle(this.fValue).finally(() => {
+        this.blockUICicle.stop();
+        this.passEntry.emit(true);
+        this.activeModal.close(true);
+      });
 
     } else {
       this.cicleService.selectedCicle.name = this.fValue.name;
       this.cicleService.selectedCicle.dateinit = this.fValue.dateinit;
       this.cicleService.selectedCicle.dateend = this.fValue.dateend;
-      this.cicleService.updateCicle(this.cicleService.selectedCicle);
+      this.cicleService.updateCicle(this.cicleService.selectedCicle).finally(() => {
+        this.blockUICicle.stop();
+        this.passEntry.emit(true);
+        this.activeModal.close(true);
+      });
 
     }
-    this.passEntry.emit(true);
-    this.activeModal.close(true);
+
   }
 }

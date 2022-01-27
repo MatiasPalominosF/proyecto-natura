@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductCartInterface } from 'src/app/_models/productCart';
 import { ProductService } from 'src/app/_services/product/product.service';
 
@@ -11,6 +13,7 @@ import { ProductService } from 'src/app/_services/product/product.service';
 })
 export class AddCartModalComponent implements OnInit {
 
+  @BlockUI('modalCart') blockUIModalCart: NgBlockUI;
   @Output() passEntry: EventEmitter<ProductCartInterface> = new EventEmitter();
 
   public title: string;
@@ -49,16 +52,22 @@ export class AddCartModalComponent implements OnInit {
     }
     this.productCart = {};
 
-    this.productCart.puid = this.productService.selectedProduct.uid;
-    this.productCart.name = this.productService.selectedProduct.name;
-    this.productCart.quantitycart = this.fValue.quantity;
-    this.productCart.unitprice = this.productService.selectedProduct.total;
-    this.productCart.totalcart = this.fValue.quantity * this.productService.selectedProduct.total;
-    this.productCart.grosstotalcart = this.fValue.quantity * this.productService.selectedProduct.gross;
-
-    this.passEntry.emit(this.productCart);
-    this.activeModal.close(true);
-
-
+    this.blockUIModalCart.start("Agregando...")
+    this.productService.selectedProduct.refcicle.get().then((cicleFs) => {
+      let cicle: CicleInterface = cicleFs.data();
+      this.productCart.cuid = cicle.uid;
+    }).finally(() => {
+      let datesold = new Date();
+      this.productCart.datesold = datesold;
+      this.productCart.puid = this.productService.selectedProduct.uid;
+      this.productCart.name = this.productService.selectedProduct.name;
+      this.productCart.quantitycart = this.fValue.quantity;
+      this.productCart.unitprice = this.productService.selectedProduct.total;
+      this.productCart.totalcart = this.fValue.quantity * this.productService.selectedProduct.total;
+      this.productCart.grosstotalcart = this.fValue.quantity * this.productService.selectedProduct.gross;
+      this.blockUIModalCart.stop();
+      this.passEntry.emit(this.productCart);
+      this.activeModal.close(true);
+    });
   }
 }

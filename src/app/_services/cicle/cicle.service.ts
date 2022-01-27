@@ -22,7 +22,7 @@ export class CicleService {
   }
 
   getFullInfoCicle(): Observable<CicleInterface[]> {
-    return this.cicle = this.afs.collection<CicleInterface>('cicles')
+    return this.cicle = this.afs.collection<CicleInterface>('cicles', ref => ref.orderBy('name'))
       .snapshotChanges()
       .pipe(map(changes => {
         return changes.map(action => {
@@ -33,16 +33,16 @@ export class CicleService {
       }));
   }
 
-  addCicle(cicle: CicleInterface) {
+  addCicle(cicle: CicleInterface): Promise<void> {
     var tempId = this.afs.createId();
     cicle.uid = tempId;
 
-    this.afs.collection<CicleInterface>('cicles').doc(tempId).set(cicle);
+    return this.afs.collection<CicleInterface>('cicles').doc(tempId).set(cicle);
   }
 
-  updateCicle(cicle: CicleInterface) {
+  updateCicle(cicle: CicleInterface): Promise<void> {
     console.log(cicle);
     this.cicleDoc = this.afs.collection<CicleInterface>('cicles').doc(`${cicle.uid}`);
-    this.cicleDoc.update(cicle);
+    return this.cicleDoc.update(cicle);
   }
 }

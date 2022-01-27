@@ -16,7 +16,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body">
+<div class="modal-body" *blockUI="'modalCart'; message: 'Loading'">
   <form [formGroup]="productInfo">
     <div class="row">
       <div class="col-md-6">
@@ -75,7 +75,7 @@
             id="quantity"
             class="form-control"
             formControlName="quantity"
-            placeholder="Precio"
+            placeholder="Cantidad"
             [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }"
           />
           <small
