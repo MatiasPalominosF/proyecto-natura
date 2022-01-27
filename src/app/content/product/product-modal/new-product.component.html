@@ -21,7 +21,7 @@
   <div style="overflow-y: hidden; height: calc(100vh - 15rem)">
     <div class="px-2" style="overflow-y: auto; height: 100%">
       <form [formGroup]="productInfo">
-        <div class="form-body">
+        <div class="form-body" *blockUI="'submit'; message: 'Loading'">
           <h4 class="form-section">
             <i class="la la-eye"></i> Acerca del producto
           </h4>

@@ -60,14 +60,14 @@ export class ProductService {
       .where('codbarra', '==', product.codbarra).where('total', '==', product.total).get();
   }
 
-  addProduct(product: ProductInterface) {
+  addProduct(product: ProductInterface): Promise<void> {
     var tempId = this.afs.createId();
     var refcicle = product.refcicle;
     product.cuid = refcicle;
     product.uid = tempId;
     product.refcicle = this.afs.firestore.doc('/cicles/' + refcicle);
 
-    this.afs.collection<ProductInterface>('product').doc(tempId).set(product);
+    return this.afs.collection<ProductInterface>('product').doc(tempId).set(product);
   }
 
   updateFieldProduct(puid: string, quantity: number) {
@@ -75,11 +75,11 @@ export class ProductService {
     this.productDoc.update({ quantity: quantity });
   }
 
-  updateProduct(product: ProductInterface) {
+  updateProduct(product: ProductInterface): Promise<void> {
     var refcicle = product.refcicle;
     product.refcicle = this.afs.firestore.doc('/cicles/' + refcicle);
     this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
-    this.productDoc.update(product);
+    return this.productDoc.update(product);
   }
 
   deleteProduct(product: ProductInterface) {

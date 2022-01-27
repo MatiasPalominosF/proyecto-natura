@@ -81,7 +81,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
 
     this.dataSourceCart.paginator = this.paginator.toArray()[1];
     this.dataSourceCart.sort = this.sort.toArray()[1];
-    this.dataSourceCart.sortingDataAccessor = this.sortingCustomAccesor;
+    this.dataSourceCart.sortingDataAccessor = this.sortingCustomAccesorCart;
 
     /* configure filter */
     this.dataSource.filterPredicate = this.filterCustomAccessor();
@@ -115,10 +115,8 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
       .then(confirmed => {
         if (!confirmed) {
         } else {
-
           var bar = new Promise<void>((resolve, reject) => {
             this.dataCart.forEach((item, index, array) => {
-              console.log(item);
               let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
               let reducestock: number = product.quantity - item.quantitycart;
               this.productService.updateFieldProduct(product.uid, reducestock);
@@ -127,11 +125,11 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
           });
 
           bar.then(() => {
-            this.getProducts();
             this.dataCart = [];
             this.dataSourceCart.data = this.dataCart;
             this.isDisabled = true;
             this.notifyService.showSuccess("Venta efectuada con éxito", "Venta");
+            this.getProducts();
           });
 
         }

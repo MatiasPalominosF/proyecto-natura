@@ -18,6 +18,7 @@ export class ProductModalComponent implements OnInit {
   @Input() public opc: boolean;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
   @BlockUI('cicles') blockUICicle: NgBlockUI;
+  @BlockUI('submit') blockUISubmit: NgBlockUI;
 
   private selectedCicle: CicleInterface = {};
   public productInfo: FormGroup;
@@ -110,21 +111,28 @@ export class ProductModalComponent implements OnInit {
     if (this.productInfo.invalid) {
       return;
     }
+
+    this.blockUISubmit.start("Guardando...")
     if (this.opc) { //Se agrega nuevo producto
       this.fValue.assign = this.currentUser.uid;
       this.fValue.nameassign = this.currentUser.displayName;
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
-      this.productService.addProduct(this.fValue);
+      this.productService.addProduct(this.fValue).finally(() => {
+        this.blockUISubmit.stop();
+        this.passEntry.emit(true);
+        this.activeModal.close(true);
+      });
 
-      this.passEntry.emit(true);
-      this.activeModal.close(true);
     } else {
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
       this.product = this.fValue;
       this.product.uid = this.productService.selectedProduct.uid;
-      this.productService.updateProduct(this.product);
-      this.passEntry.emit(true);
-      this.activeModal.close(true);
+      this.productService.updateProduct(this.product).finally(() => {
+        this.blockUISubmit.stop();
+        this.passEntry.emit(true);
+        this.activeModal.close(true);
+      });
+
     }
 
   }
