@@ -3,7 +3,8 @@ export interface ProductCartInterface {
   puid?: string;
   cuid?: string;
   name?: string;
-  grosstotalcart?: number
+  grosstotalcart?: number;
+  nettotalcart?: number;
   unitprice?: number
   quantitycart?: number;
   totalcart?: number;

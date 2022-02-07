@@ -64,6 +64,7 @@ export class AddCartModalComponent implements OnInit {
       this.productCart.quantitycart = this.fValue.quantity;
       this.productCart.unitprice = this.productService.selectedProduct.total;
       this.productCart.totalcart = this.fValue.quantity * this.productService.selectedProduct.total;
+      this.productCart.nettotalcart = this.fValue.quantity * this.productService.selectedProduct.net;
       this.productCart.grosstotalcart = this.fValue.quantity * this.productService.selectedProduct.gross;
       this.blockUIModalCart.stop();
       this.passEntry.emit(this.productCart);

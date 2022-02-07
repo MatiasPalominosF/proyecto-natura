@@ -86,13 +86,14 @@ export class DashboardViewComponent implements OnInit {
         });
         promise.then(() => {
           this.totalProduct = this.sales.length;
-          var salegross: number = 0;
+          var salenet: number = 0;
           this.sales.forEach(sale => {
             this.saleTotal += sale.totalcart;
-            salegross += sale.grosstotalcart;
+            salenet += sale.nettotalcart;
           });
-          this.gain = this.saleTotal - salegross;
-          this.margin = this.gain / salegross;
+          this.gain = this.saleTotal - salenet;
+
+          this.margin = this.gain / salenet;
 
           let grouped = this.groupBy(this.sales, "puid");
 
