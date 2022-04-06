@@ -103,7 +103,8 @@
           <h4 class="form-section">
             <i class="feather ft-info"></i> Información del producto
           </h4>
-          <div class="row">
+          <!-- Fila de precio bruto e IVA eliminada -->
+          <!-- <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="gross">Precio bruto *</label>
@@ -155,7 +156,7 @@
                 </small>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
@@ -163,13 +164,13 @@
                 <input
                   type="number"
                   onkeydown="javascript: return event.keyCode === 8 ||
-                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="net"
+                  (ngModelChange)="disabledMarginAndTotal($event)"
                   class="form-control"
                   formControlName="net"
                   placeholder="Precio neto"
                   [ngClass]="{ 'is-invalid': submitted && f.net.errors }"
-                  readonly
                 />
                 <small
                   class="form-text text-muted danger"
@@ -189,12 +190,13 @@
                   type="number"
                   (change)="setMarginToTotal($event.target.value)"
                   onkeydown="javascript: return event.keyCode === 8 ||
-                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="margin"
                   class="form-control"
                   formControlName="margin"
                   placeholder="Margen de ganancia"
                   [ngClass]="{ 'is-invalid': submitted && f.margin.errors }"
+                  [readonly]="readonly"
                 />
                 <small
                   class="form-text text-muted danger"
@@ -216,12 +218,13 @@
                   type="number"
                   (change)="setMarginFromTotal($event.target.value)"
                   onkeydown="javascript: return event.keyCode === 8 ||
-                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="total"
                   class="form-control"
                   formControlName="total"
                   placeholder="Precio venta"
                   [ngClass]="{ 'is-invalid': submitted && f.total.errors }"
+                  [readonly]="readonly"
                 />
                 <small
                   class="form-text text-muted danger"
@@ -240,7 +243,7 @@
                 <input
                   type="number"
                   onkeydown="javascript: return event.keyCode === 8 ||
-                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="quantity"
                   class="form-control"
                   formControlName="quantity"
@@ -266,7 +269,7 @@
                 <input
                   type="number"
                   onkeydown="javascript: return event.keyCode === 8 ||
-                  event.keyCode === 46 ? true : !isNaN(Number(event.key))"
+                  event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="quantitymin"
                   class="form-control"
                   formControlName="quantitymin"
