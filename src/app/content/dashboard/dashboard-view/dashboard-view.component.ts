@@ -70,6 +70,7 @@ export class DashboardViewComponent implements OnInit {
   setValuesInCardGeneral() {
     this.blockUICards.start("Cargando...");
 
+    this.sales = [];
     this.saleService.getAllSales().then(
       (querySnapshot) => {
         if (querySnapshot.empty) {
@@ -77,17 +78,21 @@ export class DashboardViewComponent implements OnInit {
           this.pieChartData.push(0)
           this.blockUICards.stop();
         };
+        let i = -1;
         var promise = new Promise<void>((resolve, reject) => {
           querySnapshot.docs.forEach(async (item, index, array) => {
             let sale: ProductCartInterface = item.data();
-            await this.sales.push(sale);
-            if (index === array.length - 1) resolve();
+            this.sales.push(sale);
+            i += 1;
+            if (i === array.length - 1) {
+              resolve();
+            }
           });
         });
         promise.then(() => {
-          this.totalProduct = this.sales.length;
           var salenet: number = 0;
           this.sales.forEach(sale => {
+            this.totalProduct += sale.quantitycart;
             this.saleTotal += sale.totalcart;
             salenet += sale.nettotalcart;
           });
@@ -102,7 +107,7 @@ export class DashboardViewComponent implements OnInit {
 
           for (let i = 0; i < array.length; i++) {
             this.pieChartLabel.push(array[i][0].name);
-            this.pieChartData.push(array[i].length);
+            this.pieChartData.push(array[i][0].quantitycart);
           }
           this.blockUICards.stop();
         })
@@ -111,6 +116,7 @@ export class DashboardViewComponent implements OnInit {
   }
 
   setValuesInCardWithCicle(cicle: CicleInterface) {
+    this.sales = [];
     this.blockUICards.start("Cargando...");
     this.saleService.getSalesByCicle(cicle.uid).then((querySnapshot) => {
       if (querySnapshot.empty) {
@@ -118,38 +124,39 @@ export class DashboardViewComponent implements OnInit {
         this.pieChartData.push(0)
         this.blockUICards.stop();
       };
+      let i = -1;
       var promise = new Promise<void>((resolve, reject) => {
         querySnapshot.docs.forEach(async (item, index, array) => {
           let sale: ProductCartInterface = item.data();
-          await this.sales.push(sale);
-          if (index === array.length - 1) resolve();
+          this.sales.push(sale);
+          i += 1;
+          if (i === array.length - 1) {
+            resolve();
+          }
         });
       });
+
       promise.then(() => {
-        this.totalProduct = this.sales.length;
-        var salegross: number = 0;
+        var salenet: number = 0;
         this.sales.forEach(sale => {
           this.saleTotal += sale.totalcart;
-          salegross += sale.grosstotalcart;
+          this.totalProduct += sale.quantitycart;
+          salenet += sale.nettotalcart
         });
-
-        this.gain = this.saleTotal - salegross;
-        this.margin = this.gain / salegross;
-
+        this.gain = this.saleTotal - salenet;
+        this.margin = this.gain / salenet;
         let grouped = this.groupBy(this.sales, "puid");
-
         let array = [];
         Object.keys(grouped).forEach(key => { array.push(grouped[key]); });
 
         for (let i = 0; i < array.length; i++) {
           this.pieChartLabel.push(array[i][0].name);
-          this.pieChartData.push(array[i].length);
+          this.pieChartData.push(array[i][0].quantitycart);
         }
         this.blockUICards.stop();
-      });
+      })
     });
   }
-
 
   groupBy(xs: any[], key: string): any {
     return xs.reduce(function (rv, x) {

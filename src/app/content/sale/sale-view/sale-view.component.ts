@@ -177,10 +177,8 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
           let text: string;
           let typeWarning: boolean = true;
           if (element.name === 'Pedido ciclo 02') {
-            console.log("element.quantitymin ", element.quantitymin);
           }
           if (element.quantitymin > 0) {
-            console.log("element.quantitymin adentro", element.quantitymin);
             if (element.quantity === element.quantitymin) {
               text = "El producto " + element.name + " alcanzó el stock mínimo"
             } if (element.quantity < element.quantitymin) {
