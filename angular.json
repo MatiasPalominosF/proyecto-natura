@@ -22,6 +22,7 @@
             "allowedCommonJsDependencies": [
               "rxjs-compat",
               "angularfire2",
+              "chart.js",
               "angularfire2/auth",
               "angularfire2/firestore",
               "@firebase/firestore"

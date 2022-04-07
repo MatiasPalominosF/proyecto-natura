@@ -22,6 +22,7 @@ export class ProductModalComponent implements OnInit {
 
   private selectedCicle: CicleInterface = {};
   public productInfo: FormGroup;
+  public readonly: boolean;
   public submitted: boolean = false;
   public selection = {};
   private currentUser: any;
@@ -43,26 +44,29 @@ export class ProductModalComponent implements OnInit {
       assign: [null],
       codbarra: ['', Validators.required],
       refcicle: [null, Validators.required],
-      gross: ['', Validators.required],
+      //gross: ['', Validators.required], // Se eliminan ya que no se utilizarán en este sistema (bruto)
       margin: ['', Validators.required],
       nameassign: [null],
       net: ['', Validators.required],
       quantity: [, Validators.required],
       quantitymin: ['', Validators.required],
       total: ['', Validators.required],
-      vat: ['', Validators.required],
+      //vat: ['', Validators.required], // Se eliminan ya que no se utilizarán en este sistema (IVA)
       isSale: [true, Validators.required],
     });
 
     this.getCicles();
 
     if (!this.opc) {
+      this.readonly = false;
       //Setear valores al formulario
       this.setValuesInForm(this.productService.selectedProduct.name, this.productService.selectedProduct.assign,
         this.productService.selectedProduct.codbarra, this.productService.selectedProduct.refcicle, this.productService.selectedProduct.gross, this.productService.selectedProduct.margin,
         this.productService.selectedProduct.nameassign, this.productService.selectedProduct.net, this.productService.selectedProduct.quantity,
         this.productService.selectedProduct.quantitymin, this.productService.selectedProduct.total, this.productService.selectedProduct.vat,
         this.productService.selectedProduct.isSale);
+    } else {
+      this.readonly = true;
     }
   }
 
@@ -71,14 +75,14 @@ export class ProductModalComponent implements OnInit {
     this.f['assign'].setValue(assign);
     this.f['codbarra'].setValue(codbarra);
     this.getCicleToForm(this.f['refcicle'], selectCicle);
-    this.f['gross'].setValue(gross);
+    //this.f['gross'].setValue(gross);
     this.f['margin'].setValue(margin * 100);
     this.f['nameassign'].setValue(nameassign);
     this.f['net'].setValue(net);
     this.f['quantity'].setValue(quantity);
     this.f['quantitymin'].setValue(quantitymin);
     this.f['total'].setValue(total);
-    this.f['vat'].setValue(vat);
+    //this.f['vat'].setValue(vat);
     this.f['isSale'].setValue(isSale);
   }
 
@@ -148,7 +152,6 @@ export class ProductModalComponent implements OnInit {
     if (gross !== null) {
       var vat = (Math.round(gross * 0.19))
       var net = gross + vat;
-
       this.f['vat'].setValue(vat);
       this.f['net'].setValue(net);
     } else {
@@ -157,16 +160,32 @@ export class ProductModalComponent implements OnInit {
     }
   }
 
-  setMarginToTotal(margin: any) {
-    var marginInPercent = 0;
-    var totalWithMargin = 0;
-    if (margin !== "") {
-      marginInPercent = (+margin / 100) + 1;
-      totalWithMargin = Math.round(this.f['net'].value * marginInPercent);
-      this.f['total'].setValue(totalWithMargin);
+  disabledMarginAndTotal(net: number) {
+    if (net !== null) {
+      this.readonly = false;
+      this.f['margin'].setValue("");
+      this.f['total'].setValue("");
     } else {
-      this.f['margin'].setValue(0)
-      this.f['total'].setValue(this.f['net'].value);
+      this.readonly = true;
+      this.f['margin'].setValue("");
+      this.f['total'].setValue("");
+    }
+  }
+
+  setMarginToTotal(margin: any) {
+    if (this.f['net'].value) {
+      var marginInPercent = 0;
+      var totalWithMargin = 0;
+      if (margin !== "") {
+        marginInPercent = (+margin / 100) + 1;
+        totalWithMargin = Math.round(this.f['net'].value * marginInPercent);
+        this.f['total'].setValue(totalWithMargin);
+      } else {
+        this.f['margin'].setValue(0)
+        this.f['total'].setValue(this.f['net'].value);
+      }
+    } else {
+      this.f['net'].markAsTouched();
     }
   }
 

@@ -67,8 +67,6 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
     switch (property) {
       case 'name': return item.name;
       case 'position': {
-        console.log("property: ", property);
-        console.log("item.position: ", item);
         return item.position
       };
       case 'dateinit': return item.dateinit;

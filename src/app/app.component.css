@@ -1,0 +1,5 @@
+/*Fix toggle calendar and this work when pagination show behind modal modal*/
+::ng-deep .cdk-overlay-container {
+    z-index: 1200 !important;
+  }
+  /*End fix toggle calendar mat table in modal*/

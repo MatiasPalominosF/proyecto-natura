@@ -41,7 +41,7 @@ export class CicleService {
   }
 
   updateCicle(cicle: CicleInterface): Promise<void> {
-    console.log(cicle);
+
     this.cicleDoc = this.afs.collection<CicleInterface>('cicles').doc(`${cicle.uid}`);
     return this.cicleDoc.update(cicle);
   }

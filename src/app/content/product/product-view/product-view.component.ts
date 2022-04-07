@@ -55,7 +55,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
         'link': '/dashboard/dashboard-view'
       },
       {
-        'name': 'Productso',
+        'name': 'Productos',
         'isLink': false,
         'link': '#'
       },],

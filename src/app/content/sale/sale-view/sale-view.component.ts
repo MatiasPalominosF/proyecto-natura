@@ -117,13 +117,17 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         if (!confirmed) {
         } else {
           this.blockUIsubmit.start("Cargando...")
+          let i = -1;
           var bar = new Promise<void>((resolve, reject) => {
             this.dataCart.forEach(async (item, index, array) => {
               let product: ProductInterface = this.products.find((product) => product.uid === item.puid);
               let reducestock: number = product.quantity - item.quantitycart;
               await this.productService.updateFieldProduct(product.uid, reducestock);
               this.saleService.addSale(item);
-              if (index === array.length - 1) resolve();
+              i += 1;
+              if (i === array.length - 1) {
+                resolve();
+              }
             });
           });
 
@@ -149,8 +153,9 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
       this.products = [];
 
+      let i = -1;
       var promise = new Promise<void>((resolve, reject) => {
-        querySnapshot.docs.forEach(async (doc, index, array) => {
+        querySnapshot.docs.forEach(async (doc, index, array): Promise<void> => {
           let product: ProductInterface = doc.data();
           await product.refcicle.get().then((cicleFs) => {
             let cicle: CicleInterface = cicleFs.data();
@@ -160,23 +165,30 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
             this.dataSource.data = this.products;
             this.isEmpty = false;
             this.blockUIProduct.stop();
+            i += 1;
+            if (i === array.length - 1) {
+              resolve();
+            }
           });
-          if (index === array.length - 1) resolve();
         });
       });
       promise.then(() => {
         this.products.forEach(element => {
           let text: string;
           let typeWarning: boolean = true;
-          if (element.quantity === element.quantitymin) {
-            text = "El producto " + element.name + " alcanzó el stock mínimo"
-          } if (element.quantity < element.quantitymin) {
-            text = "El producto " + element.name + " está por debajo del stock mínimo"
-            typeWarning = false;
+          if (element.name === 'Pedido ciclo 02') {
           }
-          if (text) {
-            if (typeWarning) { this.notifyService.showWarning(text, "Stock alcanzado") }
-            else { this.notifyService.showError(text, "Stock crítico") }
+          if (element.quantitymin > 0) {
+            if (element.quantity === element.quantitymin) {
+              text = "El producto " + element.name + " alcanzó el stock mínimo"
+            } if (element.quantity < element.quantitymin) {
+              text = "El producto " + element.name + " está por debajo del stock mínimo"
+              typeWarning = false;
+            }
+            if (text) {
+              if (typeWarning) { this.notifyService.showWarning(text, "Stock alcanzado") }
+              else { this.notifyService.showError(text, "Stock crítico") }
+            }
           }
         });
       });
@@ -197,6 +209,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
           product.quantitycart = product.quantitycart + receivedEntry.quantitycart;
           product.totalcart = product.totalcart + receivedEntry.totalcart
           product.grosstotalcart = product.grosstotalcart + receivedEntry.grosstotalcart;
+          product.nettotalcart = product.nettotalcart + receivedEntry.nettotalcart;
           this.dataCart[index] = product;
         } else {
           this.dataCart.push(receivedEntry);
