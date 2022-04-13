@@ -35,7 +35,7 @@ export class UserService {
     }));
   }
 
-  getAllUsers() {
+  getAllUsers(): Observable<UserInterface[]> {
     return this.users = this.usersCollection.snapshotChanges()
       .pipe(map(changes => {
         return changes.map(action => {
@@ -56,6 +56,19 @@ export class UserService {
           return data;
         });
       }));
+  }
+
+  /**
+   * Update field in all documents firestore.
+   */
+  async test(): Promise<void> {
+    let date: Date = new Date(2022, 3, 12, 0, 0, 0, 0);
+    const querySnapshot = await firebase.firestore().collection("product").get();
+    querySnapshot.forEach(function (doc) {
+      doc.ref.update({
+        dateadded: date
+      });
+    });
   }
 
   getUsers() {

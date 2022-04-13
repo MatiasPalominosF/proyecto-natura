@@ -25,9 +25,9 @@ export class CicleViewComponent implements OnInit, AfterViewInit {
   public displayedColumns: string[] = ['position', 'name', 'dateinit', 'dateend', 'actions'];
   public dataSource: MatTableDataSource<CicleInterface> = new MatTableDataSource<CicleInterface>();
   public isEmpty: boolean = false;
+  public breadcrumb: BreadcrumbInterface;
   private closeResult = '';
 
-  public breadcrumb: BreadcrumbInterface;
 
   constructor(
     private cicleService: CicleService,
