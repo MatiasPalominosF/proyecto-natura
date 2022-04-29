@@ -140,14 +140,12 @@ export class ProductModalComponent implements OnInit {
       this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
       this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
 
-      // this.productService.updateProduct(this.product).finally(() => {
-      //   this.blockUISubmit.stop();
-      //   this.passEntry.emit(true);
-      //   this.activeModal.close(true);
-      // });
-
+      this.productService.updateProduct(this.product).finally(() => {
+        this.blockUISubmit.stop();
+        this.passEntry.emit(true);
+        this.activeModal.close(true);
+      });
     }
-
   }
 
   getUserLogged(): void {
