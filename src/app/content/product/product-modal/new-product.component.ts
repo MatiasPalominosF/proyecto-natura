@@ -5,8 +5,10 @@ import { AnyCnameRecord } from 'dns';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
+import { UserInterface } from 'src/app/_models/user';
 import { CicleService } from 'src/app/_services/cicle/cicle.service';
 import { ProductService } from 'src/app/_services/product/product.service';
+import { UserService } from 'src/app/_services/user/user.service';
 
 @Component({
   selector: 'app-new-product',
@@ -18,6 +20,7 @@ export class ProductModalComponent implements OnInit {
   @Input() public opc: boolean;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
   @BlockUI('cicles') blockUICicle: NgBlockUI;
+  @BlockUI('users') blockUIUsers: NgBlockUI;
   @BlockUI('submit') blockUISubmit: NgBlockUI;
 
   private selectedCicle: CicleInterface = {};
@@ -28,12 +31,14 @@ export class ProductModalComponent implements OnInit {
   private currentUser: any;
   private product: ProductInterface = {};
   public ciclesArray: CicleInterface[] = [];
+  public usersArray: UserInterface[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private productService: ProductService,
     private cicleService: CicleService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +46,7 @@ export class ProductModalComponent implements OnInit {
     this.getUserLogged();
     this.productInfo = this.formBuilder.group({
       name: ['', Validators.required],
-      assign: [null],
+      assign: [null, Validators.required],
       codbarra: ['', Validators.required],
       refcicle: [null, Validators.required],
       //gross: ['', Validators.required], // Se eliminan ya que no se utilizarán en este sistema (bruto)
@@ -56,6 +61,7 @@ export class ProductModalComponent implements OnInit {
     });
 
     this.getCicles();
+    this.getUsers();
 
     if (!this.opc) {
       this.readonly = false;
@@ -107,6 +113,14 @@ export class ProductModalComponent implements OnInit {
     })
   }
 
+  getUsers() {
+    this.blockUIUsers.start("Cargando...");
+    this.userService.getAllUsers().subscribe((users) => {
+      this.usersArray = users;
+      this.blockUIUsers.stop();
+    })
+  }
+
   get f() { return this.productInfo.controls; }
 
   get fValue() { return this.productInfo.value; }
@@ -118,10 +132,13 @@ export class ProductModalComponent implements OnInit {
       return;
     }
 
-    this.blockUISubmit.start("Guardando...")
+    this.blockUISubmit.start("Guardando...");
+
+    let user: UserInterface = this.usersArray.find(user => user.uid === this.fValue.assign);
+    this.fValue.assign = user.uid;
+    this.fValue.nameassign = user.firstname;
+
     if (this.opc) { //Se agrega nuevo producto
-      this.fValue.assign = this.currentUser.uid;
-      this.fValue.nameassign = this.currentUser.displayName;
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
       this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
       this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
