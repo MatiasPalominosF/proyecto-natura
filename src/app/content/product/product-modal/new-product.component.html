@@ -162,7 +162,8 @@
               <div class="form-group">
                 <label for="net">Precio neto *</label>
                 <input
-                  type="number"
+                  type="text"
+                  (input)="addDotInNumber(true)"
                   onkeydown="javascript: return event.keyCode === 8 ||
                   event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="net"
@@ -215,7 +216,8 @@
               <div class="form-group">
                 <label for="total">Precio venta *</label>
                 <input
-                  type="number"
+                  type="string"
+                  (input)="addDotInNumber(false)"
                   (change)="setMarginFromTotal($event.target.value)"
                   onkeydown="javascript: return event.keyCode === 8 ||
                   event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"

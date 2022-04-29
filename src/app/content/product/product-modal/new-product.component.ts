@@ -78,10 +78,12 @@ export class ProductModalComponent implements OnInit {
     //this.f['gross'].setValue(gross);
     this.f['margin'].setValue(margin * 100);
     this.f['nameassign'].setValue(nameassign);
-    this.f['net'].setValue(net);
+    let netWithPoint = this.addDotInNumber2(net + "");
+    this.f['net'].setValue(netWithPoint);
     this.f['quantity'].setValue(quantity);
     this.f['quantitymin'].setValue(quantitymin);
-    this.f['total'].setValue(total);
+    let totalWithPoint = this.addDotInNumber2(total + "");
+    this.f['total'].setValue(totalWithPoint);
     //this.f['vat'].setValue(vat);
     this.f['isSale'].setValue(isSale);
   }
@@ -121,6 +123,9 @@ export class ProductModalComponent implements OnInit {
       this.fValue.assign = this.currentUser.uid;
       this.fValue.nameassign = this.currentUser.displayName;
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
+      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
+      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
+
       this.productService.addProduct(this.fValue).finally(() => {
         this.blockUISubmit.stop();
         this.passEntry.emit(true);
@@ -132,11 +137,14 @@ export class ProductModalComponent implements OnInit {
       this.product = this.fValue;
       this.product.cuid = this.fValue.refcicle;
       this.product.uid = this.productService.selectedProduct.uid;
-      this.productService.updateProduct(this.product).finally(() => {
-        this.blockUISubmit.stop();
-        this.passEntry.emit(true);
-        this.activeModal.close(true);
-      });
+      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
+      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
+
+      // this.productService.updateProduct(this.product).finally(() => {
+      //   this.blockUISubmit.stop();
+      //   this.passEntry.emit(true);
+      //   this.activeModal.close(true);
+      // });
 
     }
 
@@ -160,8 +168,72 @@ export class ProductModalComponent implements OnInit {
     }
   }
 
-  disabledMarginAndTotal(net: number) {
-    if (net !== null) {
+  addDotInNumber(opc: boolean) {
+    if (opc) {
+      let neto = this.productInfo.get('net');
+      var entrada = neto.value.split('.').join('');
+      entrada = entrada.split('').reverse();
+      var salida = [];
+      var aux = '';
+      var paginador = Math.ceil(entrada.length / 3);
+
+      for (let i = 0; i < paginador; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (entrada[j + (i * 3)] != undefined) {
+            aux += entrada[j + (i * 3)];
+          }
+        }
+        salida.push(aux);
+        aux = '';
+        var final = salida.join('.').split("").reverse().join('');
+        neto.setValue(final);
+      }
+    } else {
+      let total = this.productInfo.get('total');
+      var entrada = total.value.split('.').join('');
+      entrada = entrada.split('').reverse();
+      var salida = [];
+      var aux = '';
+      var paginador = Math.ceil(entrada.length / 3);
+
+      for (let i = 0; i < paginador; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (entrada[j + (i * 3)] != undefined) {
+            aux += entrada[j + (i * 3)];
+          }
+        }
+        salida.push(aux);
+        aux = '';
+        var final = salida.join('.').split("").reverse().join('');
+        total.setValue(final);
+      }
+    }
+  }
+
+  addDotInNumber2(value: any): string {
+    let entrada = value.split('.').join('');
+    entrada = entrada.split('').reverse();
+
+    var salida = [];
+    var aux = '';
+    var paginador = Math.ceil(entrada.length / 3);
+
+    for (let i = 0; i < paginador; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (entrada[j + (i * 3)] != undefined) {
+          aux += entrada[j + (i * 3)];
+        }
+      }
+      salida.push(aux);
+      aux = '';
+      var final = salida.join('.').split("").reverse().join('');
+    }
+
+    return final;
+  }
+
+  disabledMarginAndTotal(net: string) {
+    if (net !== null && net !== "") {
       this.readonly = false;
       this.f['margin'].setValue("");
       this.f['total'].setValue("");
@@ -176,13 +248,16 @@ export class ProductModalComponent implements OnInit {
     if (this.f['net'].value) {
       var marginInPercent = 0;
       var totalWithMargin = 0;
+      var netWithOutPoint = this.f['net'].value.toString();
       if (margin !== "") {
         marginInPercent = (+margin / 100) + 1;
-        totalWithMargin = Math.round(this.f['net'].value * marginInPercent);
-        this.f['total'].setValue(totalWithMargin);
+        netWithOutPoint = netWithOutPoint.split('.').join('');
+        totalWithMargin = Math.round(+netWithOutPoint * marginInPercent);
+        let totalWithMargin2 = this.addDotInNumber2(totalWithMargin + "");
+        this.f['total'].setValue(totalWithMargin2);
       } else {
         this.f['margin'].setValue(0)
-        this.f['total'].setValue(this.f['net'].value);
+        this.f['total'].setValue(netWithOutPoint);
       }
     } else {
       this.f['net'].markAsTouched();
@@ -192,7 +267,7 @@ export class ProductModalComponent implements OnInit {
   setMarginFromTotal(total: any): void {
     var totalWithOutMargin = 0;
     if (total !== "") {
-      totalWithOutMargin = Math.ceil(((+total * 100) / this.f['net'].value) - 100);
+      totalWithOutMargin = Math.ceil(((+total.toString().split('.').join('') * 100) / +this.f['net'].value.toString().split('.').join('')) - 100);
       this.f['margin'].setValue(totalWithOutMargin);
     } else {
       this.f['margin'].setValue(0);

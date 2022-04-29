@@ -150,7 +150,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
     this.blockUIProduct.start("Cargando...");
     this.isEmpty = true;
 
-    this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
+    this.productService.getFullInfoProductNotObservableWithFilter().then((querySnapshot) => {
       this.products = [];
 
       let i = -1;
@@ -158,9 +158,12 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         querySnapshot.docs.forEach(async (doc, index, array): Promise<void> => {
           let product: ProductInterface = doc.data();
           await product.refcicle.get().then((cicleFs) => {
+
             let cicle: CicleInterface = cicleFs.data();
-            product.namecicle = cicle.name;
-            this.products.push(product);
+            if (cicle !== undefined) {
+              product.namecicle = cicle.name;
+              this.products.push(product);
+            }
           }).finally(() => {
             this.dataSource.data = this.products;
             this.isEmpty = false;
@@ -176,8 +179,6 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
         this.products.forEach(element => {
           let text: string;
           let typeWarning: boolean = true;
-          if (element.name === 'Pedido ciclo 02') {
-          }
           if (element.quantitymin > 0) {
             if (element.quantity === element.quantitymin) {
               text = "El producto " + element.name + " alcanzó el stock mínimo"

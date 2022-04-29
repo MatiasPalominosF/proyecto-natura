@@ -51,6 +51,10 @@ export class ProductService {
     return this.afs.firestore.collection('product').get();
   }
 
+  getFullInfoProductNotObservableWithFilter() {
+    return this.afs.firestore.collection('product').where('quantity', '>', 0).get();
+  }
+
   getProductByCicle(cuid: string) {
     return this.afs.firestore.collection('product').where('cuid', '==', `${cuid}`).get();
   }
