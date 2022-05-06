@@ -25,7 +25,8 @@
               "chart.js",
               "angularfire2/auth",
               "angularfire2/firestore",
-              "@firebase/firestore"
+              "@firebase/firestore",
+              "xlsx"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

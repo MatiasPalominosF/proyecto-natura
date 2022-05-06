@@ -62,7 +62,7 @@ export class UserService {
    * Update field in all documents firestore.
    */
   async test(): Promise<void> {
-    let date: Date = new Date(2022, 3, 12, 0, 0, 0, 0);
+    let date: Date = new Date(2022, 1, 12, 0, 0, 0, 0);
     const querySnapshot = await firebase.firestore().collection("product").get();
     querySnapshot.forEach(function (doc) {
       doc.ref.update({

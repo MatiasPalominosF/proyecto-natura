@@ -2,10 +2,13 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { UserInterface } from 'src/app/_models/user';
+import { NotificationService } from 'src/app/_services/notification/notification.service';
 import { UserService } from 'src/app/_services/user/user.service';
+import { FilterDataExportComponent } from '../filter-data-export/filter-data-export.component';
 
 @Component({
   selector: 'app-worker-view',
@@ -22,9 +25,12 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
   public displayedColumns: string[] = ['position', 'firstname', 'rut', 'actions'];
   public dataSource: MatTableDataSource<UserInterface> = new MatTableDataSource<UserInterface>();
   public isEmpty: boolean = false;
+  private closeResult = '';
 
   constructor(
     private userService: UserService,
+    private modalService: NgbModal,
+    private notifyService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -66,11 +72,23 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
 
   }
 
-  showLastProducts() {
+  showLastProducts(user: UserInterface) {
+    const modalRef = this.modalService.open(FilterDataExportComponent, { windowClass: 'animated fadeInDown my-class', backdrop: 'static' });
+    modalRef.componentInstance.user = user;
+    modalRef.result.then((result) => {
+      if (result) {
+        this.notifyService.showSuccess("Exportar", "¡Archivo exportado con éxito!");
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  showAllProducts(user: UserInterface) {
 
   }
 
-  editWorker() {
+  editWorker(user: UserInterface) {
 
   }
 
@@ -122,5 +140,14 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
 }

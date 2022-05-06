@@ -15,12 +15,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatRippleModule } from '@angular/material/core';
+import { FilterDataExportComponent } from './filter-data-export/filter-data-export.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 
 @NgModule({
   declarations: [
-    WorkerViewComponent
+    WorkerViewComponent,
+    FilterDataExportComponent
   ],
   imports: [
     MatTableModule,
@@ -30,6 +34,8 @@ import { MatRippleModule } from '@angular/material/core';
     MatInputModule,
     MatRadioModule,
     MatRippleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     CommonModule,
     BreadcrumbModule,
     CardModule,

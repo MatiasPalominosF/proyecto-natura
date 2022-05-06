@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ProductInterface } from 'src/app/_models/product';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,22 @@ export class ProductService {
     return this.products = this.afs.collection<ProductInterface>('product')
       .snapshotChanges()
       .pipe(map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as ProductInterface;
+          data.uid = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
+  getProductsWithFilterDate(userId: string, fromDate: any, toDate: any): Observable<ProductInterface[]> {
+    return this.products = this.afs.collection<ProductInterface>('product', ref => ref
+      .where('assign', '==', `${userId}`)
+      .where('dateadded', '>=', fromDate)
+      .where('dateadded', '<=', toDate)
+    )
+      .snapshotChanges()
+      .pipe(take(1), map(changes => {
         return changes.map(action => {
           const data = action.payload.doc.data() as ProductInterface;
           data.uid = action.payload.doc.id;
@@ -93,5 +110,18 @@ export class ProductService {
 
   async delete2(product: ProductInterface): Promise<void> {
     return await this.afs.firestore.collection('product').doc(`${product.uid}`).delete();
+  }
+
+  /**
+  * Update field in all documents firestore.
+  */
+  async updateAllFields(): Promise<void> {
+    let date: Date = new Date(2022, 1, 12, 0, 0, 0, 0);
+    const querySnapshot = await firebase.firestore().collection("product").get();
+    querySnapshot.forEach(function (doc) {
+      doc.ref.update({
+        dateadded: date
+      });
+    });
   }
 }

@@ -142,8 +142,11 @@ export class ProductModalComponent implements OnInit {
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
       this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
       this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
+      let dateadded = new Date();
+      let product: ProductInterface = this.fValue;
+      product.dateadded = dateadded;
 
-      this.productService.addProduct(this.fValue).finally(() => {
+      this.productService.addProduct(product).finally(() => {
         this.blockUISubmit.stop();
         this.passEntry.emit(true);
         this.activeModal.close(true);
@@ -151,11 +154,11 @@ export class ProductModalComponent implements OnInit {
 
     } else {
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
+      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
+      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
       this.product = this.fValue;
       this.product.cuid = this.fValue.refcicle;
       this.product.uid = this.productService.selectedProduct.uid;
-      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
-      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
 
       this.productService.updateProduct(this.product).finally(() => {
         this.blockUISubmit.stop();
