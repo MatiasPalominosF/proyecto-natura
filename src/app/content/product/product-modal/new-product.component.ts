@@ -5,8 +5,10 @@ import { AnyCnameRecord } from 'dns';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CicleInterface } from 'src/app/_models/cicle';
 import { ProductInterface } from 'src/app/_models/product';
+import { UserInterface } from 'src/app/_models/user';
 import { CicleService } from 'src/app/_services/cicle/cicle.service';
 import { ProductService } from 'src/app/_services/product/product.service';
+import { UserService } from 'src/app/_services/user/user.service';
 
 @Component({
   selector: 'app-new-product',
@@ -18,6 +20,7 @@ export class ProductModalComponent implements OnInit {
   @Input() public opc: boolean;
   @Output() passEntry: EventEmitter<any> = new EventEmitter();
   @BlockUI('cicles') blockUICicle: NgBlockUI;
+  @BlockUI('users') blockUIUsers: NgBlockUI;
   @BlockUI('submit') blockUISubmit: NgBlockUI;
 
   private selectedCicle: CicleInterface = {};
@@ -28,12 +31,14 @@ export class ProductModalComponent implements OnInit {
   private currentUser: any;
   private product: ProductInterface = {};
   public ciclesArray: CicleInterface[] = [];
+  public usersArray: UserInterface[] = [];
 
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private productService: ProductService,
     private cicleService: CicleService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +46,7 @@ export class ProductModalComponent implements OnInit {
     this.getUserLogged();
     this.productInfo = this.formBuilder.group({
       name: ['', Validators.required],
-      assign: [null],
+      assign: [null, Validators.required],
       codbarra: ['', Validators.required],
       refcicle: [null, Validators.required],
       //gross: ['', Validators.required], // Se eliminan ya que no se utilizarán en este sistema (bruto)
@@ -56,6 +61,7 @@ export class ProductModalComponent implements OnInit {
     });
 
     this.getCicles();
+    this.getUsers();
 
     if (!this.opc) {
       this.readonly = false;
@@ -78,10 +84,12 @@ export class ProductModalComponent implements OnInit {
     //this.f['gross'].setValue(gross);
     this.f['margin'].setValue(margin * 100);
     this.f['nameassign'].setValue(nameassign);
-    this.f['net'].setValue(net);
+    let netWithPoint = this.addDotInNumber2(net + "");
+    this.f['net'].setValue(netWithPoint);
     this.f['quantity'].setValue(quantity);
     this.f['quantitymin'].setValue(quantitymin);
-    this.f['total'].setValue(total);
+    let totalWithPoint = this.addDotInNumber2(total + "");
+    this.f['total'].setValue(totalWithPoint);
     //this.f['vat'].setValue(vat);
     this.f['isSale'].setValue(isSale);
   }
@@ -105,6 +113,14 @@ export class ProductModalComponent implements OnInit {
     })
   }
 
+  getUsers() {
+    this.blockUIUsers.start("Cargando...");
+    this.userService.getAllUsers().subscribe((users) => {
+      this.usersArray = users;
+      this.blockUIUsers.stop();
+    })
+  }
+
   get f() { return this.productInfo.controls; }
 
   get fValue() { return this.productInfo.value; }
@@ -116,12 +132,21 @@ export class ProductModalComponent implements OnInit {
       return;
     }
 
-    this.blockUISubmit.start("Guardando...")
+    this.blockUISubmit.start("Guardando...");
+
+    let user: UserInterface = this.usersArray.find(user => user.uid === this.fValue.assign);
+    this.fValue.assign = user.uid;
+    this.fValue.nameassign = user.firstname;
+
     if (this.opc) { //Se agrega nuevo producto
-      this.fValue.assign = this.currentUser.uid;
-      this.fValue.nameassign = this.currentUser.displayName;
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
-      this.productService.addProduct(this.fValue).finally(() => {
+      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
+      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
+      let dateadded = new Date();
+      let product: ProductInterface = this.fValue;
+      product.dateadded = dateadded;
+
+      this.productService.addProduct(product).finally(() => {
         this.blockUISubmit.stop();
         this.passEntry.emit(true);
         this.activeModal.close(true);
@@ -129,17 +154,18 @@ export class ProductModalComponent implements OnInit {
 
     } else {
       this.fValue.margin = this.fValue.margin / 100; // dejo el % expresado en decimales.
+      this.fValue.net = +this.fValue.net.split('.').join(''); // Le elimino el punto separador a los input y cambio de string a entero el campo.
+      this.fValue.total = +this.fValue.total.split('.').join(''); // acá igual
       this.product = this.fValue;
       this.product.cuid = this.fValue.refcicle;
       this.product.uid = this.productService.selectedProduct.uid;
+
       this.productService.updateProduct(this.product).finally(() => {
         this.blockUISubmit.stop();
         this.passEntry.emit(true);
         this.activeModal.close(true);
       });
-
     }
-
   }
 
   getUserLogged(): void {
@@ -160,8 +186,72 @@ export class ProductModalComponent implements OnInit {
     }
   }
 
-  disabledMarginAndTotal(net: number) {
-    if (net !== null) {
+  addDotInNumber(opc: boolean) {
+    if (opc) {
+      let neto = this.productInfo.get('net');
+      var entrada = neto.value.split('.').join('');
+      entrada = entrada.split('').reverse();
+      var salida = [];
+      var aux = '';
+      var paginador = Math.ceil(entrada.length / 3);
+
+      for (let i = 0; i < paginador; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (entrada[j + (i * 3)] != undefined) {
+            aux += entrada[j + (i * 3)];
+          }
+        }
+        salida.push(aux);
+        aux = '';
+        var final = salida.join('.').split("").reverse().join('');
+        neto.setValue(final);
+      }
+    } else {
+      let total = this.productInfo.get('total');
+      var entrada = total.value.split('.').join('');
+      entrada = entrada.split('').reverse();
+      var salida = [];
+      var aux = '';
+      var paginador = Math.ceil(entrada.length / 3);
+
+      for (let i = 0; i < paginador; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (entrada[j + (i * 3)] != undefined) {
+            aux += entrada[j + (i * 3)];
+          }
+        }
+        salida.push(aux);
+        aux = '';
+        var final = salida.join('.').split("").reverse().join('');
+        total.setValue(final);
+      }
+    }
+  }
+
+  addDotInNumber2(value: any): string {
+    let entrada = value.split('.').join('');
+    entrada = entrada.split('').reverse();
+
+    var salida = [];
+    var aux = '';
+    var paginador = Math.ceil(entrada.length / 3);
+
+    for (let i = 0; i < paginador; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (entrada[j + (i * 3)] != undefined) {
+          aux += entrada[j + (i * 3)];
+        }
+      }
+      salida.push(aux);
+      aux = '';
+      var final = salida.join('.').split("").reverse().join('');
+    }
+
+    return final;
+  }
+
+  disabledMarginAndTotal(net: string) {
+    if (net !== null && net !== "") {
       this.readonly = false;
       this.f['margin'].setValue("");
       this.f['total'].setValue("");
@@ -176,13 +266,16 @@ export class ProductModalComponent implements OnInit {
     if (this.f['net'].value) {
       var marginInPercent = 0;
       var totalWithMargin = 0;
+      var netWithOutPoint = this.f['net'].value.toString();
       if (margin !== "") {
         marginInPercent = (+margin / 100) + 1;
-        totalWithMargin = Math.round(this.f['net'].value * marginInPercent);
-        this.f['total'].setValue(totalWithMargin);
+        netWithOutPoint = netWithOutPoint.split('.').join('');
+        totalWithMargin = Math.round(+netWithOutPoint * marginInPercent);
+        let totalWithMargin2 = this.addDotInNumber2(totalWithMargin + "");
+        this.f['total'].setValue(totalWithMargin2);
       } else {
         this.f['margin'].setValue(0)
-        this.f['total'].setValue(this.f['net'].value);
+        this.f['total'].setValue(netWithOutPoint);
       }
     } else {
       this.f['net'].markAsTouched();
@@ -192,7 +285,7 @@ export class ProductModalComponent implements OnInit {
   setMarginFromTotal(total: any): void {
     var totalWithOutMargin = 0;
     if (total !== "") {
-      totalWithOutMargin = Math.ceil(((+total * 100) / this.f['net'].value) - 100);
+      totalWithOutMargin = Math.ceil(((+total.toString().split('.').join('') * 100) / +this.f['net'].value.toString().split('.').join('')) - 100);
       this.f['margin'].setValue(totalWithOutMargin);
     } else {
       this.f['margin'].setValue(0);

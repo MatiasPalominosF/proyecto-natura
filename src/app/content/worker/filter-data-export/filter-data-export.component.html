@@ -1,0 +1,74 @@
+<div class="modal-header">
+  <h4 class="form-section">
+    <div class="d-flex flex-row">
+      <div><i class="mr-2 la la-calendar-o"></i></div>
+      <div>
+        {{ title }}
+      </div>
+    </div>
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-body" *blockUI="'submit'; message: 'Loading'">
+    <div [formGroup]="filterForm" class="row justify-content-between">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>Desde</mat-label>
+          <input
+            matInput
+            [matDatepicker]="fromDate"
+            placeholder="dd-mm-yyyy"
+            formControlName="fromDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="fromDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #fromDate></mat-datepicker>
+          <mat-error *ngIf="hasError('fromDate', 'required')"
+            >Debe ingresar una fecha de inicio</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>Hasta</mat-label>
+          <input
+            matInput
+            [matDatepicker]="toDate"
+            placeholder="dd-mm-yyyy"
+            formControlName="toDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="toDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #toDate></mat-datepicker>
+          <mat-error *ngIf="hasError('toDate', 'required')"
+            >Debe ingresar una fecha de término</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+    class="btn btn-sm grey btn-outline-secondary"
+  >
+    <i class="feather ft-x"></i> Cerrar
+  </button>
+  <button (click)="onSubmit()" class="btn btn-sm btn-outline-primary">
+    <i class="feather ft-check"></i> Exportar
+  </button>
+</div>

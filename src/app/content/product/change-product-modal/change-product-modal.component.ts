@@ -88,6 +88,7 @@ export class ChangeProductModalComponent implements OnInit {
     this.newSelectedProduct.quantity = this.fValue.move;
 
     this.blockUISubmit.start("Guardando...");
+    let dateadded = new Date();
     this.productService.getProductByUid(this.newSelectedProduct).then((querySnapshot) => {
       querySnapshot.forEach(document => {
         this.data = Object.assign({}, document.data());
@@ -101,6 +102,7 @@ export class ChangeProductModalComponent implements OnInit {
         }).finally(() => {
           this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
           this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
+          this.data.dateadded = dateadded;
           this.productService.updateProduct(this.data);
           this.productService.updateProduct(this.oldSelectedProduct);
           this.blockUISubmit.stop();
@@ -116,6 +118,7 @@ export class ChangeProductModalComponent implements OnInit {
         }).finally(() => {
           this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
           this.productService.updateProduct(this.oldSelectedProduct);
+          this.newSelectedProduct.dateadded = dateadded;
           this.productService.addProduct(this.newSelectedProduct);
           this.blockUISubmit.stop();
           this.passEntry.emit(true);

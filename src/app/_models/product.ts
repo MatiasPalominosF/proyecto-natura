@@ -3,6 +3,7 @@ export interface ProductInterface {
     assign?: string;
     nameassign?: string;
     cuid?: string;
+    dateadded?: any;
     refcicle?: any;
     namecicle?: string;
     gross?: number;

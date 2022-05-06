@@ -32,14 +32,14 @@ import { ShowProductsComponent } from './show-products/show-products.component';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatRadioModule,
+    MatRippleModule,
     CommonModule,
     BreadcrumbModule,
     CardModule,
     NgbModule,
-    MatRippleModule,
     NgbModalModule,
     FormsModule,
-    MatRadioModule,
     ReactiveFormsModule,
     BlockUIModule.forRoot({
       template: BlockTemplateComponent

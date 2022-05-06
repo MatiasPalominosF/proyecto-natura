@@ -1,11 +1,132 @@
 <div class="app-content content">
-    <div class="content-wrapper">
-      <div class="content-header row mb-1">
-        <app-breadcrumb class="col-12" [breadcrumb]="breadcrumb"></app-breadcrumb>
+  <div class="content-wrapper">
+    <div class="content-header row mb-1">
+      <app-breadcrumb class="col-12" [breadcrumb]="breadcrumb"></app-breadcrumb>
+    </div>
+    <div class="content-body">
+      <div class="d-flex justify-content-between">
+        <mat-form-field appearance="standard">
+          <mat-label>Buscar</mat-label>
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Ej. Evelyn"
+            #input
+          />
+        </mat-form-field>
+        <div class="justify-content-center">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm mt-2"
+            (click)="addNewWorker()"
+          >
+            <i class="la la-plus"></i> Nuevo trabajador
+          </button>
+        </div>
       </div>
-      <div class="content-body">
-        <p>worker-view works!</p>
-      </div>
+      <mat-table
+        #table
+        class="mat-elevation-z8"
+        [dataSource]="dataSource"
+        matSort
+        matSortActive="firstname"
+        matSortDirection="asc"
+        class="mat-cell"
+        *blockUI="'workers'; message: 'Loading'"
+      >
+        <!-- position Definition -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> N&#176; </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i = index" data-label="N&#176;">
+            {{ paginator.pageIndex * paginator.pageSize + i + 1 }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- name Definition -->
+        <ng-container matColumnDef="firstname">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Nombre
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Nombre">
+            {{ row.firstname }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- rut Definition -->
+        <ng-container matColumnDef="rut">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            RUT
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="RUT">
+            {{ row.rut }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- actions Definition -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let row" data-label="Acciones">
+            <div class="d-flex justify-content-end">
+              <button
+                (click)="editWorker(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Editar trabajador"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-vimeo"
+              >
+                <span class="feather ft-edit-2"></span>
+              </button>
+              <button
+                (click)="showLastProducts(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Exportar productos por fecha"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-soundcloud"
+              >
+                <span class="la la-calendar"></span>
+              </button>
+              <button
+                (click)="showAllProducts(row)"
+                triggers="hover:click:hover"
+                [autoClose]="'outside'"
+                placement="left"
+                ngbTooltip="Exportar todos los productos"
+                class="btn btn-social-icon btn-xs mt-1 mb-1 mr-1 btn-outline-dropbox"
+              >
+                <span class="la la-history"></span>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns; let i = index"
+        ></mat-row>
+
+        <!-- Row shown when there is no matching data. -->
+
+        <tr class="mat-row" *matNoDataRow>
+          <td *ngIf="!isEmpty" class="mat-cell" colspan="4">
+            <br />
+            No hay coincidencias para "{{ input.value }}"
+          </td>
+          <td *ngIf="isEmpty" class="mat-cell" colspan="4">
+            <br />
+            No hay datos para mostrar
+          </td>
+        </tr>
+      </mat-table>
+      <!-- Pagination-->
+      <mat-paginator
+        #paginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 15, 50, 100]"
+      >
+      </mat-paginator>
     </div>
   </div>
-  
+</div>

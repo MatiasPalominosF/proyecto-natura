@@ -26,7 +26,7 @@
             <i class="la la-eye"></i> Acerca del producto
           </h4>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="name">Nombre *</label>
                 <input
@@ -44,6 +44,32 @@
                 >
                   <div *ngIf="f.name.errors.required">
                     El nombre del producto es requerido
+                  </div>
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6" *blockUI="'users'; message: 'Loading'">
+              <div class="form-group">
+                <label for="assign">Bodega *</label>
+                <ng-select
+                  id="assign"
+                  [items]="usersArray"
+                  bindValue="uid"
+                  bindLabel="firstname"
+                  placeholder="Seleccione una bodega"
+                  formControlName="assign"
+                  [ngClass]="{
+                    'is-invalid': submitted && f.assign.invalid
+                  }"
+                >
+                </ng-select>
+                <small
+                  class="form-text text-muted danger"
+                  *ngIf="submitted && f.assign.invalid"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.assign.errors.required">
+                    La bodega es requerida
                   </div>
                 </small>
               </div>
@@ -162,7 +188,8 @@
               <div class="form-group">
                 <label for="net">Precio neto *</label>
                 <input
-                  type="number"
+                  type="text"
+                  (input)="addDotInNumber(true)"
                   onkeydown="javascript: return event.keyCode === 8 ||
                   event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
                   id="net"
@@ -215,7 +242,8 @@
               <div class="form-group">
                 <label for="total">Precio venta *</label>
                 <input
-                  type="number"
+                  type="string"
+                  (input)="addDotInNumber(false)"
                   (change)="setMarginFromTotal($event.target.value)"
                   onkeydown="javascript: return event.keyCode === 8 ||
                   event.keyCode === 46 || event.keyCode === 9 ? true : !isNaN(Number(event.key))"
