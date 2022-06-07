@@ -103,7 +103,7 @@ export class ProductService {
     return this.productDoc.update(product);
   }
 
-  deleteProduct(product: ProductInterface) {
+  deleteProduct(product: ProductInterface): Promise<void> {
     this.productDoc = this.afs.collection<ProductInterface>('product').doc(`${product.uid}`);
     return this.productDoc.delete();
   }

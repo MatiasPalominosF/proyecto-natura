@@ -30,7 +30,7 @@ export class SaleViewComponent implements OnInit, AfterViewInit {
 
   public isDisabled: boolean = true;
   public breadcrumb: BreadcrumbInterface;
-  public displayedColumns: string[] = ['position', 'name', 'cicle', 'quantity', 'total', 'actions'];
+  public displayedColumns: string[] = ['position', 'name', 'cicle', 'quantity', 'nameassign', 'total', 'actions'];
   public displayedColumnsCart: string[] = ['position', 'name', 'quantitycart', 'unitprice', 'totalcart', 'actions'];
   public dataSource: MatTableDataSource<ProductInterface> = new MatTableDataSource<ProductInterface>();
   public dataSourceCart: MatTableDataSource<ProductCartInterface> = new MatTableDataSource<ProductCartInterface>();

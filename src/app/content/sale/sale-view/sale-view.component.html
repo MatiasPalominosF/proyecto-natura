@@ -65,6 +65,16 @@
               </mat-cell>
             </ng-container>
 
+            <!-- dateinit Definition -->
+            <ng-container matColumnDef="nameassign">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Bodega
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row" data-label="Bodega">
+                {{ row.nameassign }}
+              </mat-cell>
+            </ng-container>
+
             <!-- dateend Definition -->
             <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef mat-sort-header>

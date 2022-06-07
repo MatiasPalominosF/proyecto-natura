@@ -8,6 +8,7 @@ import { NotificationService } from 'src/app/_services/notification/notification
 import { ProductService } from 'src/app/_services/product/product.service';
 
 export interface DataToExport {
+  codbarra?: string;
   producto?: string;
   cantidad?: number;
   precioVenta?: number;
@@ -54,6 +55,13 @@ export class FilterDataExportComponent implements OnInit {
     return this.filterForm.get(controlName).hasError(errorName);
   }
 
+  groupBy(xs: any[], key: string): any {
+    return xs.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  }
+
   onSubmit() {
     this.submitted = true;
 
@@ -69,12 +77,22 @@ export class FilterDataExportComponent implements OnInit {
     this.productService.getProductsWithFilterDate(this.user.uid, fromDate, toDate).subscribe(products => {
       if (products.length > 0) {
         products.forEach(product => {
-          let dataToExport: DataToExport = {};
-          dataToExport.producto = product.name;
-          dataToExport.cantidad = product.quantity;
-          dataToExport.precioVenta = product.total;
+          if (product.quantity > 0) {
+            let dataToExport: DataToExport = {};
+            dataToExport.codbarra = product.codbarra;
+            dataToExport.producto = product.name;
+            dataToExport.cantidad = product.quantity;
+            dataToExport.precioVenta = product.total;
+            if (this.excelData.filter(e => e.codbarra === dataToExport.codbarra).length > 0) {
+              let element = this.excelData.find(el => el.codbarra === dataToExport.codbarra);
+              let index = this.excelData.indexOf(element);
+              element.cantidad = element.cantidad + dataToExport.cantidad;
+              this.excelData[index] = element;
+            } else {
+              this.excelData.push(dataToExport);
+            }
 
-          this.excelData.push(dataToExport);
+          }
         });
         let nameExcel = 'Productos ' + this.user.firstname
         this.exportToExcelService.exportAsExcelFile(this.excelData, nameExcel);

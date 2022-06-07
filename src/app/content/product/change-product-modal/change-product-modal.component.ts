@@ -35,11 +35,13 @@ export class ChangeProductModalComponent implements OnInit {
     private userService: UserService,
     private productService: ProductService,
   ) {
-    this.oldSelectedProduct = Object.assign({}, this.productService.selectedProduct);
-    this.newSelectedProduct = Object.assign({}, this.productService.selectedProduct);
+    // this.oldSelectedProduct = Object.assign({}, this.productService.selectedProduct);
+    // this.newSelectedProduct = Object.assign({}, this.productService.selectedProduct);
   }
 
   ngOnInit(): void {
+    this.oldSelectedProduct = Object.assign({}, this.productService.selectedProduct);
+    this.newSelectedProduct = Object.assign({}, this.productService.selectedProduct);
     this.title = 'Mover stock';
     this.productInfo = this.formBuilder.group({
       name: ['', Validators.required],
@@ -74,7 +76,7 @@ export class ChangeProductModalComponent implements OnInit {
 
   get fValue() { return this.productInfo.value; }
 
-  async onProductInfoSubmit() {
+  onProductInfoSubmit() {
     this.submitted = true;
 
     if (this.productInfo.invalid) {
@@ -99,12 +101,12 @@ export class ChangeProductModalComponent implements OnInit {
           let cicle: CicleInterface = cicleFs.data();
           this.data.refcicle = cicle.uid;
           this.oldSelectedProduct.refcicle = cicle.uid;
-        }).finally(() => {
+        }).finally(async () => {
           this.updateQuantityOldSelectedProduct(this.data, this.newSelectedProduct, false);
           this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
           this.data.dateadded = dateadded;
-          this.productService.updateProduct(this.data);
-          this.productService.updateProduct(this.oldSelectedProduct);
+          await this.productService.updateProduct(this.data);
+          await this.productService.updateProduct(this.oldSelectedProduct);
           this.blockUISubmit.stop();
           this.passEntry.emit(true);
           this.activeModal.close(true);
@@ -115,11 +117,11 @@ export class ChangeProductModalComponent implements OnInit {
           let cicle: CicleInterface = cicleFs.data();
           this.newSelectedProduct.refcicle = cicle.uid;
           this.oldSelectedProduct.refcicle = cicle.uid;
-        }).finally(() => {
+        }).finally(async () => {
           this.updateQuantityOldSelectedProduct(this.oldSelectedProduct, this.newSelectedProduct, true);
-          this.productService.updateProduct(this.oldSelectedProduct);
+          await this.productService.updateProduct(this.oldSelectedProduct);
           this.newSelectedProduct.dateadded = dateadded;
-          this.productService.addProduct(this.newSelectedProduct);
+          await this.productService.addProduct(this.newSelectedProduct);
           this.blockUISubmit.stop();
           this.passEntry.emit(true);
           this.activeModal.close(true);
