@@ -64,6 +64,21 @@ export class ProductService {
       }));
   }
 
+  getProductsByAssign(userId: string) {
+    return this.products = this.afs.collection<ProductInterface>('product', ref => ref
+      .where('assign', '==', `${userId}`)
+      .where('quantity', '>', 0)
+    )
+      .snapshotChanges()
+      .pipe(take(1), map(changes => {
+        return changes.map(action => {
+          const data = action.payload.doc.data() as ProductInterface;
+          data.uid = action.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
   getFullInfoProductNotObservable() {
     return this.afs.firestore.collection('product').get();
   }

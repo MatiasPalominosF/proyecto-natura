@@ -74,6 +74,7 @@ export class FilterDataExportComponent implements OnInit {
     let toDate = new Date(this.toDate.getUTCFullYear(), this.toDate.getUTCMonth(), this.toDate.getUTCDate(), 23, 59, 59, 59);
 
     this.blockUISubmit.start('Cargando...');
+    this.excelData = [];
     this.productService.getProductsWithFilterDate(this.user.uid, fromDate, toDate).subscribe(products => {
       if (products.length > 0) {
         products.forEach(product => {

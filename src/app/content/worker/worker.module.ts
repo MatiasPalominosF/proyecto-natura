@@ -18,7 +18,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { FilterDataExportComponent } from './filter-data-export/filter-data-export.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -40,6 +41,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     BreadcrumbModule,
     CardModule,
     NgbModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     NgbModalModule,
     FormsModule,
     ReactiveFormsModule,
