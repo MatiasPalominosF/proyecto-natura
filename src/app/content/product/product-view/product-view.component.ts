@@ -213,7 +213,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       .then(async confirmed => {
         if (!confirmed) {
         } else {
-          this.productService.deleteProduct(product);
+          await this.productService.deleteProduct(product);
           this.refreshView();
           this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
 

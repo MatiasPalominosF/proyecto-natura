@@ -6,9 +6,19 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { BreadcrumbInterface } from 'src/app/_models/breadcrumb';
 import { UserInterface } from 'src/app/_models/user';
+import { ExportToExcelService } from 'src/app/_services/export-to-excel/export-to-excel.service';
 import { NotificationService } from 'src/app/_services/notification/notification.service';
+import { ProductService } from 'src/app/_services/product/product.service';
 import { UserService } from 'src/app/_services/user/user.service';
 import { FilterDataExportComponent } from '../filter-data-export/filter-data-export.component';
+
+export interface DataToExport {
+  codbarra?: string;
+  producto?: string;
+  cantidad?: number;
+  precioVenta?: number;
+}
+
 
 @Component({
   selector: 'app-worker-view',
@@ -19,6 +29,7 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @BlockUI('workers') blockUIWorker: NgBlockUI;
+  @BlockUI('showAllProductsBtn') blockUIShowAllProductsBtn: NgBlockUI;
 
 
   public breadcrumb: BreadcrumbInterface;
@@ -26,11 +37,14 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
   public dataSource: MatTableDataSource<UserInterface> = new MatTableDataSource<UserInterface>();
   public isEmpty: boolean = false;
   private closeResult = '';
+  private excelData: DataToExport[] = [];
 
   constructor(
     private userService: UserService,
+    private productService: ProductService,
     private modalService: NgbModal,
     private notifyService: NotificationService,
+    private exportToExcelService: ExportToExcelService,
   ) { }
 
   ngOnInit(): void {
@@ -85,7 +99,29 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
   }
 
   showAllProducts(user: UserInterface) {
-
+    console.log(user);
+    this.excelData = [];
+    this.blockUIShowAllProductsBtn.start('Cargando...');
+    this.productService.getProductsByAssign(user.uid).subscribe((products) => {
+      products.forEach((product) => {
+        let dataToExport: DataToExport = {};
+        dataToExport.codbarra = product.codbarra;
+        dataToExport.producto = product.name;
+        dataToExport.cantidad = product.quantity;
+        dataToExport.precioVenta = product.total;
+        if (this.excelData.filter(e => e.codbarra === dataToExport.codbarra).length > 0) {
+          let element = this.excelData.find(el => el.codbarra === dataToExport.codbarra);
+          let index = this.excelData.indexOf(element);
+          element.cantidad = element.cantidad + dataToExport.cantidad;
+          this.excelData[index] = element;
+        } else {
+          this.excelData.push(dataToExport);
+        }
+      });
+      let nameExcel = 'Productos ' + user.firstname
+      this.exportToExcelService.exportAsExcelFile(this.excelData, nameExcel);
+      this.blockUIShowAllProductsBtn.stop();
+    });
   }
 
   editWorker(user: UserInterface) {

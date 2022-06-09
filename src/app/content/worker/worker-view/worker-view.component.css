@@ -6,6 +6,10 @@
   padding-right: 5px;
 }
 
+:host ::ng-deep .block-ui-wrapper {
+  background: rgba(255, 249, 249, 0.5) !important;
+}
+
 mat-cell:first-child,
 mat-footer-cell:first-child,
 mat-header-cell:first-child {
