@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,8 +38,12 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   public isEmpty: boolean;
   public isFounded: boolean;
   private closeResult = '';
-  private productArray: ProductInterface[];
-
+  private productArray: ProductInterface[] = [];
+  public color: ThemePalette = 'primary';
+  public mode: ProgressSpinnerMode = 'indeterminate';
+  public value = 50;
+  public loading: boolean = false;
+  public diameter: number = 20;
 
   constructor(
     private productService: ProductService,
@@ -65,44 +71,62 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     this.getProducts();
   }
 
+  // getProducts() {
+  //   this.blockUIProduct.start('Cargando...');
+  //   this.isEmpty = true;
+  //   this.isFounded = true;
+  //   this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
+  //     this.productArray = [];
+  //     if (querySnapshot.empty) {
+  //       this.isEmpty = true;
+  //       this.blockUIProduct.stop();
+  //       this.dataSource.data = this.productArray;
+  //       return;
+  //     }
+
+  //     querySnapshot.forEach(doc => {
+  //       let data: any = doc.data();
+  //       if (Object.keys(data.refcicle).length !== 0) {
+  //         let product: ProductInterface = {};
+  //         data.refcicle.get().then((cicleFs) => {
+  //           let cicle: CicleInterface = cicleFs.data();
+  //           product = data;
+  //           product.namecicle = cicle.name;
+  //           this.productArray.push(product);
+  //         }).finally(() => {
+  //           this.dataSource.data = this.productArray;
+  //           this.isEmpty = false;
+  //           this.isFounded = false;
+  //           this.blockUIProduct.stop();
+  //         })
+  //       } else {
+  //         this.productArray = [];
+  //         this.dataSource.data = this.productArray;
+  //         this.isEmpty = false;
+  //         this.isFounded = false;
+  //         this.blockUIProduct.stop();
+  //       }
+
+  //     });
+  //   })
+  // }
+
   getProducts() {
-    this.blockUIProduct.start('Cargando...');
-    this.isEmpty = true;
-    this.isFounded = true;
-    this.productService.getFullInfoProductNotObservable().then((querySnapshot) => {
+    this.loading = true;
+    this.productService.getFullInfoProduct().subscribe(async products => {
+      this.loading = true;
       this.productArray = [];
-      if (querySnapshot.empty) {
-        this.isEmpty = true;
-        this.blockUIProduct.stop();
-        this.dataSource.data = this.productArray;
-        return;
-      }
-
-      querySnapshot.forEach(doc => {
-        let data: any = doc.data();
-        if (Object.keys(data.refcicle).length !== 0) {
-          let product: ProductInterface = {};
-          data.refcicle.get().then((cicleFs) => {
-            let cicle: CicleInterface = cicleFs.data();
-            product = data;
-            product.namecicle = cicle.name;
-            this.productArray.push(product);
-          }).finally(() => {
-            this.dataSource.data = this.productArray;
-            this.isEmpty = false;
-            this.isFounded = false;
-            this.blockUIProduct.stop();
-          })
-        } else {
-          this.productArray = [];
-          this.dataSource.data = this.productArray;
-          this.isEmpty = false;
-          this.isFounded = false;
-          this.blockUIProduct.stop();
-        }
-
-      });
-    })
+      await Promise.all(products.map(async product => {
+        await product.refcicle.get().then((cicleFs) => {
+          let cicle: CicleInterface = cicleFs.data();
+          product.namecicle = cicle.name;
+          this.productArray.push(product);
+        })
+      }))
+      this.loading = false;
+      this.dataSource.data = this.productArray;
+    }
+    )
   }
 
   refreshView() {
@@ -174,7 +198,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Agregar", "¡El producto se agregó correctamente!");
-        this.refreshView();
+        //this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -187,7 +211,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Mover stock", "¡El stock se ha movido correctamente!");
-        this.refreshView();
+        //this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -201,7 +225,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
     modalRef.result.then((result) => {
       if (result) {
         this.notifyService.showSuccess("Editar", "¡El producto se editó correctamente!");
-        this.refreshView();
+        //this.refreshView();
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -209,13 +233,15 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   }
 
   deleteProduct(product: ProductInterface): void {
+    this.loading = true;
     this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
       .then(async confirmed => {
         if (!confirmed) {
         } else {
           await this.productService.deleteProduct(product);
-          this.refreshView();
+          //this.refreshView();
           this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
+          this.loading = false;
 
         }
       }).catch(() => {

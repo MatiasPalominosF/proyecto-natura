@@ -18,6 +18,7 @@ import { ProductModalComponent } from './product-modal/new-product.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ChangeProductModalComponent } from './change-product-modal/change-product-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { ChangeProductModalComponent } from './change-product-modal/change-produ
     MatRippleModule,
     NgbModalModule,
     NgSelectModule,
+    MatProgressSpinnerModule,
     FormsModule,
     MatRadioModule,
     ReactiveFormsModule,
