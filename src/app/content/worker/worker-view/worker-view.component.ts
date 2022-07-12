@@ -99,7 +99,6 @@ export class WorkerViewComponent implements OnInit, AfterViewInit {
   }
 
   showAllProducts(user: UserInterface) {
-    console.log(user);
     this.excelData = [];
     this.blockUIShowAllProductsBtn.start('Cargando...');
     this.productService.getProductsByAssign(user.uid).subscribe((products) => {

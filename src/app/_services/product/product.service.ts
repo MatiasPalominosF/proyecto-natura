@@ -93,7 +93,7 @@ export class ProductService {
 
   getProductByUid(product: ProductInterface) {
     return this.afs.firestore.collection('product').where('nameassign', '==', product.nameassign).where('assign', '==', product.assign)
-      .where('codbarra', '==', product.codbarra).where('total', '==', product.total).get();
+      .where('codbarra', '==', product.codbarra).where('total', '==', product.total).where('net', '==', product.net).where('margin', '==', product.margin).get();
   }
 
   addProduct(product: ProductInterface): Promise<void> {

@@ -68,6 +68,7 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
       options: false,
       putselect: false,
     };
+    this.loading = true;
     this.getProducts();
   }
 
@@ -112,7 +113,6 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   // }
 
   getProducts() {
-    this.loading = true;
     this.productService.getFullInfoProduct().subscribe(async products => {
       this.loading = true;
       this.productArray = [];
@@ -235,14 +235,13 @@ export class ProductViewComponent implements OnInit, AfterViewInit {
   deleteProduct(product: ProductInterface): void {
     this.loading = true;
     this.confirmationDialogService.confirm('Confirmación', '¿Estás seguro de eliminar el producto?')
-      .then(async confirmed => {
+      .then(confirmed => {
         if (!confirmed) {
         } else {
-          await this.productService.deleteProduct(product);
-          //this.refreshView();
-          this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!");
-          this.loading = false;
-
+          this.productService.deleteProduct(product).finally(() => {
+            this.loading = true;
+            this.notifyService.showSuccess("Eliminar", "¡El producto se eliminó correctamente!")
+          });
         }
       }).catch(() => {
         console.log("Not ok");

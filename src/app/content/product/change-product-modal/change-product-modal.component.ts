@@ -96,7 +96,8 @@ export class ChangeProductModalComponent implements OnInit {
         this.data = Object.assign({}, document.data());
       })
     }).finally(() => {
-      if (Object.keys(this.data).length !== 0) {// Si a la persona que se envía stock ya existe, se actualiza stock.
+      if (Object.keys(this.data).length !== 0) {// Si la bodega que se envía el producto no lo tiene, se añade como producto nuevo a su bodega.
+        console.log("Bodega tiene el producto");
         this.newSelectedProduct.refcicle.get().then((cicleFs) => {
           let cicle: CicleInterface = cicleFs.data();
           this.data.refcicle = cicle.uid;
@@ -112,7 +113,8 @@ export class ChangeProductModalComponent implements OnInit {
           this.activeModal.close(true);
         });
 
-      } else { // Si la persona a la que se le pasa stock no existe, se crea el producto y se reduce stock al que mandó.
+      } else { // Si la bodega ya tiene el producto, se modifica el stock.
+        console.log("Bodega NO tiene el producto");
         this.newSelectedProduct.refcicle.get().then((cicleFs) => {
           let cicle: CicleInterface = cicleFs.data();
           this.newSelectedProduct.refcicle = cicle.uid;
